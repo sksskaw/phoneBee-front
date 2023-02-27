@@ -21,7 +21,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .back-btn-box {
     align-items: flex-start;
     padding: 0px;
