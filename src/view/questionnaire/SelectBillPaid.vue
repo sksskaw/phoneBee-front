@@ -5,35 +5,42 @@
         </div>
 
         <div class="title">
-            <div>현재 사용하고 있는</div>
-            <div>통신사는 무엇인가요?</div>
+            <div>핸드폰 요금은 한달에</div>
+            <div>얼마정도 내고 계시나요?</div>
         </div>
 
         <div>
-            <input type="radio" id="skt" v-model="check" value="skt" class="radio" @click="onCheck">
-            <label for="skt">
-                <div class="select-btn">SKT
+            <input type="radio" id="1" v-model="check" value="1" class="radio" @click="onCheck">
+            <label for="1">
+                <div class="select-btn">5만원대 이하
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="lgu+" v-model="check" value="lgu+" class="radio" @click="onCheck">
-            <label for="lgu+">
-                <div class="select-btn">LG U+
+            <input type="radio" id="2" v-model="check" value="2" class="radio" @click="onCheck">
+            <label for="2">
+                <div class="select-btn">6만원대
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="kt" v-model="check" value="kt" class="radio" @click="onCheck">
-            <label for="kt">
-                <div class="select-btn">KT
+            <input type="radio" id="3" v-model="check" value="3" class="radio" @click="onCheck">
+            <label for="3">
+                <div class="select-btn">7만원대
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="mvno" v-model="check" value="mvno" class="radio" @click="onCheck">
-            <label for="mvno">
-                <div class="select-btn">알뜰폰
+            <input type="radio" id="4" v-model="check" value="4" class="radio" @click="onCheck">
+            <label for="4">
+                <div class="select-btn">8만원대
+                    <img class="check-icon" src="/images/unfilled_check.png">
+                </div>
+            </label>
+
+            <input type="radio" id="5" v-model="check" value="5" class="radio" @click="onCheck">
+            <label for="5">
+                <div class="select-btn">9만원대 이상
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
@@ -50,7 +57,7 @@ export default {
     },
 
     mounted() {
-        this.check = localStorage.getItem('selectedMobileCarrier')
+        this.check = localStorage.getItem('selectBillPaid')
     },
 
     methods: {
@@ -59,8 +66,8 @@ export default {
         },
 
         onCheck(ref) {
-            localStorage.setItem('selectedMobileCarrier', ref.target.id);
-            this.$router.push("/questionnaire/selectUsagePeriod");
+            localStorage.setItem('selectBillPaid', ref.target.id);
+            this.$router.push("/questionnaire/selectLocation");
         },
     }
 }

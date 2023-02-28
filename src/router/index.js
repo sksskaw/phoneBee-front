@@ -18,6 +18,18 @@ const routes = [
         path: '/questionnaire/selectMobileCarrier',
         component: () => import('../view/questionnaire/SelectMobileCarrier.vue')
     },
+    {
+        path: '/questionnaire/selectUsagePeriod',
+        component: () => import('../view/questionnaire/SelectUsagePeriod.vue')
+    },
+    {
+        path: '/questionnaire/selectBillPaid',
+        component: () => import('../view/questionnaire/SelectBillPaid.vue')
+    },
+    {
+        path: '/questionnaire/selectLocation',
+        component: () => import('../view/questionnaire/SelectLocation.vue')
+    },
 ]
 
 const router = createRouter({

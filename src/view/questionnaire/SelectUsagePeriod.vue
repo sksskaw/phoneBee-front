@@ -5,35 +5,28 @@
         </div>
 
         <div class="title">
-            <div>현재 사용하고 있는</div>
-            <div>통신사는 무엇인가요?</div>
+            <div>핸드폰을 바꾸신지</div>
+            <div>얼마나 되셨나요?</div>
         </div>
 
         <div>
-            <input type="radio" id="skt" v-model="check" value="skt" class="radio" @click="onCheck">
-            <label for="skt">
-                <div class="select-btn">SKT
+            <input type="radio" id="1" v-model="check" value="1" class="radio" @click="onCheck">
+            <label for="1">
+                <div class="select-btn">1년도 안된 것 같아요.
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="lgu+" v-model="check" value="lgu+" class="radio" @click="onCheck">
-            <label for="lgu+">
-                <div class="select-btn">LG U+
+            <input type="radio" id="2" v-model="check" value="2" class="radio" @click="onCheck">
+            <label for="2">
+                <div class="select-btn">1년은 넘었어요.
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="kt" v-model="check" value="kt" class="radio" @click="onCheck">
-            <label for="kt">
-                <div class="select-btn">KT
-                    <img class="check-icon" src="/images/unfilled_check.png">
-                </div>
-            </label>
-
-            <input type="radio" id="mvno" v-model="check" value="mvno" class="radio" @click="onCheck">
-            <label for="mvno">
-                <div class="select-btn">알뜰폰
+            <input type="radio" id="3" v-model="check" value="3" class="radio" @click="onCheck">
+            <label for="3">
+                <div class="select-btn">2년도 넘었어요.
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
@@ -50,7 +43,7 @@ export default {
     },
 
     mounted() {
-        this.check = localStorage.getItem('selectedMobileCarrier')
+        this.check = localStorage.getItem('selectedUsagePeriod')
     },
 
     methods: {
@@ -59,8 +52,14 @@ export default {
         },
 
         onCheck(ref) {
-            localStorage.setItem('selectedMobileCarrier', ref.target.id);
-            this.$router.push("/questionnaire/selectUsagePeriod");
+            localStorage.setItem('selectedUsagePeriod', ref.target.id);
+
+            if (localStorage.getItem('lookingForModelCheck') === '1') {
+                this.$router.push("/questionnaire/selectLocation");
+            } else {
+                this.$router.push("/questionnaire/selectBillPaid");
+            }
+
         },
     }
 }

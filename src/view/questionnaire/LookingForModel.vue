@@ -10,14 +10,14 @@
         </div>
 
         <div>
-            <input type="radio" id="y" v-model="check" value="1" class="radio" @change="onCheck">
+            <input type="radio" id="y" v-model="check" value="1" class="radio" @click="onCheck">
             <label for="y">
                 <div class="select-btn">네
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="n" v-model="check" value="0" class="radio" @change="onCheck">
+            <input type="radio" id="n" v-model="check" value="0" class="radio" @click="onCheck">
             <label for="n">
                 <div class="select-btn">아니요
                     <img class="check-icon" src="/images/unfilled_check.png">
@@ -35,24 +35,30 @@ export default {
         }
     },
 
+    mounted() {
+        this.check = localStorage.getItem('lookingForModelCheck')
+    },
+
     methods: {
         onBackBtn() {
             this.$router.go(-1);
         },
 
-        onCheck() {
-            if (this.check === "1") {
+        onCheck(ref) {
+            if (ref.target.id === "y") {
+                localStorage.setItem('lookingForModelCheck', "1");
                 this.$router.push("/questionnaire/selectModel");
                 return
             }
 
+            localStorage.setItem('lookingForModelCheck', "0");
             this.$router.push("/questionnaire/selectMobileCarrier");
         },
     }
 }
 </script>
 
-<style>
+<style scoped>
 .back-btn-box {
     align-items: flex-start;
     padding: 0px;
@@ -78,42 +84,5 @@ export default {
     color: #391A15;
 
     margin-bottom: 76px;
-}
-
-.select-btn {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    height: 24px;
-    padding: 14px 20px 14px 20px;
-    gap: 4px;
-
-    background: #F7F7F7;
-    border-radius: 8px;
-
-    font-family: 'Pretendard';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 21.33px;
-    line-height: 30px;
-
-    text-align: center;
-    color: #391A15;
-
-    cursor: pointer;
-}
-
-.check-icon {
-    width: 28px;
-    height: 28px;
-}
-
-.radio {
-    -webkit-appearance: none;
-}
-
-.radio:hover+label img {
-    content: url("../../../public/images/filled_check.png")
 }
 </style>

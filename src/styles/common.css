@@ -4,3 +4,46 @@
     margin: 0 auto;
     margin-top: 52px;
 }
+
+.select-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 24px;
+    padding: 14px 20px 14px 20px;
+    gap: 4px;
+
+    background: #F7F7F7;
+    border-radius: 8px;
+
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 21.33px;
+    line-height: 30px;
+
+    text-align: center;
+    color: #391A15;
+
+    cursor: pointer;
+
+    margin-bottom: 16px;
+}
+
+.check-icon {
+    width: 28px;
+    height: 28px;
+}
+
+.radio {
+    display: none;
+}
+
+.radio:hover+label img {
+    content: url("../../public/images/filled_check.png")
+}
+
+.radio:checked+label img {
+    content: url("../../public/images/filled_check.png")
+}
