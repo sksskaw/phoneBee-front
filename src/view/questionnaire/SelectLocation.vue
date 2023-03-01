@@ -54,9 +54,9 @@ export default {
     data() {
         return {
             address: null,
-            buildingName: "서교 푸르지오",
-            roadAddress: "서울 마포구 양화로 55 서교 푸르지오",
-            jibunAddress: "[지번] 서울특별시 마포구 서교동 832-2 푸르지오"
+            buildingName: "",
+            roadAddress: "",
+            jibunAddress: ""
         }
     },
 
