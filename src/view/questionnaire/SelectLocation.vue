@@ -21,6 +21,31 @@
         <div class="current-location-btn">
             <img class="target-icon" src="/images/target_icon.png">현재 위치로 검색
         </div>
+
+        <transition name="slide-up">
+            <div class="black-bg" id="mapContainer">
+                <div class="white-bg">
+                    <div class="address-check">
+                        <img class="back-btn" src="/images/arrow.png" @click="closeModal">
+                        주소 확인
+                        <div style="width: 24px; height: 24px;"></div>
+                    </div>
+
+                    <div class="kakao-map" id="kakao-map"></div>
+
+                    <div class="address-box">
+                        <div class="buildingName">{{ buildingName }}</div>
+                        <div class="roadAddress">{{ roadAddress }}</div>
+                        <div class="jibunAddress">{{ jibunAddress }}</div>
+                    </div>
+
+                    <div class="estimate-btn">
+                        견적 확인하기
+                    </div>
+                    <div style="height: 34px;"></div>
+                </div>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -28,7 +53,22 @@
 export default {
     data() {
         return {
-            address: null
+            address: null,
+            buildingName: "서교 푸르지오",
+            roadAddress: "서울 마포구 양화로 55 서교 푸르지오",
+            jibunAddress: "[지번] 서울특별시 마포구 서교동 832-2 푸르지오"
+        }
+    },
+
+    mounted() {
+        if (window.kakao && window.kakao.maps) {
+            this.initMap();
+        } else {
+            const script = document.createElement("script");
+            script.onload = () => kakao.maps.load(this.initMap);
+            script.src =
+                "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=" + process.env.VUE_APP_KAKAO_URL + "&libraries=services";
+            document.head.appendChild(script);
         }
     },
 
@@ -41,9 +81,48 @@ export default {
             new daum.Postcode({
                 oncomplete: (data) => {
                     this.address = data.address;
+
+                    this.buildingName = data.buildingName;
+                    this.roadAddress = data.roadAddress ? data.roadAddress : data.autoRoadAddress;
+                    this.jibunAddress = data.jibunAddress ? data.jibunAddress : data.autoJibunAddress;
+                    this.jibunAddress = "[지번] " + this.jibunAddress
+
+                    var mapContainer = document.getElementById('mapContainer')
+                    this.geocoder.addressSearch(data.address, (results, status) => {
+                        if (status === kakao.maps.services.Status.OK) {
+                            var result = results[0];
+                            var coords = new kakao.maps.LatLng(result.y, result.x);
+
+                            mapContainer.style.display = "block";
+
+                            this.initMap()
+                            this.map.setCenter(coords);
+                            this.marker.setPosition(coords)
+                        }
+                    });
                 }
             }).open();
-        }
+        },
+
+        closeModal() {
+            var mapContainer = document.getElementById('mapContainer')
+            mapContainer.style.display = "none";
+        },
+
+        initMap() {
+            const container = document.getElementById("kakao-map");
+            const options = {
+                center: new kakao.maps.LatLng(33.450701, 126.570667),
+                level: 5,
+            };
+
+            this.map = new kakao.maps.Map(container, options);
+            this.geocoder = new kakao.maps.services.Geocoder();
+            this.marker = new kakao.maps.Marker({
+                position: new kakao.maps.LatLng(33.450701, 126.570667),
+                map: this.map
+            });
+        },
     }
 }
 </script>
@@ -151,5 +230,124 @@ export default {
 .target-icon {
     width: 24px;
     height: 24px;
+}
+
+.black-bg {
+    display: none;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: auto;
+    background: rgba(0, 0, 0, 0.1);
+    position: absolute;
+}
+
+.white-bg {
+    width: 100%;
+    height: auto;
+    background: white;
+    border-radius: 20px 20px 0px 0px;
+    animation: fadeInUp 1s;
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 100%, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateZ(0);
+    }
+}
+
+.black-bg .white-bg {
+    display: block;
+}
+
+.address-check {
+    margin-top: 51px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 18px;
+
+    height: 60px;
+
+    font-family: 'Spoqa Han Sans Neo';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+
+    color: #241E17;
+}
+
+.address-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0px;
+    margin: 24px 24px 30px 24px;
+
+    height: 78px;
+}
+
+.buildingName {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 21.33px;
+    line-height: 30px;
+
+    color: #391A15;
+}
+
+.roadAddress {
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+
+    color: #391A15;
+}
+
+.jibunAddress {
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+
+    color: #828282;
+}
+
+.estimate-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0px 24px 0px 24px;
+    height: 58px;
+
+    background: #391A15;
+    border-radius: 8px;
+
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+
+    color: #FFFFFF;
+}
+
+.kakao-map {
+    height: 450px;
 }
 </style>
