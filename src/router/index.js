@@ -5,6 +5,8 @@ const routes = [
         path: '/',
         component: () => import('../view/Landing.vue')
     },
+    
+    //questionnaire
     {
         path: '/questionnaire',
         component: () => import('../view/questionnaire/LookingForModel.vue')
@@ -29,6 +31,20 @@ const routes = [
     {
         path: '/questionnaire/selectLocation',
         component: () => import('../view/questionnaire/SelectLocation.vue')
+    },
+
+    //questionnaire complete
+    {
+        path: '/questionnaireCompleted/loading',
+        component: () => import('../view/questionnaireCompleted/Loading.vue')
+    },
+    {
+        path: '/questionnaireCompleted/Found',
+        component: () => import('../view/questionnaireCompleted/Found.vue')
+    },
+    {
+        path: '/questionnaireCompleted/NotFound',
+        component: () => import('../view/questionnaireCompleted/NotFound.vue')
     },
 ]
 

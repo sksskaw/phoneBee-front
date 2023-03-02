@@ -20,7 +20,7 @@
 
         <div class="current-location-btn" @click="onCurrentLocation">
             <div v-if="getCurrentPositionLoding == true" class="current-location-box">
-                <img class="loading-icon" src="/images/loading_icon.gif">
+                <img class="loading-icon" src="/images/search_loading_icon.gif">
             </div>
 
             <div v-if="getCurrentPositionLoding == false" class="current-location-box">
@@ -97,8 +97,9 @@ export default {
                     if (status === kakao.maps.services.Status.OK) {
 
                         this.address = result[0].address.address_name;
-                        var roadAddress = result[0].road_address
+                        localStorage.setItem('address', this.address)
 
+                        var roadAddress = result[0].road_address
                         if (roadAddress != null) {
                             this.buildingName = roadAddress.building_name;
                             this.roadAddress = result[0].road_address.address_name;
@@ -138,6 +139,7 @@ export default {
             new daum.Postcode({
                 oncomplete: (data) => {
                     this.address = data.address;
+                    localStorage.setItem('address', this.address)
 
                     this.buildingName = data.buildingName;
                     this.roadAddress = data.roadAddress ? data.roadAddress : data.autoRoadAddress;
@@ -159,6 +161,18 @@ export default {
                     });
                 }
             }).open();
+
+            var lookingForModelCheck = localStorage.getItem('lookingForModelCheck')
+            var selectedModel = localStorage.getItem('selectedModel')
+            var selectBillPaid = localStorage.getItem('selectBillPaid')
+
+            if (lookingForModelCheck == "0") {
+                this.estimateBtnText = selectBillPaid + " 원대 견적 확인하기"
+            }
+
+            if (lookingForModelCheck == "1") {
+                this.estimateBtnText = selectedModel + "번 모델 견적 확인하기"
+            }
         },
 
         closeModal() {
