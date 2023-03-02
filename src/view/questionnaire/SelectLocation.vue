@@ -45,9 +45,7 @@
                         <div class="jibunAddress">{{ jibunAddress }}</div>
                     </div>
 
-                    <div class="estimate-btn">
-                        견적 확인하기
-                    </div>
+                    <div class="estimate-btn">{{ estimateBtnText }}</div>
                     <div style="height: 34px;"></div>
                 </div>
             </div>
@@ -65,6 +63,7 @@ export default {
             jibunAddress: "",
 
             getCurrentPositionLoding: false,
+            estimateBtnText: ""
         }
     },
 
@@ -120,6 +119,18 @@ export default {
                 };
 
                 this.geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+
+                var lookingForModelCheck = localStorage.getItem('lookingForModelCheck')
+                var selectedModel = localStorage.getItem('selectedModel')
+                var selectBillPaid = localStorage.getItem('selectBillPaid')
+
+                if (lookingForModelCheck == "0") {
+                    this.estimateBtnText = selectBillPaid + " 원대 견적 확인하기"
+                }
+
+                if (lookingForModelCheck == "1") {
+                    this.estimateBtnText = selectedModel + "번 모델 견적 확인하기"
+                }
             });
         },
 
