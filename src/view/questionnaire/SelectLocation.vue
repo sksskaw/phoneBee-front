@@ -18,8 +18,14 @@
             <input class="search-icon" type="button" @click="searchAddress">
         </div>
 
-        <div class="current-location-btn">
-            <img class="target-icon" src="/images/target_icon.png">현재 위치로 검색
+        <div class="current-location-btn" @click="onCurrentLocation">
+            <div v-if="getCurrentPositionLoding == true" class="current-location-box">
+                <img class="loading-icon" src="/images/loading_icon.gif">
+            </div>
+
+            <div v-if="getCurrentPositionLoding == false" class="current-location-box">
+                <img class="target-icon" src="/images/target_icon.svg">현재 위치로 검색
+            </div>
         </div>
 
         <transition name="slide-up">
@@ -56,7 +62,9 @@ export default {
             address: null,
             buildingName: "",
             roadAddress: "",
-            jibunAddress: ""
+            jibunAddress: "",
+
+            getCurrentPositionLoding: false,
         }
     },
 
@@ -75,6 +83,44 @@ export default {
     methods: {
         onBackBtn() {
             this.$router.go(-1);
+        },
+
+
+        onCurrentLocation() {
+            this.getCurrentPositionLoding = true
+
+            navigator.geolocation.getCurrentPosition((pos) => {
+                var latitude = pos.coords.latitude;
+                var longitude = pos.coords.longitude;
+                var coord = new kakao.maps.LatLng(latitude, longitude);
+
+                var callback = (result, status) => {
+                    if (status === kakao.maps.services.Status.OK) {
+
+                        this.address = result[0].address.address_name;
+                        var roadAddress = result[0].road_address
+
+                        if (roadAddress != null) {
+                            this.buildingName = roadAddress.building_name;
+                            this.roadAddress = result[0].road_address.address_name;
+                        } else {
+                            this.roadAddress = result[0].address.address_name;
+                        }
+
+                        this.jibunAddress = "[지번] " + result[0].address.address_name;
+
+                        var mapContainer = document.getElementById('mapContainer')
+                        mapContainer.style.display = "block";
+
+                        this.initMap()
+                        this.map.setCenter(coord);
+                        this.marker.setPosition(coord)
+                        this.getCurrentPositionLoding = false
+                    }
+                };
+
+                this.geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+            });
         },
 
         searchAddress() {
@@ -213,7 +259,7 @@ export default {
     box-sizing: border-box;
 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 18px 20px;
@@ -225,6 +271,26 @@ export default {
     border-radius: 8px;
 
     cursor: pointer;
+}
+
+.current-location-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 8px;
+
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+
+    color: #575757;
+}
+
+.loading-icon {
+    width: 24px;
+    height: 24px;
 }
 
 .target-icon {
