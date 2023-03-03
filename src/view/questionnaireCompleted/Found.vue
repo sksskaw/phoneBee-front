@@ -12,7 +12,7 @@
             최적의 {{ estimateText }} 견적을 찾았어요!<br>
         </div>
 
-        <div class="check-btn">최적 견적 확인하기</div>
+        <div class="check-btn" @click="onCheck">최적 견적 확인하기</div>
     </div>
 </template>
 
@@ -20,21 +20,21 @@
 export default {
     data() {
         return {
+            lookingForModelCheck: localStorage.getItem('lookingForModelCheck'),
             address: localStorage.getItem('address'),
             estimateText: null,
         }
     },
 
     created() {
-        var lookingForModelCheck = localStorage.getItem('lookingForModelCheck');
         var selectBillPaid = localStorage.getItem('selectBillPaid');
         var selectedModel = localStorage.getItem('selectedModel');
 
-        if (lookingForModelCheck == "0") {
+        if (this.lookingForModelCheck == "0") {
             this.estimateText = selectBillPaid + " 원대"
         }
 
-        if (lookingForModelCheck == "1") {
+        if (this.lookingForModelCheck == "1") {
             this.estimateText = selectedModel + "번 모델"
         }
     },
@@ -42,6 +42,16 @@ export default {
     methods: {
         onBackBtn() {
             this.$router.push("/questionnaire/selectLocation");
+        },
+
+        onCheck() {
+            if (this.lookingForModelCheck == "0") {
+                this.$router.push("/estimateComparison/billPaidEstimateCard");
+            }
+
+            if (this.lookingForModelCheck == "1") {
+                this.$router.push("/estimateComparison/modelEstimateCard");
+            }
         },
     }
 }

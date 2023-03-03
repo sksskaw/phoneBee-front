@@ -37,7 +37,7 @@
                 <div class="model-select-btn">
                     <img class="model-check-icon" src="/images/unfilled_check.png">
                     <img class="sample-model-img" src="/images/sample_model.png">
-                    <div class="model-name">sample 1</div>
+                    <div class="model-name">sample 3</div>
                 </div>
             </label>
 
@@ -46,7 +46,7 @@
                 <div class="model-select-btn">
                     <img class="sample-model-img" src="/images/sample_model.png">
                     <img class="model-check-icon" src="/images/unfilled_check.png">
-                    <div class="model-name">sample 2</div>
+                    <div class="model-name">sample 4</div>
                 </div>
             </label>
         </div>

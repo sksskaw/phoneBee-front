@@ -5,7 +5,7 @@ const routes = [
         path: '/',
         component: () => import('../view/Landing.vue')
     },
-    
+
     //questionnaire
     {
         path: '/questionnaire',
@@ -45,6 +45,20 @@ const routes = [
     {
         path: '/questionnaireCompleted/NotFound',
         component: () => import('../view/questionnaireCompleted/NotFound.vue')
+    },
+
+    //estimate comparison
+    {
+        path: '/estimateComparison/billPaidEstimateCard',
+        component: () => import('../view/estimateComparison/BillPaidEstimateCard.vue')
+    },
+    {
+        path: '/estimateComparison/modelEstimateCard',
+        component: () => import('../view/estimateComparison/ModelEstimateCard.vue')
+    },
+    {
+        path: '/estimateComparison/cardDetail',
+        component: () => import('../view/estimateComparison/CardDetail.vue')
     },
 ]
 

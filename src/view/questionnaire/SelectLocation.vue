@@ -45,7 +45,7 @@
                         <div class="jibunAddress">{{ jibunAddress }}</div>
                     </div>
 
-                    <div class="estimate-btn">{{ estimateBtnText }}</div>
+                    <div class="estimate-btn" @click="onEstimate">{{ estimateBtnText }}</div>
                     <div style="height: 34px;"></div>
                 </div>
             </div>
@@ -98,7 +98,8 @@ export default {
 
                         this.address = result[0].address.address_name;
                         localStorage.setItem('address', this.address)
-
+                        localStorage.setItem('sigungu', result[0].address.region_2depth_name)
+                        
                         var roadAddress = result[0].road_address
                         if (roadAddress != null) {
                             this.buildingName = roadAddress.building_name;
@@ -140,6 +141,7 @@ export default {
                 oncomplete: (data) => {
                     this.address = data.address;
                     localStorage.setItem('address', this.address)
+                    localStorage.setItem('sigungu', data.sigungu)
 
                     this.buildingName = data.buildingName;
                     this.roadAddress = data.roadAddress ? data.roadAddress : data.autoRoadAddress;
@@ -194,6 +196,10 @@ export default {
                 map: this.map
             });
         },
+
+        onEstimate() {
+            this.$router.push("/questionnaireCompleted/loading");
+        }
     }
 }
 </script>

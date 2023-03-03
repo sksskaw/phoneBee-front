@@ -5,6 +5,7 @@
     margin-top: 52px;
 }
 
+/* 설문 페이지 라디오 버튼 css */
 .select-btn {
     display: flex;
     flex-direction: row;
@@ -46,4 +47,107 @@
 
 .radio:checked+label img {
     content: url("../../public/images/filled_check.png")
+}
+
+
+/* 견적 비교 페이지 라디오(카드) 버튼 css */
+.estimate-radio {
+    display: none;
+}
+
+.estimate-radio-card {
+    position: relative;
+    box-sizing: border-box;
+    height: 146px;
+
+    background: #FFFFFF;
+    border: 1.5px solid #EEEEEE;
+    border-radius: 16px;
+
+    filter: drop-shadow(1px 0px 12px rgba(48, 48, 48, 0.1));
+    margin-bottom: 18px;
+}
+
+.estimate-radio:hover+label .estimate-radio-card {
+    border: 1.5px solid #FFD340;
+}
+
+.estimate-radio:checked+label .estimate-radio-card {
+    border: 1.5px solid #FFD340;
+}
+
+.carrier-icon {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+}
+
+.badge-icon {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+}
+
+.cost {
+    margin-top: 24px;
+    height: 22px;
+
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    text-align: center;
+    text-decoration-line: line-through;
+    color: #AEAEAE;
+}
+
+.discount {
+    height: 18px;
+
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 18px;
+    text-align: center;
+    color: #FF0000;
+}
+
+.amount {
+    height: 38px;
+
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28.43px;
+    line-height: 38px;
+    text-align: center;
+    color: #000000;
+}
+
+.card-text {
+    height: 18px;
+
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 18px;
+    text-align: center;
+
+    color: #575757;
+}
+
+.card-model-text {
+    height: 18px;
+
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 18px;
+    text-align: center;
+
+    color: #000000;
 }
