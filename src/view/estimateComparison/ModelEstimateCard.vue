@@ -19,7 +19,7 @@
         </div>
 
         <div>
-            <input type="radio" id="skt" v-model="selectedCard" value="skt" class="estimate-radio">
+            <input type="radio" id="skt" v-model="selectedCard" value="skt" class="estimate-radio" @click="toDetail">
             <label for="skt">
                 <div class="estimate-radio-card">
                     <img class="carrier-icon" src="/images/skt_logo.svg">
@@ -82,7 +82,9 @@ export default {
     },
 
     methods: {
-
+        toDetail() {
+            this.$router.push("/estimateComparison/cardDetail");
+        }
     }
 }
 </script>

@@ -206,10 +206,10 @@ export default {
 
 <style scoped>
 .back-btn-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: flex-start;
-    padding: 0px;
-
-    width: 100%;
     height: 60px;
 
     margin-bottom: 72px;
