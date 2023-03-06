@@ -1,8 +1,8 @@
 <template>
     <div class="footer">
-        상호: 주식회사 아크 | 대표이사: 김인섭<br>
-        사업자등록번호: 327-81-00525<br>
-        주소: 서울특별시 금천구 디지털로9길 32, A동 20층 2005호
+        상호: 브리즈럽 | 대표이사: 김천일<br>
+        사업자등록번호: 332-21-01463<br>
+        주소: 서울특별시 노원구 노해로 508, 625동 101호
     </div>
 </template>
 
@@ -12,6 +12,11 @@
 
 <style>
 .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
     display: flex;
     flex-direction: row;
     align-items: flex-start;

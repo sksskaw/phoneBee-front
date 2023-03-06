@@ -1,19 +1,13 @@
 <template>
     <div class="router-div">
-        <div class="icon-box">
-            <img class="icon" src="/images/logo_name.png">
-        </div>
-
         <div class="title">
-            <div>호갱 당하기는 싫지만,</div>
-            <div>발품 팔기는 귀찮다면?</div>
+            <div>핸드폰 싸게 사고싶다면? </div>
         </div>
 
         <div class="speech">
             <p style="margin: 0;">
-                귀찮게 발품 파실 필요 없어요.<br>
-                동네 매장 견적을 모아서<br>
-                가장 저렴한 곳을 추천해 드릴게요.
+                우리 동네 매장 견적<br>
+                모아서 비교해드릴게요!
             </p>
         </div>
 
@@ -22,7 +16,9 @@
         <button class="estimate-btn" type="button" @click="onEstimateBtn">3분만에 견적 받아보기</button>
     </div>
 
-    <Footer> </Footer>
+    <div class="footer-wrap">
+        <Footer> </Footer>
+    </div>
 </template>
 
 <script>
@@ -42,13 +38,10 @@ export default {
 </script>
   
 <style scoped>
-.icon {
-    width: 30%;
-    height: auto;
-}
-
-.icon-box {
-    margin-bottom: 40px;
+.footer-wrap {
+    position: relative;
+    min-height: 100%;
+    padding-bottom: 138px;
 }
 
 .title {
@@ -59,7 +52,7 @@ export default {
     line-height: 38px;
     color: #391A15;
 
-    margin-bottom: 40px;
+    margin-bottom: 24px;
 }
 
 .speech {
@@ -70,7 +63,6 @@ export default {
     line-height: 22px;
 
     color: #391A15;
-
     margin-bottom: 18px;
 }
 
@@ -104,6 +96,6 @@ export default {
     line-height: 22px;
 
     color: #FFFFFF;
-    margin-bottom: 52px;
+    margin-bottom: 18px;
 }
 </style>
