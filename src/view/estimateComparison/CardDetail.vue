@@ -69,6 +69,12 @@
                 </div>
             </div>
         </div>
+
+        <div class="confirm-box">
+            <div class="confirm-btn" @click="onConfirm">견적 확정하기</div>
+        </div>
+
+        <div style="height: 102px;"></div>
     </div>
 </template>
 
@@ -84,6 +90,10 @@ export default {
         onBackBtn() {
             this.$router.go(-1);
         },
+
+        onConfirm() {
+            this.$router.push("/confirm/confirmEstimate");
+        }
     }
 }
 </script>
@@ -318,7 +328,7 @@ export default {
     align-items: flex-start;
     padding: 0px;
     gap: 48px;
-    
+
     height: auto;
 
     font-family: 'Pretendard';
@@ -341,5 +351,39 @@ export default {
     align-items: center;
     padding: 0px;
     gap: 4px;
+}
+
+.confirm-box {
+    position: fixed;
+    margin: 0 auto;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 102px;
+    background: #FFFFFF;
+
+    box-shadow: 0px -4px 20px 0px rgba(48, 48, 48, 0.1);
+}
+
+.confirm-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 24px 34px 24px;
+    gap: 10px;
+
+    height: 58px;
+    background: #391A15;
+    border-radius: 8px;
+
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+
+    color: #FFFFFF;
 }
 </style>

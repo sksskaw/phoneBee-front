@@ -13,7 +13,7 @@
         <div style="height: 220px; margin-bottom: 48px; border:solid 1px">비교 그래프 박스</div>
 
         <div class="box-3">
-            {{ today.getMonth() }}월 {{ today.getDate() }}일 {{ sigungu }}<br>
+            {{ today }} {{ sigungu }}<br>
             판매점들의 {{ selectedModel }} 기기<br>
             견적을 비교해 보았어요!<br>
         </div>
@@ -68,7 +68,7 @@ import strg from "@/utils/strg";
 export default {
     data() {
         return {
-            today: new Date(),
+            today: strg.getCurrentMonthAndDate(),
             selectedModel: localStorage.getItem('selectedModel'),
             totalDiscountAmount: "총 할인 금액",
             sigungu: localStorage.getItem('sigungu'),

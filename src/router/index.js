@@ -60,6 +60,16 @@ const routes = [
         path: '/estimateComparison/cardDetail',
         component: () => import('../view/estimateComparison/CardDetail.vue')
     },
+
+    //confirm estimate
+    {
+        path: '/confirm/confirmEstimate',
+        component: () => import('../view/confirm/ConfirmEstimate.vue')
+    },
+    {
+        path: '/confirm/confirmCheck',
+        component: () => import('../view/confirm/ConfirmCheck.vue')
+    },
 ]
 
 const router = createRouter({
