@@ -5,6 +5,10 @@ const routes = [
         path: '/',
         component: () => import('../view/Landing.vue')
     },
+    {
+        path: '/login',
+        component: () => import('../view/kakaoLogin.vue')
+    },
 
     //questionnaire
     {
