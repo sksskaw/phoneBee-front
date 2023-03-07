@@ -7,7 +7,7 @@ const routes = [
     },
     {
         path: '/login',
-        component: () => import('../view/kakaoLogin.vue')
+        component: () => import('../view/KakaoLogin.vue')
     },
 
     //questionnaire
@@ -15,7 +15,6 @@ const routes = [
         path: '/questionnaire',
         component: () => import('../view/questionnaire/LookingForModel.vue')
     },
-
     {
         path: '/questionnaire/selectModel',
         component: () => import('../view/questionnaire/SelectModel.vue')
