@@ -127,15 +127,11 @@ export default {
     },
 
     mounted() {
-        if (window.kakao && window.kakao.maps) {
-            this.initMap();
-        } else {
-            const script = document.createElement("script");
-            script.onload = () => kakao.maps.load(this.initMap);
-            script.src =
-                "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=" + process.env.VUE_APP_KAKAO_URL + "&libraries=services";
-            document.head.appendChild(script);
-        }
+        const script = document.createElement("script");
+        script.onload = () => kakao.maps.load(this.initMap);
+        script.src =
+            "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=" + process.env.VUE_APP_KAKAO_URL + "&libraries=services";
+        document.head.appendChild(script);
     },
 
     methods: {
@@ -175,7 +171,7 @@ export default {
                 }
             });
         },
-        
+
         onReservation() {
             this.$router.push("/confirm/confirmCheck");
         },
