@@ -10,7 +10,9 @@
             핸드폰 가격보다 <span style="color: #E5B40F;">{{ totalDiscountAmount }}</span> 더 저렴해요
         </div>
 
-        <div style="height: 220px; margin-bottom: 48px; border:solid 1px">비교 그래프 박스</div>
+        <div class="graph">
+            <Graph></Graph>
+        </div>
 
         <div class="box-3">
             {{ today }} {{ sigungu }}<br>
@@ -66,9 +68,14 @@
 </template>
 
 <script>
+import Graph from '@/components/EstimateComparisonGraph.vue';
 import strg from "@/utils/strg";
 
 export default {
+    components: {
+        Graph
+    },
+
     data() {
         return {
             today: strg.getCurrentMonthAndDate(),
@@ -154,5 +161,13 @@ export default {
     line-height: 22px;
 
     color: #AEAEAE;
+}
+
+.graph {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 220px; 
+    margin-bottom: 48px
 }
 </style>
