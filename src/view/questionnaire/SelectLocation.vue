@@ -10,7 +10,6 @@
         </div>
 
         <div class="sub-title">상세 주소는 기입하실 필요 없어요!</div>
-
         <div class="search-box">
             <span @click="searchAddress">
                 <input class="search-input" type="text" v-model="address" placeholder="시/군/구/동을 입력해주세요." disabled>
@@ -80,7 +79,7 @@ export default {
             const script = document.createElement("script");
             script.onload = () => kakao.maps.load(this.initMap);
             script.src =
-                "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=" + process.env.VUE_APP_KAKAO_URL + "&libraries=services";
+                "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=" + process.env.VUE_APP_KAKAO_KEY + "&libraries=services";
             document.head.appendChild(script);
         }
     },
@@ -199,65 +198,70 @@ export default {
         },
 
         onEstimate() {
-            var lookingForModelCheck = localStorage.getItem('lookingForModelCheck')
-
-            var selectedModel = JSON.parse(localStorage.getItem('selectedModel'))
-            var selectedMobileCarrier = JSON.parse(localStorage.getItem('selectedMobileCarrier'))
-            var selectedUsagePeriod = JSON.parse(localStorage.getItem('selectedUsagePeriod'))
-            var selectBillPaid = JSON.parse(localStorage.getItem('selectBillPaid'))
-
-            var sido = localStorage.getItem('sido')
-            var sigungu = localStorage.getItem('sigungu')
-
-            // 원하는 기기 없는 경우
-            if (lookingForModelCheck == "0") {
-                let param = {
-                    useTelecomIdx: parseInt(selectedMobileCarrier.value),
-                    usePeriodIdx: parseInt(selectedUsagePeriod.value),
-                    monthCost: parseInt(selectBillPaid.value),
-                    findArea: encodeURIComponent(sido + " " + sigungu),
+            Kakao.Auth.authorize({
+                redirectUri: window.location.origin + '/kakao/auto',
+            });
+                /*
+                var lookingForModelCheck = localStorage.getItem('lookingForModelCheck')
+    
+                var selectedModel = JSON.parse(localStorage.getItem('selectedModel'))
+                var selectedMobileCarrier = JSON.parse(localStorage.getItem('selectedMobileCarrier'))
+                var selectedUsagePeriod = JSON.parse(localStorage.getItem('selectedUsagePeriod'))
+                var selectBillPaid = JSON.parse(localStorage.getItem('selectBillPaid'))
+    
+                var sido = localStorage.getItem('sido')
+                var sigungu = localStorage.getItem('sigungu')
+    
+                // 원하는 기기 없는 경우
+                if (lookingForModelCheck == "0") {
+                    let param = {
+                        useTelecomIdx: parseInt(selectedMobileCarrier.value),
+                        usePeriodIdx: parseInt(selectedUsagePeriod.value),
+                        monthCost: parseInt(selectBillPaid.value),
+                        findArea: encodeURIComponent(sido + " " + sigungu),
+                    }
+                    console.log(param)
+                    this.postSurveyDeviceComplete()
                 }
-                console.log(param)
-                this.postSurveyDeviceComplete()
+    
+                // 원하는 기기 있는 경우
+                if (lookingForModelCheck == "1") {
+                    let param = {
+                        useTelecomIdx: parseInt(selectedMobileCarrier.value),
+                        usePeriodIdx: parseInt(selectedUsagePeriod.value),
+                        deviceIdx: parseInt(selectedModel.value),
+                        findArea: encodeURIComponent(sido + " " + sigungu),
+                    }
+                    console.log(param)
+                    this.postSurveyCostComplete()
+    
+                } 
+                */
+            },
+
+            postSurveyDeviceComplete() {
+                apiQuestionnaire.postSurveyDeviceComplete(param)
+                    .then(response => {
+                        console.log(response)
+                        //this.$router.push("/questionnaireCompleted/loading");
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    });
+            },
+
+            postSurveyCostComplete() {
+                apiQuestionnaire.postSurveyCostComplete(param)
+                    .then(response => {
+                        console.log(response)
+                        //this.$router.push("/questionnaireCompleted/loading");
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    });
             }
-
-            // 원하는 기기 있는 경우
-            if (lookingForModelCheck == "1") {
-                let param = {
-                    useTelecomIdx: parseInt(selectedMobileCarrier.value),
-                    usePeriodIdx: parseInt(selectedUsagePeriod.value),
-                    deviceIdx: parseInt(selectedModel.value),
-                    findArea: encodeURIComponent(sido + " " + sigungu),
-                }
-                console.log(param)
-                this.postSurveyCostComplete()
-
-            }
-        },
-
-        postSurveyDeviceComplete() {
-            apiQuestionnaire.postSurveyDeviceComplete(param)
-                .then(response => {
-                    console.log(response)
-                    //this.$router.push("/questionnaireCompleted/loading");
-                })
-                .catch(e => {
-                    console.log(e)
-                });
-        },
-
-        postSurveyCostComplete() {
-            apiQuestionnaire.postSurveyCostComplete(param)
-                .then(response => {
-                    console.log(response)
-                    //this.$router.push("/questionnaireCompleted/loading");
-                })
-                .catch(e => {
-                    console.log(e)
-                });
         }
     }
-}
 </script>
 
 <style scoped>
@@ -483,7 +487,7 @@ export default {
 .estimate-notice {
     height: 22px;
     margin-bottom: 14px;
-    
+
     font-family: 'Pretendard';
     font-style: normal;
     font-weight: 500;

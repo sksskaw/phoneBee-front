@@ -9,6 +9,10 @@ const routes = [
         path: '/login',
         component: () => import('../view/KakaoLogin.vue')
     },
+    {
+        path: '/kakao/auto',
+        component: () => import('../view/KakaoAuth.vue')
+    },
 
     //questionnaire
     {
