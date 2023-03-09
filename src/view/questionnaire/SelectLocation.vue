@@ -45,6 +45,7 @@
                         <div class="jibunAddress">{{ jibunAddress }}</div>
                     </div>
 
+                    <div class="estimate-notice">견적 확인을 위해 카카오로 가입이 필요해요</div>
                     <div class="estimate-btn" @click="onEstimate">
                         <img src="/images/kakao_icon.svg">
                         <div>카카오로 견적 확인하기</div>
@@ -477,6 +478,20 @@ export default {
     line-height: 18px;
 
     color: #828282;
+}
+
+.estimate-notice {
+    height: 22px;
+    margin-bottom: 14px;
+    
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 22px;
+    text-align: center;
+
+    color: #391A15;
 }
 
 .estimate-btn {
