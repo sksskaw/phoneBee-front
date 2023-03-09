@@ -4,14 +4,14 @@
         <div class="y-title">정책</div>
         <div class="graph">
             <div class="bar-frame">
-                <div class="bar" v-for="value, index in data" :style="{
-                    height: `${getHeight(value) * 140}px`,
-                    background: `${getBackground(index)}`
+                <div class="bar" v-for="item in list" :style="{
+                    height: `${getHeight(item.deviceMonthPrice) * 140}px`,
+                    background: `${getBackground(item.badge.message)}`
                 }">
-                    <div class="bar-value">{{ priceFormat(value) }}원</div>
+                    <div class="bar-value">{{ priceFormat(item.deviceMonthPrice) }}원</div>
 
-                    <img v-if="index == 1"
-                    style="margin-top: 4px; width: 36px; height: 14.4;" src="/images/skt_logo.svg">
+                    <img v-if="item.badge.message == '추천'" style="margin-top: 4px; width: 36px; height: 14.4;"
+                        :src="getCarrierLogo(item.telecomName)">
                 </div>
             </div>
         </div>
@@ -22,25 +22,45 @@
 import strg from "@/utils/strg";
 
 export default {
-    data() {
-        return {
-            data: [160000, 189134, 199134, 200000, 210000]
-        }
+    props: ["cardList"],
+
+    computed: {
+        list() {
+            const sortedList = this.cardList.sort(this.compare)
+            return sortedList.slice(0,6);
+        },
     },
 
     methods: {
+        compare(a, b) {
+            if (a.deviceMonthPrice < b.deviceMonthPrice) {
+                return -1;
+            }
+            if (a.deviceMonthPrice > b.deviceMonthPrice) {
+                return 1;
+            }
+            return 0;
+        },
+
         priceFormat(value) {
             return strg.priceFormat(value)
         },
 
         getHeight(value) {
-            let maxValue = Math.max(...this.data)
+            let prices = this.cardList.map(i => i.deviceMonthPrice)
+            let maxValue = Math.max(...prices)
             let rate = (value / maxValue)
             return rate
         },
 
-        getBackground(index) {
-            if(index == 1) return "#FFD340"
+        getBackground(message) {
+            if (message == '추천') return "#FFD340"
+        },
+
+        getCarrierLogo(name) {
+            if (name == 'SKT') return "/images/skt_logo.svg"
+            if (name == 'LGU+') return "/images/lgu+_logo.svg"
+            if (name == 'KT') return "/images/kt_logo.svg"
         },
     }
 }

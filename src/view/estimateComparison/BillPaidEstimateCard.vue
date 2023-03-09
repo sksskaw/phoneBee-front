@@ -70,6 +70,7 @@
 <script>
 import Graph from '@/components/EstimateComparisonGraph.vue';
 import strg from "@/utils/strg";
+import apiEstimate from "@/api/estimate";
 
 export default {
     components: {
@@ -78,12 +79,15 @@ export default {
 
     data() {
         return {
+            date: {},
+            deviceName: '',
+
             today: strg.getCurrentMonthAndDate(),
             selectedModel: localStorage.getItem('selectedModel'),
             selectBillPaid: localStorage.getItem('selectBillPaid'),
-            totalDiscountAmount: "총 할인 금액",
+            totalDiscountPrice: "총 할인 금액",
             sigungu: localStorage.getItem('sigungu'),
-            
+
             cost: strg.priceFormat(23000),
             discount: strg.priceFormat(-4000),
             amount: strg.priceFormat(19000),
@@ -92,9 +96,26 @@ export default {
         }
     },
 
+    mounted() {
+        this.getEstimateList()
+    },
+
     methods: {
         toDetail() {
             this.$router.push("/estimateComparison/cardDetail");
+        },
+
+        getEstimateList() {
+            apiEstimate.getEstimateList("amplS3FCM1JiLzhHenVFYzNBYUR2dz09")
+                .then(response => {
+                    console.log(response.data)
+                    this.date = response.data.date
+                    this.deviceName = response.data.deviceName
+                    this.totalDiscountPrice = response.data. totalDiscountPrice
+                })
+                .catch(e => {
+                    console.log(e)
+                });
         }
     }
 }
@@ -167,7 +188,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 220px; 
+    height: 220px;
     margin-bottom: 48px
 }
 </style>

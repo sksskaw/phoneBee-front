@@ -46,11 +46,9 @@ export default {
                 phoneNumber: this.kakaoUserInfo.kakao_account.phone_number,
                 thumbnailImageUrl: this.kakaoUserInfo.properties.profile_image,
             }
-
-            console.log(param)
             apiLogin.sighUpLogin(param)
                 .then(response => {
-                    console.log(response)
+                    console.log(response.data.Enmemberidx)
                 })
                 .catch(e => {
                     console.log(e)

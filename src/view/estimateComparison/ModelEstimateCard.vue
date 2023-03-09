@@ -1,23 +1,18 @@
 <template>
     <div class="router-div">
         <div class="box-1">
-            {{ selectedModel }} 기기로<br>
-            변경하기 위한 <span style="color: #E5B40F;">최적의 견적</span>을<br>
-            발견했어요!
-        </div>
-
-        <div class="box-2">
-            핸드폰 가격보다 <span style="color: #E5B40F;">{{ totalDiscountAmount }}</span> 더 저렴해요
+            원래 가격보다<br>
+            <span style="color: #E5B40F;">{{ totalDiscountPrice }}원</span> 더 저렴해요
         </div>
 
         <div class="graph">
-            <Graph></Graph>
+            <Graph v-bind:cardList="cardList"></Graph>
         </div>
 
         <div class="box-3">
-            {{ today }} {{ sigungu }}<br>
-            판매점들의 {{ selectedModel }} 기기<br>
-            견적을 비교해 보았어요!<br>
+            <span class="box-3-date">{{ date.month }}월 {{ date.day }}일 {{ date.findArea }}</span><br>
+            {{ deviceName }} 최적의 견적<br>
+            을 발견했어요!<br>
         </div>
 
         <div>
@@ -67,6 +62,7 @@
 <script>
 import Graph from '@/components/EstimateComparisonGraph.vue';
 import strg from "@/utils/strg";
+import apiEstimate from "@/api/estimate";
 
 export default {
     components: {
@@ -75,10 +71,10 @@ export default {
 
     data() {
         return {
-            today: strg.getCurrentMonthAndDate(),
-            selectedModel: localStorage.getItem('selectedModel'),
-            totalDiscountAmount: "총 할인 금액",
-            sigungu: localStorage.getItem('sigungu'),
+            date: {},
+            deviceName: '',
+            totalDiscountPrice: '',
+            cardList: [],
 
             cost: strg.priceFormat(23000),
             discount: strg.priceFormat(-4000),
@@ -88,9 +84,27 @@ export default {
         }
     },
 
+    mounted() {
+        this.getEstimateList()
+    },
+
     methods: {
         toDetail() {
             this.$router.push("/estimateComparison/cardDetail");
+        },
+
+        getEstimateList() {
+            apiEstimate.getEstimateList("amplS3FCM1JiLzhHenVFYzNBYUR2dz09")
+                .then(response => {
+                    this.date = response.data.estimate.date
+                    this.deviceName = response.data.estimate.deviceName
+                    this.totalDiscountPrice = strg.priceFormat(response.data.estimate.totalDiscountPrice)
+                    this.cardList = response.data.estimate.list
+                    console.log(this.cardList)
+                })
+                .catch(e => {
+                    console.log(e)
+                });
         }
     }
 }
@@ -98,8 +112,7 @@ export default {
 
 <style scoped>
 .box-1 {
-    height: 90px;
-    margin: 90px 0px 40px 0px;
+    margin: 90px 0px 32px 0px;
 
     font-family: 'Pretendard';
     font-style: normal;
@@ -136,6 +149,17 @@ export default {
     color: #391A15;
 }
 
+.box-3-date {
+    font-family: 'Pretendard';
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 22px;
+    letter-spacing: 0em;
+    text-align: left;
+
+    color: #828282;
+}
+
 .more-btn {
     margin-top: 10px;
     margin-bottom: 24px;
@@ -163,7 +187,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 220px; 
+    height: 220px;
     margin-bottom: 48px
 }
 </style>
