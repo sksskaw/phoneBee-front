@@ -9,60 +9,56 @@
             <div>바꾸고 싶으세요?</div>
         </div>
 
-        <div class="model-radio-box">
-            <input type="radio" id="0" v-model="check" value="0" class="model-radio" @click="onCheck">
-            <label for="0">
-                <div class="model-select-btn">
-                    <img class="model-check-icon" src="/images/unfilled_check.png">
-                    <img class="sample-model-img" src="/images/sample_model.png">
-                    <div class="model-name">sample 1</div>
-                </div>
-            </label>
+        <div class="radio-box">
 
-            <input type="radio" id="1" v-model="check" value="1" class="model-radio" @click="onCheck">
-            <label for="1">
-                <div class="model-select-btn">
-                    <img class="sample-model-img" src="/images/sample_model.png">
-                    <img class="model-check-icon" src="/images/unfilled_check.png">
-                    <div class="model-name">sample 2</div>
+            <div class="model-radio-box">
+                <div v-for="model in evneList()">
+                    <input type="radio" :id="model.deviceName" v-model="check" :value="model.deviceIdx" class="model-radio"
+                        @click="onCheck">
+                    <label :for="model.deviceName">
+                        <div class="model-select-btn">
+                            <img class="model-check-icon" src="/images/unfilled_check.png">
+                            <img class="sample-model-img" :src="model.deviceImgUrl">
+                            <div class="model-name">{{ model.deviceName }}</div>
+                        </div>
+                    </label>
                 </div>
-            </label>
+            </div>
+
+            <div class="model-radio-box">
+                <div v-for="model in oddList()">
+                    <input type="radio" :id="model.deviceName" v-model="check" :value="model.deviceIdx" class="model-radio"
+                        @click="onCheck">
+                    <label :for="model.deviceName">
+                        <div class="model-select-btn">
+                            <img class="model-check-icon" src="/images/unfilled_check.png">
+                            <img class="sample-model-img" :src="model.deviceImgUrl">
+                            <div class="model-name">{{ model.deviceName }}</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
         </div>
 
-        <div style="height: 18px;"></div>
 
-        <div class="model-radio-box">
-            <input type="radio" id="3" v-model="check" value="3" class="model-radio" @click="onCheck">
-            <label for="3">
-                <div class="model-select-btn">
-                    <img class="model-check-icon" src="/images/unfilled_check.png">
-                    <img class="sample-model-img" src="/images/sample_model.png">
-                    <div class="model-name">sample 3</div>
-                </div>
-            </label>
 
-            <input type="radio" id="4" v-model="check" value="4" class="model-radio" @click="onCheck">
-            <label for="4">
-                <div class="model-select-btn">
-                    <img class="sample-model-img" src="/images/sample_model.png">
-                    <img class="model-check-icon" src="/images/unfilled_check.png">
-                    <div class="model-name">sample 4</div>
-                </div>
-            </label>
-        </div>
     </div>
 </template>
 
 <script>
+import apiQuestionnaire from '@/api/questionnaire';
+
 export default {
     data() {
         return {
             check: null,
+            deviceModels: []
         }
     },
 
     mounted() {
         this.check = localStorage.getItem('selectedModel')
+        this.getDiviceModels()
     },
 
     methods: {
@@ -71,8 +67,37 @@ export default {
         },
 
         onCheck(ref) {
-            localStorage.setItem('selectedModel', ref.target.id);
+            localStorage.setItem('selectedModel', JSON.stringify(
+                { name: ref.target.id, value: ref.target.value })
+            );
             this.$router.push("/questionnaire/selectMobileCarrier");
+        },
+
+        getDiviceModels() {
+            apiQuestionnaire.getDeviceModels()
+                .then(response => {
+                    this.deviceModels = response.data.device.list
+                })
+                .catch(e => {
+                    console.log(e)
+                });
+        },
+
+        // v-for 에서 2 step 기능 지원 안되서... 
+        evneList() {
+            var list = [];
+            this.deviceModels.map((item, index) => {
+                if (index % 2 == 0) list.push(item);
+            });
+            return list
+        },
+
+        oddList() {
+            var list = [];
+            this.deviceModels.map((item, index) => {
+                if (index % 2 == 1) list.push(item);
+            });
+            return list
         },
     }
 }
@@ -106,14 +131,21 @@ export default {
     margin-bottom: 76px;
 }
 
-.model-radio-box {
+.radio-box {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
+    padding: 0px;
+}
+
+.model-radio-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     justify-content: space-around;
     padding: 0px;
-
-    height: 154.5px;
+    gap: 18px;
+    width: 100%;
 }
 
 .model-select-btn {
@@ -140,18 +172,19 @@ export default {
 
 .sample-model-img {
     position: absolute;
-    width: 154px;
     height: 117px;
-    left: 0px;
-    top: 8px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .model-name {
     position: absolute;
-    width: 72px;
     height: 22px;
-    left: 42px;
-    top: 121px;
+    width: 100%;
+    bottom: 0%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
     font-family: 'Pretendard';
     font-style: normal;

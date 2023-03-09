@@ -45,7 +45,10 @@
                         <div class="jibunAddress">{{ jibunAddress }}</div>
                     </div>
 
-                    <div class="estimate-btn" @click="onEstimate">{{ estimateBtnText }}</div>
+                    <div class="estimate-btn" @click="onEstimate">
+                        <img src="/images/kakao_icon.svg">
+                        <div>카카오로 견적 확인하기</div>
+                    </div>
                     <div style="height: 34px;"></div>
                 </div>
             </div>
@@ -54,6 +57,8 @@
 </template>
 
 <script>
+import apiQuestionnaire from '@/api/questionnaire';
+
 export default {
     data() {
         return {
@@ -98,8 +103,9 @@ export default {
 
                         this.address = result[0].address.address_name;
                         localStorage.setItem('address', this.address)
+                        localStorage.setItem('sido', result[0].address.region_1depth_name)
                         localStorage.setItem('sigungu', result[0].address.region_2depth_name)
-                        
+
                         var roadAddress = result[0].road_address
                         if (roadAddress != null) {
                             this.buildingName = roadAddress.building_name;
@@ -121,18 +127,7 @@ export default {
                 };
 
                 this.geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
-
-                var lookingForModelCheck = localStorage.getItem('lookingForModelCheck')
-                var selectedModel = localStorage.getItem('selectedModel')
-                var selectBillPaid = localStorage.getItem('selectBillPaid')
-
-                if (lookingForModelCheck == "0") {
-                    this.estimateBtnText = selectBillPaid + " 원대 견적 확인하기"
-                }
-
-                if (lookingForModelCheck == "1") {
-                    this.estimateBtnText = selectedModel + "번 모델 견적 확인하기"
-                }
+                this.setEstimateBtnText()
             });
         },
 
@@ -141,6 +136,7 @@ export default {
                 oncomplete: (data) => {
                     this.address = data.address;
                     localStorage.setItem('address', this.address)
+                    localStorage.setItem('sido', data.sido)
                     localStorage.setItem('sigungu', data.sigungu)
 
                     this.buildingName = data.buildingName;
@@ -164,16 +160,20 @@ export default {
                 }
             }).open();
 
+            this.setEstimateBtnText()
+        },
+
+        setEstimateBtnText() {
             var lookingForModelCheck = localStorage.getItem('lookingForModelCheck')
-            var selectedModel = localStorage.getItem('selectedModel')
-            var selectBillPaid = localStorage.getItem('selectBillPaid')
+            var selectedModel = JSON.parse(localStorage.getItem('selectedModel'))
+            var selectBillPaid = JSON.parse(localStorage.getItem('selectBillPaid'))
 
             if (lookingForModelCheck == "0") {
-                this.estimateBtnText = selectBillPaid + " 원대 견적 확인하기"
+                this.estimateBtnText = selectBillPaid.name + " 견적 확인하기"
             }
 
             if (lookingForModelCheck == "1") {
-                this.estimateBtnText = selectedModel + "번 모델 견적 확인하기"
+                this.estimateBtnText = selectedModel.name + " 모델 견적 확인하기"
             }
         },
 
@@ -198,7 +198,62 @@ export default {
         },
 
         onEstimate() {
-            this.$router.push("/questionnaireCompleted/loading");
+            var lookingForModelCheck = localStorage.getItem('lookingForModelCheck')
+
+            var selectedModel = JSON.parse(localStorage.getItem('selectedModel'))
+            var selectedMobileCarrier = JSON.parse(localStorage.getItem('selectedMobileCarrier'))
+            var selectedUsagePeriod = JSON.parse(localStorage.getItem('selectedUsagePeriod'))
+            var selectBillPaid = JSON.parse(localStorage.getItem('selectBillPaid'))
+
+            var sido = localStorage.getItem('sido')
+            var sigungu = localStorage.getItem('sigungu')
+
+            // 원하는 기기 없는 경우
+            if (lookingForModelCheck == "0") {
+                let param = {
+                    useTelecomIdx: parseInt(selectedMobileCarrier.value),
+                    usePeriodIdx: parseInt(selectedUsagePeriod.value),
+                    monthCost: parseInt(selectBillPaid.value),
+                    findArea: encodeURIComponent(sido + " " + sigungu),
+                }
+                console.log(param)
+                this.postSurveyDeviceComplete()
+            }
+
+            // 원하는 기기 있는 경우
+            if (lookingForModelCheck == "1") {
+                let param = {
+                    useTelecomIdx: parseInt(selectedMobileCarrier.value),
+                    usePeriodIdx: parseInt(selectedUsagePeriod.value),
+                    deviceIdx: parseInt(selectedModel.value),
+                    findArea: encodeURIComponent(sido + " " + sigungu),
+                }
+                console.log(param)
+                this.postSurveyCostComplete()
+
+            }
+        },
+
+        postSurveyDeviceComplete() {
+            apiQuestionnaire.postSurveyDeviceComplete(param)
+                .then(response => {
+                    console.log(response)
+                    //this.$router.push("/questionnaireCompleted/loading");
+                })
+                .catch(e => {
+                    console.log(e)
+                });
+        },
+
+        postSurveyCostComplete() {
+            apiQuestionnaire.postSurveyCostComplete(param)
+                .then(response => {
+                    console.log(response)
+                    //this.$router.push("/questionnaireCompleted/loading");
+                })
+                .catch(e => {
+                    console.log(e)
+                });
         }
     }
 }
@@ -426,22 +481,23 @@ export default {
 
 .estimate-btn {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     margin: 0px 24px 0px 24px;
+    gap: 8px;
     height: 58px;
 
-    background: #391A15;
+    background: #FEE500;
     border-radius: 8px;
 
     font-family: 'Pretendard';
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
-    line-height: 22px;
+    line-height: 1px;
 
-    color: #FFFFFF;
+    color: #000000;
 }
 
 .kakao-map {

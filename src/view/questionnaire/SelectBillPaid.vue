@@ -10,36 +10,36 @@
         </div>
 
         <div>
-            <input type="radio" id="1" v-model="check" value="1" class="radio" @click="onCheck">
-            <label for="1">
+            <input type="radio" id="5만원대" v-model="check" value="5" class="radio" @click="onCheck">
+            <label for="5만원대">
                 <div class="select-btn">5만원대 이하
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="2" v-model="check" value="2" class="radio" @click="onCheck">
-            <label for="2">
+            <input type="radio" id="6만원대" v-model="check" value="6" class="radio" @click="onCheck">
+            <label for="6만원대">
                 <div class="select-btn">6만원대
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="3" v-model="check" value="3" class="radio" @click="onCheck">
-            <label for="3">
+            <input type="radio" id="7만원대" v-model="check" value="7" class="radio" @click="onCheck">
+            <label for="7만원대">
                 <div class="select-btn">7만원대
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="4" v-model="check" value="4" class="radio" @click="onCheck">
-            <label for="4">
+            <input type="radio" id="8만원대" v-model="check" value="8" class="radio" @click="onCheck">
+            <label for="8만원대">
                 <div class="select-btn">8만원대
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="5" v-model="check" value="5" class="radio" @click="onCheck">
-            <label for="5">
+            <input type="radio" id="9만원대" v-model="check" value="9" class="radio" @click="onCheck">
+            <label for="9만원대">
                 <div class="select-btn">9만원대 이상
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
@@ -66,7 +66,9 @@ export default {
         },
 
         onCheck(ref) {
-            localStorage.setItem('selectBillPaid', ref.target.id);
+            localStorage.setItem('selectBillPaid', JSON.stringify(
+                { name: ref.target.id, value: ref.target.value })
+            );
             this.$router.push("/questionnaire/selectLocation");
         },
     }

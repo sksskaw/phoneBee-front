@@ -10,28 +10,28 @@
         </div>
 
         <div>
-            <input type="radio" id="skt" v-model="check" value="skt" class="radio" @click="onCheck">
+            <input type="radio" id="skt" v-model="check" value="1" class="radio" @click="onCheck">
             <label for="skt">
                 <div class="select-btn">SKT
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="lgu+" v-model="check" value="lgu+" class="radio" @click="onCheck">
+            <input type="radio" id="lgu+" v-model="check" value="3" class="radio" @click="onCheck">
             <label for="lgu+">
                 <div class="select-btn">LG U+
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="kt" v-model="check" value="kt" class="radio" @click="onCheck">
+            <input type="radio" id="kt" v-model="check" value="2" class="radio" @click="onCheck">
             <label for="kt">
                 <div class="select-btn">KT
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="mvno" v-model="check" value="mvno" class="radio" @click="onCheck">
+            <input type="radio" id="mvno" v-model="check" value="4" class="radio" @click="onCheck">
             <label for="mvno">
                 <div class="select-btn">알뜰폰
                     <img class="check-icon" src="/images/unfilled_check.png">
@@ -59,7 +59,9 @@ export default {
         },
 
         onCheck(ref) {
-            localStorage.setItem('selectedMobileCarrier', ref.target.id);
+            localStorage.setItem('selectedMobileCarrier', JSON.stringify(
+                { name: ref.target.id, value: ref.target.value })
+            );
             this.$router.push("/questionnaire/selectUsagePeriod");
         },
     }

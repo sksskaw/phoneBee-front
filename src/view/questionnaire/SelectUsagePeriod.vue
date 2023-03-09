@@ -10,22 +10,22 @@
         </div>
 
         <div>
-            <input type="radio" id="1" v-model="check" value="1" class="radio" @click="onCheck">
-            <label for="1">
+            <input type="radio" id="1년" v-model="check" value="0" class="radio" @click="onCheck">
+            <label for="1년">
                 <div class="select-btn">1년도 안된 것 같아요.
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="2" v-model="check" value="2" class="radio" @click="onCheck">
-            <label for="2">
+            <input type="radio" id="1년이상" v-model="check" value="1" class="radio" @click="onCheck">
+            <label for="1년이상">
                 <div class="select-btn">1년은 넘었어요.
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="3" v-model="check" value="3" class="radio" @click="onCheck">
-            <label for="3">
+            <input type="radio" id="2년이상" v-model="check" value="2" class="radio" @click="onCheck">
+            <label for="2년이상">
                 <div class="select-btn">2년도 넘었어요.
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
@@ -52,7 +52,9 @@ export default {
         },
 
         onCheck(ref) {
-            localStorage.setItem('selectedUsagePeriod', ref.target.id);
+            localStorage.setItem('selectedUsagePeriod', JSON.stringify(
+                { name: ref.target.id, value: ref.target.value })
+            );
 
             if (localStorage.getItem('lookingForModelCheck') === '1') {
                 this.$router.push("/questionnaire/selectLocation");
