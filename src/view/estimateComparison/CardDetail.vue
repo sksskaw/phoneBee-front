@@ -5,17 +5,17 @@
         </div>
 
         <div class="amount-box">
-            <img class="carrier-img" src="/images/skt_logo.svg">
+            <img class="carrier-img" :src="telecomCode">
             <span style="color: #D7D1D0;">ㅣ</span>
             <div>
-                월 <span style="font-weight: 700;">19,000</span>원
+                월 <span style="font-weight: 700;">{{ monthPrice }}</span>원
             </div>
         </div>
 
         <div class="model-box">
-            <img class="back-btn" src="/images/sample_model.svg">
-            <div class="model-name">갤럭시 A53 5G 자급제</div>
-            <div class="model-price"><span style="color: #AEAEAE;">출고가</span> 480,000원</div>
+            <img class="model-img" :src="deviceImgUrl">
+            <div class="model-name">{{ deviceName }}</div>
+            <div class="model-price"><span style="color: #AEAEAE;">출고가</span> {{ factoryPrice }}원</div>
         </div>
 
         <div class="di-box-bg">
@@ -24,25 +24,25 @@
 
                 <div class="di-box1">
                     <div>공시지원금</div>
-                    <div style="font-weight: 700;">-94,567원</div>
+                    <div style="font-weight: 700;">-{{ publicSubsidy }}원</div>
                 </div>
 
                 <div class="di-box2">
                     <div>매장 특별 지원금</div>
-                    <div>-94,567원</div>
+                    <div>-{{ storeSupport }}원</div>
                 </div>
 
                 <div class="di-box3">(공시지원금 + 매장 특별 지원금)</div>
 
                 <div class="di-box4">
                     <div>총 할인금액:</div>
-                    <div>189,134원</div>
+                    <div>{{ totalDiscountPrice }}원</div>
                 </div>
                 <hr width="100%" color="#E1E1E1" size="1">
 
                 <div class="di-box5">
                     <div>단말기 월 할부 금액 :</div>
-                    <div>19,000원</div>
+                    <div>{{ monthPrice }}원</div>
                 </div>
 
                 <div class="di-box6">* 매장 특별 지원금 지급 조건 65요금제 6개월 유지</div>
@@ -53,19 +53,46 @@
 
                 <div class="si-box">
                     <div class="si-box-name">상호명</div>
-                    <div>싸다폰</div>
+                    <div>{{ storeName }}</div>
                 </div>
 
                 <div class="si-box">
                     <div class="si-box-name">주소</div>
-                    <div>서울시 마포구 양화로 160 수성빌딩 101호 (주소가 길어진다면 여기까지)</div>
+                    <div>{{ storeAddress }}</div>
                 </div>
 
                 <div class="si-box">
                     <div class="si-box-name">평점</div>
                     <div class="si-score-box">
-                        <img src="/images/star.svg"><span style="font-weight: 700;">4.5점</span>
+                        <img src="/images/star.svg"><span style="font-weight: 700;">{{ storeGrade }}점</span>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="review-box">
+            <div class="review-count-box">판매점 리뷰
+                <span style="color: #828282; font-weight: 400;">{{ reviews.length }}개</span>
+            </div>
+
+            <div class="review-content-box" v-for="item in reviews">
+                <div class="review-user-info">
+                    <div class="user-profile">
+                        <img src="/images/user_profile_default.svg">
+                    </div>
+                    <div class="user-name-grade">
+                        <div class="user-name">
+                            <div>{{ item.writer }}</div>
+                            <div style="font-weight: 400; font-size: 12px; line-height: 18px;">{{ item.registDateTime }}
+                            </div>
+                        </div>
+                        <div class="grade-box">
+                            <img v-for="i in item.grade" src="/images/star.svg">
+                        </div>
+                    </div>
+                </div>
+                <div class="review-content">
+                    {{ item.review }}
                 </div>
             </div>
         </div>
@@ -79,11 +106,38 @@
 </template>
 
 <script>
+import strg from "@/utils/strg";
+import apiEstimate from "@/api/estimate";
+import cookie from '@/utils/cookie';
+
 export default {
     data() {
         return {
+            monthPrice: '',
+            deviceImgUrl: '',
+            deviceName: '',
+            factoryPrice: '',
+            telecomCode: '',
 
+            publicSubsidy: '',
+            storeSupport: '',
+            totalDiscountPrice: '',
+            monthPrice: '',
+
+            storeAddress: '',
+            storeGrade: '',
+            storeName: '',
+
+            reviews: [],
         }
+    },
+
+    mounted() {
+        var enmemberidx = cookie.getCookie('Enmemberidx')
+        if (enmemberidx == '' || enmemberidx == null)
+            this.$router.push("/");
+
+        this.getEstimateDetail(enmemberidx)
     },
 
     methods: {
@@ -95,8 +149,39 @@ export default {
             this.$router.push("/confirm/confirmEstimate");
         },
 
-        getdetail() {
-            this.$route.query.selectedCard
+        getEstimateDetail(enmemberidx) {
+            apiEstimate.getEstimateDetail(this.$route.query.surveyCode, this.$route.query.planPriceIdx, enmemberidx)
+                .then(response => {
+                    const data = response.data.estimate
+
+                    this.monthPrice = this.priceFormat(data.deviceSection.monthPrice)
+                    this.deviceImgUrl = data.deviceSection.deviceImgUrl
+                    this.deviceName = data.deviceSection.deviceName
+                    this.factoryPrice = this.priceFormat(data.deviceSection.factoryPrice)
+                    this.telecomCode = this.getCarrierLogo(data.deviceSection.telecomCode)
+
+                    this.publicSubsidy = this.priceFormat(data.monthPriceSection.publicSubsidy)
+                    this.storeSupport = this.priceFormat(data.monthPriceSection.storeSupport)
+                    this.totalDiscountPrice = this.priceFormat(data.monthPriceSection.totalDiscountPrice)
+                    this.monthPrice = this.priceFormat(data.monthPriceSection.monthPrice)
+
+                    this.storeAddress = data.storeSection.storeAddress
+                    this.storeGrade = data.storeSection.storeGrade
+                    this.storeName = data.storeSection.storeName
+
+                    this.reviews = data.reviewSection
+                })
+                .catch(e => {
+                    console.log(e)
+                });
+        },
+
+        getCarrierLogo(name) {
+            return strg.getCarrierLogo(name)
+        },
+
+        priceFormat(price) {
+            return strg.priceFormat(price)
         }
     }
 }
@@ -150,6 +235,10 @@ export default {
 
     height: 183px;
     margin-bottom: 48px;
+}
+
+.model-img {
+    height: 125px;
 }
 
 .model-name {
@@ -389,5 +478,93 @@ export default {
     line-height: 22px;
 
     color: #FFFFFF;
+}
+
+.review-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 28px 24px;
+    gap: 24px;
+
+    background: #FFFFFF;
+}
+
+.review-count-box {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+
+    height: 22px;
+
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 22px;
+}
+
+.review-content-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 16px;
+}
+
+.review-user-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 16px;
+
+    height: 48px;
+}
+
+.user-name-grade {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+
+    height: 46px;
+}
+
+.user-name {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 8px;
+
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 22px;
+
+    color: #828282;
+}
+
+.review-content {
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 22px;
+
+    color: #828282;
+}
+
+.grade-box {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 4px;
 }
 </style>

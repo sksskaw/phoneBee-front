@@ -73,8 +73,8 @@ export default {
     },
 
     methods: {
-        toDetail() {
-            this.$router.push(`/estimateComparison/cardDetail?planPriceIdx=${this.selectedCard}`);
+        toDetail(ref) {
+            this.$router.push(`/estimateComparison/cardDetail?surveyCode=${this.$route.query.surveyCode}&planPriceIdx=${ref.target.id}`);
         },
 
         onMore() {
@@ -97,7 +97,6 @@ export default {
                     this.deviceName = response.data.estimate.deviceName
                     this.totalDiscountPrice = strg.priceFormat(response.data.estimate.totalDiscountPrice)
                     this.cardList = response.data.estimate.list
-                    console.log(this.cardList)
                 })
                 .catch(e => {
                     console.log(e)

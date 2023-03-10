@@ -34,4 +34,21 @@ export default {
                 });
         });
     },
+
+    async getEstimateDetail(surveyCode, planPriceIdx, enmemberidx) {
+        return new Promise((resolve, reject) => {
+            rest.get(`/api/estimate/detail/${surveyCode}/${planPriceIdx}`
+                , {
+                    headers: {
+                        'Enmemberidx': enmemberidx
+                    }
+                })
+                .then(response => {
+                    resolve(response);
+                })
+                .catch(error => {
+                    reject(error);
+                });
+        });
+    },
 }

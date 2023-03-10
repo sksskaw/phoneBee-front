@@ -45,9 +45,15 @@
           </div>
 
           <div class="estimate-notice">견적 확인을 위해 카카오로 가입이 필요해요</div>
-          <div class="estimate-btn" @click="onEstimate">
-            <img src="/images/kakao_icon.svg">
-            <div>카카오로 견적 확인하기</div>
+          <div @click="onEstimate">
+            <div class="estimate-btn" v-if="estimateLoading == true">
+              <img class="loading-icon" src="/images/search_loading_icon.gif">
+            </div>
+
+            <div class="estimate-btn" v-if="estimateLoading == false">
+              <img src="/images/kakao_icon.svg" style="background-color: #FEE500;">
+              <div>카카오로 견적 확인하기</div>
+            </div>
           </div>
           <div style="height: 34px;"></div>
         </div>
@@ -73,6 +79,7 @@ export default {
       jibunAddress: "",
 
       getCurrentPositionLoding: false,
+      estimateLoading: false,
     }
   },
 
@@ -215,53 +222,11 @@ export default {
 
           apiLogin.sighUpLogin(userInfo)
             .then(response => {
-
               // response.resultCode === 0 인 경우..
               if (response.data.resultCode === 0) {
-
-                let findArea = this.sido + "시 " + this.sigungu
-                let param = {
-                  useTelecomIdx: parseInt(this.$route.params.useTelecomIdx),
-                  usePeriodIdx: parseInt(this.$route.params.usePeriodIdx),
-                  deviceIdx: parseInt(this.$route.params.deviceIdx),
-                  monthCost: parseInt(this.$route.params.monthCost),
-                  findArea: encodeURIComponent(findArea),
-                }
-
                 var enmemberidx = response.data.Enmemberidx
                 cookie.setCookie('Enmemberidx', enmemberidx, 1)
-                var findType = this.$route.params.findType
-
-                // 원하는 기기 있는 경우
-                if (findType == "1") {
-                  apiQuestionnaire.postSurveyDeviceComplete(param, enmemberidx)
-                    .then(response => {
-                      if (response.data.resultCode === 0) {
-                        this.$router.push(`/questionnaireCompleted/loading?surveyCode=${response.data.surveyCode}`);
-                      } else {
-                        console.log("실패")
-                      }
-                    }).catch(e => {
-                      // 예외사항 체크
-                      console.log(e)
-                    });
-                }
-
-                // 원하는 기기 없는 경우
-                if (findType == "0") {
-                  apiQuestionnaire.postSurveyCostComplete(param, enmemberidx)
-                    .then(response => {
-                      if (response.data.resultCode === 0) {
-                        this.$router.push(`/questionnaireCompleted/loading?surveyCode=${response.data.surveyCode}`);
-                      } else {
-                        console.log("실패")
-                      }
-                    }).catch(e => {
-                      // 예외사항 체크
-                      console.log(e)
-                    });
-                }
-
+                this.postSurvey(enmemberidx)
               } else {
                 console.log("response.data.resultCode === 0 이 아닌 경우에 대한 예외 처리")
               }
@@ -278,9 +243,60 @@ export default {
     },
 
     onEstimate() {
-      window.Kakao.Auth.login({
-        success: this.getKakaoMyInfo
-      })
+      this.estimateLoading = true
+
+      var enmemberidx = cookie.getCookie('Enmemberidx')
+
+      if (enmemberidx == null || enmemberidx == '') {
+        window.Kakao.Auth.login({
+          success: this.getKakaoMyInfo
+        })
+        return
+      }
+
+      this.postSurvey(enmemberidx)
+    },
+
+    postSurvey(enmemberidx) {
+      let findArea = this.sido + "시 " + this.sigungu
+      let param = {
+        useTelecomIdx: parseInt(this.$route.params.useTelecomIdx),
+        usePeriodIdx: parseInt(this.$route.params.usePeriodIdx),
+        deviceIdx: parseInt(this.$route.params.deviceIdx),
+        monthCost: parseInt(this.$route.params.monthCost),
+        findArea: encodeURIComponent(findArea),
+      }
+
+      var findType = this.$route.params.findType
+      // 원하는 기기 있는 경우
+      if (findType == "1") {
+        apiQuestionnaire.postSurveyDeviceComplete(param, enmemberidx)
+          .then(response => {
+            if (response.data.resultCode === 0) {
+              this.$router.push(`/questionnaireCompleted/loading?surveyCode=${response.data.surveyCode}`);
+            } else {
+              console.log("실패")
+            }
+          }).catch(e => {
+            // 예외사항 체크
+            console.log(e)
+          });
+      }
+
+      // 원하는 기기 없는 경우
+      if (findType == "0") {
+        apiQuestionnaire.postSurveyCostComplete(param, enmemberidx)
+          .then(response => {
+            if (response.data.resultCode === 0) {
+              this.$router.push(`/questionnaireCompleted/loading?surveyCode=${response.data.surveyCode}`);
+            } else {
+              console.log("실패")
+            }
+          }).catch(e => {
+            // 예외사항 체크
+            console.log(e)
+          });
+      }
     },
   }
 }

@@ -74,8 +74,8 @@ export default {
     },
 
     methods: {
-        toDetail() {
-            this.$router.push(`/estimateComparison/cardDetail?planPriceIdx=${this.selectedCard}`);
+        toDetail(ref) {
+            this.$router.push(`/estimateComparison/cardDetail?surveyCode=${this.$route.query.surveyCode}&planPriceIdx=${ref.target.id}`);
         },
 
         onMore() {
@@ -94,7 +94,6 @@ export default {
         getEstimateList(enmemberidx) {
             apiEstimate.getEstimateList(this.$route.query.surveyCode, enmemberidx)
                 .then(response => {
-                    console.log(response.data)
                     this.date = response.data.date
                     this.deviceName = response.data.deviceName
                     this.totalDiscountPrice = response.data.totalDiscountPrice
