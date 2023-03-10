@@ -10,29 +10,29 @@
         </div>
 
         <div>
-            <input type="radio" id="skt" v-model="check" value="1" class="radio" @click="onCheck">
-            <label for="skt">
+            <input type="radio" id="1" v-model="check" value="1" class="radio" @click="onCheck">
+            <label for="1">
                 <div class="select-btn">SKT
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="lgu+" v-model="check" value="3" class="radio" @click="onCheck">
-            <label for="lgu+">
+            <input type="radio" id="3" v-model="check" value="3" class="radio" @click="onCheck">
+            <label for="3">
                 <div class="select-btn">LG U+
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="kt" v-model="check" value="2" class="radio" @click="onCheck">
-            <label for="kt">
+            <input type="radio" id="2" v-model="check" value="2" class="radio" @click="onCheck">
+            <label for="2">
                 <div class="select-btn">KT
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="mvno" v-model="check" value="4" class="radio" @click="onCheck">
-            <label for="mvno">
+            <input type="radio" id="4" v-model="check" value="4" class="radio" @click="onCheck">
+            <label for="4">
                 <div class="select-btn">알뜰폰
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
@@ -50,26 +50,28 @@ export default {
     },
 
     mounted() {
-        this.check = JSON.parse(localStorage.getItem('selectedMobileCarrier'))?.value
+        this.check = this.$route.params.useTelecomIdx
     },
 
     methods: {
         onBackBtn() {
-            let lookingForModelCheck = localStorage.getItem('lookingForModelCheck')
-            if (lookingForModelCheck == "0") {
-            this.$router.push("/");
+            if (this.$route.params.findType == "0") {
+                this.$router.push(`/questionnaire/${this.$route.params.findType}`);
             }
 
-            if (lookingForModelCheck == "1") {
-            this.$router.push("/questionnaire/selectModel");
+            if (this.$route.params.findType == "1") {
+                this.$router.push(`/questionnaire/${this.$route.params.findType}/${this.$route.params.deviceIdx}`);
             }
         },
 
         onCheck(ref) {
-            localStorage.setItem('selectedMobileCarrier', JSON.stringify(
-                { name: ref.target.id, value: ref.target.value })
-            );
-            this.$router.push("/questionnaire/selectUsagePeriod");
+            if (this.$route.params.findType == "0") {
+                this.$router.push(`/questionnaire/${this.$route.params.findType}/0/${ref.target.id}/selectUsagePeriod`);
+            }
+
+            if (this.$route.params.findType == "1") {
+                this.$router.push(`/questionnaire/${this.$route.params.findType}/${this.$route.params.deviceIdx}/${ref.target.id}/selectUsagePeriod`);
+            }
         },
     }
 }

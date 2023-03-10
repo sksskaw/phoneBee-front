@@ -17,29 +17,29 @@
                 </div>
             </label>
 
-            <input type="radio" id="6만원대" v-model="check" value="6" class="radio" @click="onCheck">
-            <label for="6만원대">
+            <input type="radio" id="6" v-model="check" value="6" class="radio" @click="onCheck">
+            <label for="6">
                 <div class="select-btn">6만원대
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="7만원대" v-model="check" value="7" class="radio" @click="onCheck">
-            <label for="7만원대">
+            <input type="radio" id="7" v-model="check" value="7" class="radio" @click="onCheck">
+            <label for="7">
                 <div class="select-btn">7만원대
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="8만원대" v-model="check" value="8" class="radio" @click="onCheck">
-            <label for="8만원대">
+            <input type="radio" id="8" v-model="check" value="8" class="radio" @click="onCheck">
+            <label for="8">
                 <div class="select-btn">8만원대
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="9만원대" v-model="check" value="9" class="radio" @click="onCheck">
-            <label for="9만원대">
+            <input type="radio" id="9" v-model="check" value="9" class="radio" @click="onCheck">
+            <label for="9">
                 <div class="select-btn">9만원대 이상
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
@@ -62,14 +62,11 @@ export default {
 
     methods: {
         onBackBtn() {
-            this.$router.push("/questionnaire/selectUsagePeriod");
+            this.$router.push(`/questionnaire/${this.$route.params.findType}/${this.$route.params.deviceIdx}/${this.$route.params.useTelecomIdx}/${this.$route.params.usePeriodIdx}`);
         },
 
         onCheck(ref) {
-            localStorage.setItem('selectBillPaid', JSON.stringify(
-                { name: ref.target.id, value: ref.target.value })
-            );
-            this.$router.push("/questionnaire/selectLocation");
+            this.$router.push(`/questionnaire/${this.$route.params.findType}/${this.$route.params.deviceIdx}/${this.$route.params.useTelecomIdx}/${this.$route.params.usePeriodIdx}/${ref.target.id}/selectLocation`);
         },
     }
 }

@@ -36,7 +36,7 @@ export default {
     },
 
     mounted() {
-        this.check = localStorage.getItem('lookingForModelCheck')
+        this.check = this.$route.params.findType
     },
 
     methods: {
@@ -46,13 +46,10 @@ export default {
 
         onCheck(ref) {
             if (ref.target.id === "y") {
-                localStorage.setItem('lookingForModelCheck', "1");
-                this.$router.push("/questionnaire/selectModel");
+                this.$router.push(`/questionnaire/1/selectModel`);
                 return
             }
-
-            localStorage.setItem('lookingForModelCheck', "0");
-            this.$router.push("/questionnaire/selectMobileCarrier");
+            this.$router.push(`/questionnaire/0/0/selectMobileCarrier`);
         },
     }
 }

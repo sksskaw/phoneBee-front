@@ -13,9 +13,9 @@
 
             <div class="model-radio-box">
                 <div v-for="model in evneList()">
-                    <input type="radio" :id="model.deviceName" v-model="check" :value="model.deviceIdx" class="model-radio"
+                    <input type="radio" :id="model.deviceIdx" v-model="check" :value="model.deviceIdx" class="model-radio"
                         @click="onCheck">
-                    <label :for="model.deviceName">
+                    <label :for="model.deviceIdx">
                         <div class="model-select-btn">
                             <img class="model-check-icon" src="/images/unfilled_check.png">
                             <img class="sample-model-img" :src="model.deviceImgUrl">
@@ -27,9 +27,9 @@
 
             <div class="model-radio-box">
                 <div v-for="model in oddList()">
-                    <input type="radio" :id="model.deviceName" v-model="check" :value="model.deviceIdx" class="model-radio"
+                    <input type="radio" :id="model.deviceIdx" v-model="check" :value="model.deviceIdx" class="model-radio"
                         @click="onCheck">
-                    <label :for="model.deviceName">
+                    <label :for="model.deviceIdx">
                         <div class="model-select-btn">
                             <img class="model-check-icon" src="/images/unfilled_check.png">
                             <img class="sample-model-img" :src="model.deviceImgUrl">
@@ -57,21 +57,17 @@ export default {
     },
 
     mounted() {
-        this.check = JSON.parse(localStorage.getItem('selectedModel'))?.value
-        
+        this.check = this.$route.params.deviceIdx
         this.getDiviceModels()
     },
 
     methods: {
         onBackBtn() {
-            this.$router.push("/questionnaire");
+            this.$router.push(`/questionnaire/${this.$route.params.findType}`);
         },
 
         onCheck(ref) {
-            localStorage.setItem('selectedModel', JSON.stringify(
-                { name: ref.target.id, value: ref.target.value })
-            );
-            this.$router.push("/questionnaire/selectMobileCarrier");
+            this.$router.push(`/questionnaire/${this.$route.params.findType}/${ref.target.id}/selectMobileCarrier`);
         },
 
         getDiviceModels() {

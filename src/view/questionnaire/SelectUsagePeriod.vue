@@ -10,22 +10,22 @@
         </div>
 
         <div>
-            <input type="radio" id="1년" v-model="check" value="0" class="radio" @click="onCheck">
-            <label for="1년">
+            <input type="radio" id="0" v-model="check" value="0" class="radio" @click="onCheck">
+            <label for="0">
                 <div class="select-btn">1년도 안된 것 같아요.
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="1년이상" v-model="check" value="1" class="radio" @click="onCheck">
-            <label for="1년이상">
+            <input type="radio" id="1" v-model="check" value="1" class="radio" @click="onCheck">
+            <label for="1">
                 <div class="select-btn">1년은 넘었어요.
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
             </label>
 
-            <input type="radio" id="2년이상" v-model="check" value="2" class="radio" @click="onCheck">
-            <label for="2년이상">
+            <input type="radio" id="2" v-model="check" value="2" class="radio" @click="onCheck">
+            <label for="2">
                 <div class="select-btn">2년도 넘었어요.
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
@@ -43,26 +43,28 @@ export default {
     },
 
     mounted() {
-        this.check = JSON.parse(localStorage.getItem('selectedUsagePeriod'))?.value
-
+        this.check = this.$route.params.usePeriodIdx
     },
 
     methods: {
         onBackBtn() {
-            this.$router.push("/questionnaire/selectMobileCarrier");
+            if (this.$route.params.findType == "0") {
+                this.$router.push(`/questionnaire/${this.$route.params.findType}/0/${this.$route.params.useTelecomIdx}`);
+            }
+
+            if (this.$route.params.findType == "1") {
+                this.$router.push(`/questionnaire/${this.$route.params.findType}/${this.$route.params.deviceIdx}/${this.$route.params.useTelecomIdx}`);
+            }
         },
 
         onCheck(ref) {
-            localStorage.setItem('selectedUsagePeriod', JSON.stringify(
-                { name: ref.target.id, value: ref.target.value })
-            );
-
-            if (localStorage.getItem('lookingForModelCheck') === '1') {
-                this.$router.push("/questionnaire/selectLocation");
-            } else {
-                this.$router.push("/questionnaire/selectBillPaid");
+            if (this.$route.params.findType == "0") {
+                this.$router.push(`/questionnaire/${this.$route.params.findType}/0/${this.$route.params.useTelecomIdx}/${ref.target.id}/selectBillPaid`);
             }
 
+            if (this.$route.params.findType == "1") {
+                this.$router.push(`/questionnaire/${this.$route.params.findType}/${this.$route.params.deviceIdx}/${this.$route.params.useTelecomIdx}/${ref.target.id}/0/selectLocation`);
+            }
         },
     }
 }

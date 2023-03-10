@@ -16,27 +16,32 @@ const routes = [
 
     //questionnaire
     {
-        path: '/questionnaire',
+        path:   '/questionnaire/:findType',
+        alias: ['/questionnaire'],
         component: () => import('../view/questionnaire/LookingForModel.vue')
     },
     {
-        path: '/questionnaire/selectModel',
+        path:   '/questionnaire/:findType/selectModel',
+        alias: ['/questionnaire/:findType/:deviceIdx'],
         component: () => import('../view/questionnaire/SelectModel.vue')
     },
     {
-        path: '/questionnaire/selectMobileCarrier',
+        path:   '/questionnaire/:findType/:deviceIdx/selectMobileCarrier',
+        alias: ['/questionnaire/:findType/:deviceIdx/:useTelecomIdx/'],
         component: () => import('../view/questionnaire/SelectMobileCarrier.vue')
     },
     {
-        path: '/questionnaire/selectUsagePeriod',
+        path:   '/questionnaire/:findType/:deviceIdx/:useTelecomIdx/selectUsagePeriod',
+        alias: ['/questionnaire/:findType/:deviceIdx/:useTelecomIdx/:usePeriodIdx'],
         component: () => import('../view/questionnaire/SelectUsagePeriod.vue')
     },
     {
-        path: '/questionnaire/selectBillPaid',
+        path:   '/questionnaire/:findType/:deviceIdx/:useTelecomIdx/:usePeriodIdx/selectBillPaid',
+        alias: ['/questionnaire/:findType/:deviceIdx/:useTelecomIdx/:usePeriodIdx/:monthCost'],
         component: () => import('../view/questionnaire/SelectBillPaid.vue')
     },
     {
-        path: '/questionnaire/selectLocation',
+        path: '/questionnaire/:findType/:deviceIdx/:useTelecomIdx/:usePeriodIdx/:monthCost/selectLocation',
         component: () => import('../view/questionnaire/SelectLocation.vue')
     },
 
