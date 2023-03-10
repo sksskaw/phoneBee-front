@@ -19,7 +19,7 @@ export default {
                 `useTelecomIdx=${params.useTelecomIdx}&` +
                 `usePeriodIdx=${params.usePeriodIdx}&` +
                 `deviceIdx=${params.deviceIdx}&` +
-                `findArea=${params.findArea}`,{},
+                `findArea=${params.findArea}`,null,
                 {
                     headers: {
                         'Enmemberidx': enmemberidx
@@ -40,7 +40,7 @@ export default {
                 `useTelecomIdx=${params.useTelecomIdx}&` +
                 `usePeriodIdx=${params.usePeriodIdx}&` +
                 `monthCost=${params.monthCost}&` +
-                `findArea=${params.findArea}`,{},
+                `findArea=${params.findArea}`,null,
                 {
                     headers: {
                         'Enmemberidx': enmemberidx

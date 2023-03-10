@@ -1,12 +1,12 @@
 import rest from "@/utils/rest";
 
 export default {
-    async getEstimateList(surveyCode) {
+    async getEstimateList(surveyCode, enmemberidx) {
         return new Promise((resolve, reject) => {
             rest.get(`/api/survey/estimate/list/${surveyCode}`
                 , {
                     headers: {
-                        'Enmemberidx': 'SXlTSHdxQnZrS2pKTkRUYm5FMU15UT09'
+                        'Enmemberidx': enmemberidx
                     }
                 })
                 .then(response => {
@@ -18,12 +18,12 @@ export default {
         });
     },
 
-    async getEstimateList(surveyCode) {
+    async getEstimateCheck(surveyCode, enmemberidx) {
         return new Promise((resolve, reject) => {
-            rest.get(`/api/survey/estimate/list/${surveyCode}`
+            rest.get(`/api/survey/estimate/check/${surveyCode}`
                 , {
                     headers: {
-                        'Enmemberidx': 'SXlTSHdxQnZrS2pKTkRUYm5FMU15UT09'
+                        'Enmemberidx': enmemberidx
                     }
                 })
                 .then(response => {

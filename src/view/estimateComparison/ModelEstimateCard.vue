@@ -64,7 +64,11 @@ export default {
     },
 
     mounted() {
-        this.getEstimateList()
+        var enmemberidx = cookie.getCookie('Enmemberidx')
+        if (enmemberidx == '' || enmemberidx == null)
+            this.$router.push("/");
+
+        this.getEstimateList(enmemberidx)
     },
 
     methods: {
@@ -85,8 +89,8 @@ export default {
             return this.showListIndex
         },
 
-        getEstimateList() {
-            apiEstimate.getEstimateList("amplS3FCM1JiLzhHenVFYzNBYUR2dz09")
+        getEstimateList(enmemberidx) {
+            apiEstimate.getEstimateList(this.$route.query.surveyCode, enmemberidx)
                 .then(response => {
                     this.date = response.data.estimate.date
                     this.deviceName = response.data.estimate.deviceName

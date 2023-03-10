@@ -57,7 +57,7 @@ export default {
     },
 
     mounted() {
-        this.check = JSON.parse(localStorage.getItem('selectBillPaid'))?.value
+        this.check = this.$route.params.monthCost
     },
 
     methods: {

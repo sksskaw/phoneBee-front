@@ -58,17 +58,21 @@
   
 <script>
 import apiQuestionnaire from '@/api/questionnaire';
+import apiLogin from '@/api/login';
+import cookie from '@/utils/cookie';
 
 export default {
   data() {
     return {
       address: null,
+      sido: null,
+      sigungu: null,
+
       buildingName: "",
       roadAddress: "",
       jibunAddress: "",
 
       getCurrentPositionLoding: false,
-      estimateBtnText: ""
     }
   },
 
@@ -108,11 +112,10 @@ export default {
           if (status === kakao.maps.services.Status.OK) {
 
             this.address = result[0].address.address_name;
-            localStorage.setItem('address', this.address)
-            localStorage.setItem('sido', result[0].address.region_1depth_name)
-            localStorage.setItem('sigungu', result[0].address.region_2depth_name)
-
+            this.sido = result[0].address.region_1depth_name;
+            this.sigungu = result[0].address.region_2depth_name;
             var roadAddress = result[0].road_address
+
             if (roadAddress != null) {
               this.buildingName = roadAddress.building_name;
               this.roadAddress = result[0].road_address.address_name;
@@ -133,7 +136,6 @@ export default {
         };
 
         this.geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
-        this.setEstimateBtnText()
       });
     },
 
@@ -141,9 +143,8 @@ export default {
       new daum.Postcode({
         oncomplete: (data) => {
           this.address = data.address;
-          localStorage.setItem('address', this.address)
-          localStorage.setItem('sido', data.sido)
-          localStorage.setItem('sigungu', data.sigungu)
+          this.sido = data.sido
+          this.sigungu = data.sigungu
 
           this.buildingName = data.buildingName;
           this.roadAddress = data.roadAddress ? data.roadAddress : data.autoRoadAddress;
@@ -165,22 +166,6 @@ export default {
           });
         }
       }).open();
-
-      this.setEstimateBtnText()
-    },
-
-    setEstimateBtnText() {
-      var lookingForModelCheck = localStorage.getItem('lookingForModelCheck')
-      var selectedModel = JSON.parse(localStorage.getItem('selectedModel'))
-      var selectBillPaid = JSON.parse(localStorage.getItem('selectBillPaid'))
-
-      if (lookingForModelCheck == "0") {
-        this.estimateBtnText = selectBillPaid.name + " 견적 확인하기"
-      }
-
-      if (lookingForModelCheck == "1") {
-        this.estimateBtnText = selectedModel.name + " 모델 견적 확인하기"
-      }
     },
 
     closeModal() {
@@ -218,23 +203,73 @@ export default {
           console.dir(res)
           const kakao_account = res.kakao_account;
           const userInfo = {
-            id: res.id,
+            kakaoId: res.id,
             accessToken: authObj.access_token,
             refreshToken: authObj.refresh_token,
             expiresIn: authObj.expires_in,
             nickname: kakao_account.profile.nickname,
             email: kakao_account.email,
             phoneNumber: kakao_account.phone_number,
-            thumbnailImageUrl: kakao_account.profile.thumbnail_image_url,
-            account_type: 2,
-            loginType: vm_.loginType,
-            chatBotUserId: vm_.chatBotUserId,
-            plusfriendUserKey: vm_.plusfriendUserKey
+            thumbnailImageUrl: kakao_account.profile.thumbnail_image_url
+
           }
 
-          console.log("kakao talk 회원정보 전달 서버에 전달 API 호출")
-          console.log("kakao talk 회원정보 전달 서버에 전달 API 응답 받으면, 설문 내역 전달 API 호출")
+          apiLogin.sighUpLogin(userInfo)
+            .then(response => {
 
+              // response.resultCode === 0 인 경우..
+              if (response.data.resultCode === 0) {
+
+                let param = {
+                  useTelecomIdx: parseInt(this.$route.params.useTelecomIdx),
+                  usePeriodIdx: parseInt(this.$route.params.usePeriodIdx),
+                  deviceIdx: parseInt(this.$route.params.deviceIdx),
+                  monthCost: parseInt(this.$route.params.monthCost),
+                  findArea: encodeURIComponent(this.sido + " " + this.sigungu),
+                }
+                var enmemberidx = response.data.Enmemberidx
+                cookie.setCookie('Enmemberidx', enmemberidx, 1)
+
+                var findType = this.$route.params.findType
+
+                // 원하는 기기 있는 경우
+                if (findType == "1") {
+                  apiQuestionnaire.postSurveyDeviceComplete(param, enmemberidx)
+                    .then(response => {
+                      if (response.data.resultCode === 0) {
+                        this.$router.push(`/questionnaireCompleted/loading?surveyCode=${response.data.surveyCode}`);
+                      } else {
+                        console.log("실패")
+                      }
+                    }).catch(e => {
+                      // 예외사항 체크
+                      console.log(e)
+                    });
+                }
+
+                // 원하는 기기 없는 경우
+                if (findType == "0") {
+                  apiQuestionnaire.postSurveyCostComplete(param, enmemberidx)
+                    .then(response => {
+                      if (response.data.resultCode === 0) {
+                        this.$router.push(`/questionnaireCompleted/loading?surveyCode=${response.data.surveyCode}`);
+                      } else {
+                        console.log("실패")
+                      }
+                    }).catch(e => {
+                      // 예외사항 체크
+                      console.log(e)
+                    });
+                }
+
+              } else {
+                console.log("response.data.resultCode === 0 이 아닌 경우에 대한 예외 처리")
+              }
+            })
+            .catch(e => {
+              // 예외사항 체크
+              console.log(e)
+            });
         },
         fail: error => {
           console.log(error);

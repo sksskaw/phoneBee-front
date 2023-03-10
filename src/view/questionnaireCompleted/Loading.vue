@@ -8,7 +8,7 @@
 
         <div class="loading-page-box-1 animate__animated animate__fadeInUp">
             {{ sigungu }} 주변 매장들의<br>
-            {{ estimateText }} 견적을<br>
+            {{ condition }} 견적을<br>
             확인하고 있어요.
         </div>
 
@@ -20,102 +20,58 @@
 </template>
 
 <script>
-import apiQuestionnaire from '@/api/questionnaire';
+import apiEstimate from '@/api/estimate';
 import cookie from '@/utils/cookie';
 
 export default {
     data() {
         return {
-            sigungu: localStorage.getItem('sigungu'),
-            estimateText: null,
+            sigungu: '',
+            condition: '',
         }
     },
 
-    created() {
-        this.setEstimateBtnText()
-    },
 
     mounted() {
         var enmemberidx = cookie.getCookie('Enmemberidx')
         if (enmemberidx == '' || enmemberidx == null)
             this.$router.push("/");
 
-        var lookingForModelCheck = localStorage.getItem('lookingForModelCheck')
-
-        var selectedModel = JSON.parse(localStorage.getItem('selectedModel'))
-        var selectedMobileCarrier = JSON.parse(localStorage.getItem('selectedMobileCarrier'))
-        var selectedUsagePeriod = JSON.parse(localStorage.getItem('selectedUsagePeriod'))
-        var selectBillPaid = JSON.parse(localStorage.getItem('selectBillPaid'))
-
-        var sido = localStorage.getItem('sido')
-        var sigungu = localStorage.getItem('sigungu')
-
-        // 원하는 기기 있는 경우
-        if (lookingForModelCheck == "1") {
-            let param = {
-                useTelecomIdx: parseInt(selectedMobileCarrier.value),
-                usePeriodIdx: parseInt(selectedUsagePeriod.value),
-                deviceIdx: parseInt(selectedModel.value),
-                findArea: encodeURIComponent(sido + " " + sigungu),
-            }
-            console.log(param)
-            this.postSurveyDeviceComplete(param, enmemberidx)
-        }
-
-        // 원하는 기기 없는 경우
-        if (lookingForModelCheck == "0") {
-            let param = {
-                useTelecomIdx: parseInt(selectedMobileCarrier.value),
-                usePeriodIdx: parseInt(selectedUsagePeriod.value),
-                monthCost: parseInt(selectBillPaid.value),
-                findArea: encodeURIComponent(sido + " " + sigungu),
-            }
-            console.log(param)
-            this.postSurveyCostComplete(param, enmemberidx)
-
-        }
+        this.getEstimateCheck(enmemberidx)
     },
 
     methods: {
         onBackBtn() {
-            this.$router.push("/questionnaire/selectLocation");
+            this.$router.push("/");
         },
 
-        setEstimateBtnText() {
-            var lookingForModelCheck = localStorage.getItem('lookingForModelCheck')
-            var selectedModel = JSON.parse(localStorage.getItem('selectedModel'))
-            var selectBillPaid = JSON.parse(localStorage.getItem('selectBillPaid'))
-
-            if (lookingForModelCheck == "0") {
-                this.estimateText = selectBillPaid.name
-            }
-
-            if (lookingForModelCheck == "1") {
-                this.estimateText = selectedModel.name
-            }
-        },
-
-        postSurveyDeviceComplete(param, enmemberidx) {
-            apiQuestionnaire.postSurveyDeviceComplete(param, enmemberidx)
+        getEstimateCheck(enmemberidx) {
+            apiEstimate.getEstimateCheck(this.$route.query.surveyCode, enmemberidx)
                 .then(response => {
-                    console.log(response)
-                    //this.$router.push("/questionnaireCompleted/loading");
+                    this.condition = response.data.buttonLabel.condition
+                    this.sigungu = response.data.buttonLabel.findArea
+                    let searchAgain = response.data.searchAgain.findArea
+
+                    setTimeout(() => {
+                        if (response.data.isEstimate == 'N') {
+                            this.$router.push(`/questionnaireCompleted/NotFound?findArea=${this.sigungu}&searchAgain=${searchAgain}`);
+                        }
+
+                        if (response.data.isEstimate == 'Y') {
+                            if (response.data.findType == 'device') {
+                                this.$router.push(`/estimateComparison/modelEstimateCard?surveyCode=${this.$route.query.surveyCode}`);
+                            }
+
+                            if (response.data.findType == 'cost') {
+                                this.$router.push(`/estimateComparison/billPaidEstimateCard?surveyCode=${this.$route.query.surveyCode}`);
+                            }
+                        }
+                    }, 3000);
                 })
                 .catch(e => {
                     console.log(e)
                 });
         },
-
-        postSurveyCostComplete(param, enmemberidx) {
-            apiQuestionnaire.postSurveyCostComplete(param, enmemberidx)
-                .then(response => {
-                    console.log(response)
-                    //this.$router.push("/questionnaireCompleted/loading");
-                })
-                .catch(e => {
-                    console.log(e)
-                });
-        }
     }
 }
 </script>

@@ -16,27 +16,27 @@ const routes = [
 
     //questionnaire
     {
-        path:   '/questionnaire/:findType',
+        path: '/questionnaire/:findType',
         alias: ['/questionnaire'],
         component: () => import('../view/questionnaire/LookingForModel.vue')
     },
     {
-        path:   '/questionnaire/:findType/selectModel',
+        path: '/questionnaire/:findType/selectModel',
         alias: ['/questionnaire/:findType/:deviceIdx'],
         component: () => import('../view/questionnaire/SelectModel.vue')
     },
     {
-        path:   '/questionnaire/:findType/:deviceIdx/selectMobileCarrier',
+        path: '/questionnaire/:findType/:deviceIdx/selectMobileCarrier',
         alias: ['/questionnaire/:findType/:deviceIdx/:useTelecomIdx/'],
         component: () => import('../view/questionnaire/SelectMobileCarrier.vue')
     },
     {
-        path:   '/questionnaire/:findType/:deviceIdx/:useTelecomIdx/selectUsagePeriod',
+        path: '/questionnaire/:findType/:deviceIdx/:useTelecomIdx/selectUsagePeriod',
         alias: ['/questionnaire/:findType/:deviceIdx/:useTelecomIdx/:usePeriodIdx'],
         component: () => import('../view/questionnaire/SelectUsagePeriod.vue')
     },
     {
-        path:   '/questionnaire/:findType/:deviceIdx/:useTelecomIdx/:usePeriodIdx/selectBillPaid',
+        path: '/questionnaire/:findType/:deviceIdx/:useTelecomIdx/:usePeriodIdx/selectBillPaid',
         alias: ['/questionnaire/:findType/:deviceIdx/:useTelecomIdx/:usePeriodIdx/:monthCost'],
         component: () => import('../view/questionnaire/SelectBillPaid.vue')
     },
@@ -48,6 +48,7 @@ const routes = [
     //questionnaire complete
     {
         path: '/questionnaireCompleted/loading',
+        props: true,
         component: () => import('../view/questionnaireCompleted/Loading.vue')
     },
     {
@@ -56,6 +57,7 @@ const routes = [
     },
     {
         path: '/questionnaireCompleted/NotFound',
+        props: true,
         component: () => import('../view/questionnaireCompleted/NotFound.vue')
     },
 

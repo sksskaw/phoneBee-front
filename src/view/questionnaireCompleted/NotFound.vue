@@ -7,13 +7,13 @@
         <img class="not-found-img" src="/images/not_found.svg">
 
         <div class="not-found-page-box-1">
-            입력해주신 {{ address }}<br>
+            입력해주신 {{ findArea }}<br>
             주변에는 저렴한 견적이 없어요.
         </div>
 
         <div class="not-found-page-box-2">
-            지금 현재 {xx구} 에서는 추천이 가능해요.<br>
-            xx구의 견적을 확인해 보시겠어요?
+            지금 현재 {{ searchAgain }} 에서는 추천이 가능해요.<br>
+            {{ searchAgain }}의 견적을 확인해 보시겠어요?
         </div>
 
         <div class="check-btn">최적 견적 확인하기</div>
@@ -24,8 +24,14 @@
 export default {
     data() {
         return {
-            address: localStorage.getItem('address'),
+            findArea: '',
+            searchAgain: '',
         }
+    },
+
+    mounted() {
+        this.findArea = this.$route.query.findArea
+        this.searchAgain = this.$route.query.searchAgain
     },
 
     methods: {
