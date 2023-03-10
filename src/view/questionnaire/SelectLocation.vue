@@ -200,7 +200,6 @@ export default {
       window.Kakao.API.request({
         url: '/v2/user/me',
         success: res => {
-          console.dir(res)
           const kakao_account = res.kakao_account;
           const userInfo = {
             kakaoId: res.id,
@@ -220,16 +219,17 @@ export default {
               // response.resultCode === 0 인 경우..
               if (response.data.resultCode === 0) {
 
+                let findArea = this.sido + "시 " + this.sigungu
                 let param = {
                   useTelecomIdx: parseInt(this.$route.params.useTelecomIdx),
                   usePeriodIdx: parseInt(this.$route.params.usePeriodIdx),
                   deviceIdx: parseInt(this.$route.params.deviceIdx),
                   monthCost: parseInt(this.$route.params.monthCost),
-                  findArea: encodeURIComponent(this.sido + " " + this.sigungu),
+                  findArea: encodeURIComponent(findArea),
                 }
+
                 var enmemberidx = response.data.Enmemberidx
                 cookie.setCookie('Enmemberidx', enmemberidx, 1)
-
                 var findType = this.$route.params.findType
 
                 // 원하는 기기 있는 경우

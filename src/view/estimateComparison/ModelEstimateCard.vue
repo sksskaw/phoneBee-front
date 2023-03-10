@@ -45,6 +45,7 @@
 import Graph from '@/components/EstimateComparisonGraph.vue';
 import strg from "@/utils/strg";
 import apiEstimate from "@/api/estimate";
+import cookie from '@/utils/cookie';
 
 export default {
     components: {

@@ -1,68 +1,43 @@
 <template>
     <div class="router-div">
         <div class="box-1">
-            {{ selectBillPaid }} 요금을 유지한 채,<br>
-            최신 핸드폰으로 바꿀 수 있는<br>
-            <span style="color: #E5B40F;">최적의 견적</span>을 발견했어요!
-        </div>
-
-        <div class="box-2">
-            핸드폰 가격보다 <span style="color: #E5B40F;">{{ totalDiscountAmount }}</span> 더 저렴해요
+            원래 가격보다<br>
+            <span style="color: #E5B40F;">{{ totalDiscountPrice }}원</span> 더 저렴해요
         </div>
 
         <div class="graph">
-            <Graph></Graph>
+            <Graph v-bind:cardList="cardList"></Graph>
         </div>
 
         <div class="box-3">
-            {{ today }} {{ sigungu }}<br>
-            판매점들의 {{ selectedModel }} 기기<br>
-            견적을 비교해 보았어요!<br>
+            <span class="box-3-date">{{ date.month }}월 {{ date.day }}일 {{ date.findArea }}</span><br>
+            {{ deviceName }} 최적의 견적<br>
+            을 발견했어요!<br>
         </div>
 
         <div>
-            <input type="radio" id="skt" v-model="selectedCard" value="skt" class="estimate-radio" @click="toDetail">
-            <label for="skt">
-                <div class="estimate-radio-card">
-                    <img class="carrier-icon" src="/images/skt_logo.svg">
-                    <img class="badge-icon" src="/images/recommended_badge.svg">
+            <div v-for="item in cardList.slice(0, showListIndex)">
+                <input type="radio" :id="item.planPriceIdx" v-model="selectedCard" :value="item.planPriceIdx"
+                    class="estimate-radio" @click="toDetail">
+                <label :for="item.planPriceIdx">
+                    <div class="estimate-radio-card">
+                        <img class="carrier-icon" :src="getCarrierLogo(item.telecomName)">
 
-                    <div class="cost" style="margin-top: 14px;">{{ cost }}</div>
-                    <div class="discount">{{ discount }}</div>
-                    <div class="amount">{{ amount }}원</div>
-                    <div class="card-model-text">갤럭시 A53 5G 자급제</div>
-                    <div class="card-text">단말기 월 할부금</div>
-                </div>
-            </label>
+                        <img v-if="item.badge.message == '추천' && item.badge.show == 'Y'" class="badge-icon"
+                            src="/images/recommended_badge.svg">
 
-            <input type="radio" id="kt" v-model="selectedCard" value="kt" class="estimate-radio">
-            <label for="kt">
-                <div class="estimate-radio-card">
-                    <img class="carrier-icon" src="/images/kt_logo.svg">
-                    <img class="badge-icon" src="/images/carrier_change_badge.svg">
+                        <img v-if="item.badge.message == '통신사이동' && item.badge.show == 'Y'" class="badge-icon"
+                            src="/images/carrier_change_badge.svg">
 
-                    <div class="cost" style="margin-top: 14px;">{{ cost }}</div>
-                    <div class="discount">{{ discount }}</div>
-                    <div class="amount">{{ amount }}원</div>
-                    <div class="card-model-text">갤럭시 A53 5G 자급제</div>
-                    <div class="card-text">단말기 월 할부금</div>
-                </div>
-            </label>
-
-            <input type="radio" id="lgu+" v-model="selectedCard" value="lgu+" class="estimate-radio">
-            <label for="lgu+">
-                <div class="estimate-radio-card">
-                    <img class="carrier-icon" src="/images/lgu+_logo.svg">
-
-                    <div class="cost" style="margin-top: 14px;">{{ cost }}</div>
-                    <div class="discount">{{ discount }}</div>
-                    <div class="amount">{{ amount }}원</div>
-                    <div class="card-model-text">갤럭시 A53 5G 자급제</div>
-                    <div class="card-text">단말기 월 할부금</div>
-                </div>
-            </label>
-
-            <div class="more-btn">요금 더보기</div>
+                        <div class="cost">{{ priceFormat(item.factoryMonthPrice) }}원</div>
+                        <div class="discount">-{{ priceFormat(item.factoryMonthPrice - item.deviceMonthPrice) }}원</div>
+                        <div class="amount">{{ priceFormat(item.deviceMonthPrice) }}원</div>
+                        <div class="card-model-text"> {{ item.deviceName }}</div>
+                        <div class="card-text">단말기 월 할부금</div>
+                    </div>
+                </label>
+            </div>
+            <div class="more-btn" id="more-btn" @click="onMore(selectedCard)">요금 더보기</div>
         </div>
     </div>
 </template>
@@ -71,6 +46,7 @@
 import Graph from '@/components/EstimateComparisonGraph.vue';
 import strg from "@/utils/strg";
 import apiEstimate from "@/api/estimate";
+import cookie from '@/utils/cookie';
 
 export default {
     components: {
@@ -81,41 +57,59 @@ export default {
         return {
             date: {},
             deviceName: '',
-
-            today: strg.getCurrentMonthAndDate(),
-            selectedModel: localStorage.getItem('selectedModel'),
-            selectBillPaid: localStorage.getItem('selectBillPaid'),
-            totalDiscountPrice: "총 할인 금액",
-            sigungu: localStorage.getItem('sigungu'),
-
-            cost: strg.priceFormat(23000),
-            discount: strg.priceFormat(-4000),
-            amount: strg.priceFormat(19000),
+            totalDiscountPrice: '',
+            cardList: [],
+            showListIndex: 3,
 
             selectedCard: null,
         }
     },
 
     mounted() {
-        this.getEstimateList()
+        var enmemberidx = cookie.getCookie('Enmemberidx')
+        if (enmemberidx == '' || enmemberidx == null)
+            this.$router.push("/");
+
+        this.getEstimateList(enmemberidx)
     },
 
     methods: {
         toDetail() {
-            this.$router.push("/estimateComparison/cardDetail");
+            this.$router.push(`/estimateComparison/cardDetail?planPriceIdx=${this.selectedCard}`);
         },
 
-        getEstimateList() {
-            apiEstimate.getEstimateList("amplS3FCM1JiLzhHenVFYzNBYUR2dz09")
+        onMore() {
+            let length = this.cardList.length
+            this.showListIndex = this.showListIndex + 3;
+
+            if (length < this.showListIndex) {
+                var btn = document.getElementById('more-btn')
+                btn.style.display = "none";
+                return length
+            }
+
+            return this.showListIndex
+        },
+
+        getEstimateList(enmemberidx) {
+            apiEstimate.getEstimateList(this.$route.query.surveyCode, enmemberidx)
                 .then(response => {
                     console.log(response.data)
                     this.date = response.data.date
                     this.deviceName = response.data.deviceName
-                    this.totalDiscountPrice = response.data. totalDiscountPrice
+                    this.totalDiscountPrice = response.data.totalDiscountPrice
                 })
                 .catch(e => {
                     console.log(e)
                 });
+        },
+
+        getCarrierLogo(name) {
+            return strg.getCarrierLogo(name)
+        },
+
+        priceFormat(price) {
+            return strg.priceFormat(price)
         }
     }
 }
