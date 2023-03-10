@@ -33,7 +33,7 @@ export default {
     computed: {
         list() {
             this.sortedList = Object.assign([], this.cardList);
-            return this.sortedList.sort(this.compare).slice(0, 6);
+            return this.sortedList.sort(this.compare).slice(0, 5);
         },
     },
 
