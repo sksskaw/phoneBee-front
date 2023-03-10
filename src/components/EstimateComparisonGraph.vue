@@ -24,10 +24,16 @@ import strg from "@/utils/strg";
 export default {
     props: ["cardList"],
 
+    data() {
+        return {
+            sortedList: [],
+        }
+    },
+
     computed: {
         list() {
-            const sortedList = this.cardList.sort(this.compare)
-            return sortedList.slice(0,6);
+            this.sortedList = Object.assign([], this.cardList);
+            return this.sortedList.sort(this.compare).slice(0, 6);
         },
     },
 
@@ -47,7 +53,7 @@ export default {
         },
 
         getHeight(value) {
-            let prices = this.cardList.map(i => i.deviceMonthPrice)
+            let prices = this.sortedList.map(i => i.deviceMonthPrice)
             let maxValue = Math.max(...prices)
             let rate = (value / maxValue)
             return rate
@@ -58,9 +64,7 @@ export default {
         },
 
         getCarrierLogo(name) {
-            if (name == 'SKT') return "/images/skt_logo.svg"
-            if (name == 'LGU+') return "/images/lgu+_logo.svg"
-            if (name == 'KT') return "/images/kt_logo.svg"
+            return strg.getCarrierLogo(name)
         },
     }
 }

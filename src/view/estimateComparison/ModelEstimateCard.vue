@@ -16,45 +16,27 @@
         </div>
 
         <div>
-            <input type="radio" id="skt" v-model="selectedCard" value="skt" class="estimate-radio" @click="toDetail">
-            <label for="skt">
-                <div class="estimate-radio-card">
-                    <img class="carrier-icon" src="/images/skt_logo.svg">
-                    <img class="badge-icon" src="/images/recommended_badge.svg">
+            <div v-for="item in cardList.slice(0, showListIndex)">
+                <input type="radio" :id="item.planPriceIdx" v-model="selectedCard" :value="item.planPriceIdx"
+                    class="estimate-radio" @click="toDetail">
+                <label :for="item.planPriceIdx">
+                    <div class="estimate-radio-card">
+                        <img class="carrier-icon" :src="getCarrierLogo(item.telecomName)">
 
-                    <div class="cost">{{ cost }}</div>
-                    <div class="discount">{{ discount }}</div>
-                    <div class="amount">{{ amount }}원</div>
-                    <div class="card-text">단말기 월 할부금</div>
-                </div>
-            </label>
+                        <img v-if="item.badge.message == '추천' && item.badge.show == 'Y'" class="badge-icon"
+                            src="/images/recommended_badge.svg">
 
-            <input type="radio" id="kt" v-model="selectedCard" value="kt" class="estimate-radio">
-            <label for="kt">
-                <div class="estimate-radio-card">
-                    <img class="carrier-icon" src="/images/kt_logo.svg">
-                    <img class="badge-icon" src="/images/carrier_change_badge.svg">
+                        <img v-if="item.badge.message == '통신사이동' && item.badge.show == 'Y'" class="badge-icon"
+                            src="/images/carrier_change_badge.svg">
 
-                    <div class="cost">{{ cost }}</div>
-                    <div class="discount">{{ discount }}</div>
-                    <div class="amount">{{ amount }}원</div>
-                    <div class="card-text">단말기 월 할부금</div>
-                </div>
-            </label>
-
-            <input type="radio" id="lgu+" v-model="selectedCard" value="lgu+" class="estimate-radio">
-            <label for="lgu+">
-                <div class="estimate-radio-card">
-                    <img class="carrier-icon" src="/images/lgu+_logo.svg">
-
-                    <div class="cost">{{ cost }}</div>
-                    <div class="discount">{{ discount }}</div>
-                    <div class="amount">{{ amount }}원</div>
-                    <div class="card-text">단말기 월 할부금</div>
-                </div>
-            </label>
-
-            <div class="more-btn">요금 더보기</div>
+                        <div class="cost">{{ priceFormat(item.factoryMonthPrice) }}원</div>
+                        <div class="discount">-{{ priceFormat(item.factoryMonthPrice - item.deviceMonthPrice) }}원</div>
+                        <div class="amount">{{ priceFormat(item.deviceMonthPrice) }}원</div>
+                        <div class="card-text">단말기 월 할부금</div>
+                    </div>
+                </label>
+            </div>
+            <div class="more-btn" id="more-btn" @click="onMore">요금 더보기</div>
         </div>
     </div>
 </template>
@@ -75,10 +57,7 @@ export default {
             deviceName: '',
             totalDiscountPrice: '',
             cardList: [],
-
-            cost: strg.priceFormat(23000),
-            discount: strg.priceFormat(-4000),
-            amount: strg.priceFormat(19000),
+            showListIndex: 3,
 
             selectedCard: null,
         }
@@ -93,6 +72,19 @@ export default {
             this.$router.push("/estimateComparison/cardDetail");
         },
 
+        onMore() {
+            let length = this.cardList.length
+            this.showListIndex = this.showListIndex + 3;
+
+            if (length < this.showListIndex) {
+                var btn = document.getElementById('more-btn')
+                btn.style.display = "none";
+                return length
+            }
+
+            return this.showListIndex
+        },
+
         getEstimateList() {
             apiEstimate.getEstimateList("amplS3FCM1JiLzhHenVFYzNBYUR2dz09")
                 .then(response => {
@@ -105,6 +97,14 @@ export default {
                 .catch(e => {
                     console.log(e)
                 });
+        },
+
+        getCarrierLogo(name) {
+            return strg.getCarrierLogo(name)
+        },
+
+        priceFormat(price) {
+            return strg.priceFormat(price)
         }
     }
 }
@@ -163,6 +163,7 @@ export default {
 .more-btn {
     margin-top: 10px;
     margin-bottom: 24px;
+    cursor: pointer;
 
     display: flex;
     flex-direction: column;

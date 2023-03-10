@@ -13,9 +13,18 @@ export default {
         });
     },
 
-    async postSurveyDeviceComplete(params) {
+    async postSurveyDeviceComplete(params, enmemberidx) {
         return new Promise((resolve, reject) => {
-            rest.post("/api/survey/device/complete", params)
+            rest.post("/api/survey/device/complete?" +
+                `useTelecomIdx=${params.useTelecomIdx}&` +
+                `usePeriodIdx=${params.usePeriodIdx}&` +
+                `deviceIdx=${params.deviceIdx}&` +
+                `findArea=${params.findArea}`,{},
+                {
+                    headers: {
+                        'Enmemberidx': enmemberidx
+                    }
+                })
                 .then(response => {
                     resolve(response);
                 })
@@ -25,9 +34,18 @@ export default {
         });
     },
 
-    async postSurveyCostComplete(params) {
+    async postSurveyCostComplete(params, enmemberidx) {
         return new Promise((resolve, reject) => {
-            rest.post("/api/survey/cost/complete", params)
+            rest.post("/api/survey/cost/complete?" +
+                `useTelecomIdx=${params.useTelecomIdx}&` +
+                `usePeriodIdx=${params.usePeriodIdx}&` +
+                `monthCost=${params.monthCost}&` +
+                `findArea=${params.findArea}`,{},
+                {
+                    headers: {
+                        'Enmemberidx': enmemberidx
+                    }
+                })
                 .then(response => {
                     resolve(response);
                 })

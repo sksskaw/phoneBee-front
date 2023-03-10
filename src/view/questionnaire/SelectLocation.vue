@@ -238,28 +238,6 @@ export default {
                 } 
                 */
             },
-
-            postSurveyDeviceComplete() {
-                apiQuestionnaire.postSurveyDeviceComplete(param)
-                    .then(response => {
-                        console.log(response)
-                        //this.$router.push("/questionnaireCompleted/loading");
-                    })
-                    .catch(e => {
-                        console.log(e)
-                    });
-            },
-
-            postSurveyCostComplete() {
-                apiQuestionnaire.postSurveyCostComplete(param)
-                    .then(response => {
-                        console.log(response)
-                        //this.$router.push("/questionnaireCompleted/loading");
-                    })
-                    .catch(e => {
-                        console.log(e)
-                    });
-            }
         }
     }
 </script>

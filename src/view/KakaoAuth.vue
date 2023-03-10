@@ -5,6 +5,7 @@
 <script>
 import apiKakao from '@/api/kakao';
 import apiLogin from '@/api/login';
+import cookie from '@/utils/cookie';
 
 export default {
     data() {
@@ -48,7 +49,8 @@ export default {
             }
             apiLogin.sighUpLogin(param)
                 .then(response => {
-                    console.log(response.data.Enmemberidx)
+                    cookie.setCookie('Enmemberidx', response.data.Enmemberidx, 1)
+                    this.$router.push("/questionnaireCompleted/loading");
                 })
                 .catch(e => {
                     console.log(e)
