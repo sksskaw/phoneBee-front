@@ -57,8 +57,6 @@
 </template>
 
 <script>
-import apiQuestionnaire from '@/api/questionnaire';
-
 export default {
     data() {
         return {
@@ -86,7 +84,14 @@ export default {
 
     methods: {
         onBackBtn() {
-            this.$router.go(-1);
+            let lookingForModelCheck = localStorage.getItem('lookingForModelCheck')
+            if (lookingForModelCheck == "0") {
+                this.$router.push("/questionnaire/selectBillPaid");
+            }
+
+            if (lookingForModelCheck == "1") {
+                this.$router.push("/questionnaire/selectUsagePeriod");
+            }
         },
 
 
@@ -201,45 +206,9 @@ export default {
             Kakao.Auth.authorize({
                 redirectUri: window.location.origin + '/kakao/auto',
             });
-                /*
-                var lookingForModelCheck = localStorage.getItem('lookingForModelCheck')
-    
-                var selectedModel = JSON.parse(localStorage.getItem('selectedModel'))
-                var selectedMobileCarrier = JSON.parse(localStorage.getItem('selectedMobileCarrier'))
-                var selectedUsagePeriod = JSON.parse(localStorage.getItem('selectedUsagePeriod'))
-                var selectBillPaid = JSON.parse(localStorage.getItem('selectBillPaid'))
-    
-                var sido = localStorage.getItem('sido')
-                var sigungu = localStorage.getItem('sigungu')
-    
-                // 원하는 기기 없는 경우
-                if (lookingForModelCheck == "0") {
-                    let param = {
-                        useTelecomIdx: parseInt(selectedMobileCarrier.value),
-                        usePeriodIdx: parseInt(selectedUsagePeriod.value),
-                        monthCost: parseInt(selectBillPaid.value),
-                        findArea: encodeURIComponent(sido + " " + sigungu),
-                    }
-                    console.log(param)
-                    this.postSurveyDeviceComplete()
-                }
-    
-                // 원하는 기기 있는 경우
-                if (lookingForModelCheck == "1") {
-                    let param = {
-                        useTelecomIdx: parseInt(selectedMobileCarrier.value),
-                        usePeriodIdx: parseInt(selectedUsagePeriod.value),
-                        deviceIdx: parseInt(selectedModel.value),
-                        findArea: encodeURIComponent(sido + " " + sigungu),
-                    }
-                    console.log(param)
-                    this.postSurveyCostComplete()
-    
-                } 
-                */
-            },
-        }
+        },
     }
+}
 </script>
 
 <style scoped>

@@ -55,7 +55,14 @@ export default {
 
     methods: {
         onBackBtn() {
-            this.$router.go(-1);
+            let lookingForModelCheck = localStorage.getItem('lookingForModelCheck')
+            if (lookingForModelCheck == "0") {
+            this.$router.push("/");
+            }
+
+            if (lookingForModelCheck == "1") {
+            this.$router.push("/questionnaire/selectModel");
+            }
         },
 
         onCheck(ref) {

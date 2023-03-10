@@ -49,7 +49,7 @@ export default {
 
     methods: {
         onBackBtn() {
-            this.$router.go(-1);
+            this.$router.push("/questionnaire/selectMobileCarrier");
         },
 
         onCheck(ref) {
