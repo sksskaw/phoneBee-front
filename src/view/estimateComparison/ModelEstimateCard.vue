@@ -36,7 +36,7 @@
                     </div>
                 </label>
             </div>
-            <div class="more-btn" id="more-btn" @click="onMore">요금 더보기</div>
+            <div class="more-btn" id="more-btn" @click="onMore(selectedCard)">요금 더보기</div>
         </div>
     </div>
 </template>
@@ -69,7 +69,7 @@ export default {
 
     methods: {
         toDetail() {
-            this.$router.push("/estimateComparison/cardDetail");
+            this.$router.push(`/estimateComparison/cardDetail?planPriceIdx=${this.selectedCard}`);
         },
 
         onMore() {

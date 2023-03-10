@@ -93,6 +93,10 @@ export default {
 
         onConfirm() {
             this.$router.push("/confirm/confirmEstimate");
+        },
+
+        getdetail() {
+            this.$route.query.selectedCard
         }
     }
 }

@@ -57,7 +57,8 @@ export default {
     },
 
     mounted() {
-        this.check = JSON.parse(localStorage.getItem('selectedModel')).value
+        this.check = JSON.parse(localStorage.getItem('selectedModel'))?.value
+        
         this.getDiviceModels()
     },
 

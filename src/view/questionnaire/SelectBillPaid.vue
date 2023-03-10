@@ -57,7 +57,7 @@ export default {
     },
 
     mounted() {
-        this.check = JSON.parse(localStorage.getItem('selectBillPaid')).value
+        this.check = JSON.parse(localStorage.getItem('selectBillPaid'))?.value
     },
 
     methods: {

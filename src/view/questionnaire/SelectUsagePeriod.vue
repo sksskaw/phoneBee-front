@@ -43,7 +43,7 @@ export default {
     },
 
     mounted() {
-        this.check = JSON.parse(localStorage.getItem('selectedUsagePeriod')).value
+        this.check = JSON.parse(localStorage.getItem('selectedUsagePeriod'))?.value
 
     },
 

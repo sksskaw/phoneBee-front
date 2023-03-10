@@ -50,7 +50,7 @@ export default {
     },
 
     mounted() {
-        this.check = JSON.parse(localStorage.getItem('selectedMobileCarrier')).value
+        this.check = JSON.parse(localStorage.getItem('selectedMobileCarrier'))?.value
     },
 
     methods: {
