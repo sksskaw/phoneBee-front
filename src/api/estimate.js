@@ -88,12 +88,14 @@ export default {
     
     async postReservationComplete(estimateCode, params, enmemberidx) {
         return new Promise((resolve, reject) => {
-            rest.post(`/api/reservation/complete/${estimateCode}?` +
-                `reservationDate=${params.reservationDate}&` +
-                `reservationTime=${params.reservationTime}`, null,
+            rest.post(`/api/reservation/complete/${estimateCode}`, null,
                 {
                     headers: {
                         'Enmemberidx': enmemberidx
+                    },
+                    params : {
+                        'reservationDate' : params.reservationDate,
+                        'reservationTime' : params.reservationTime,
                     }
                 })
                 .then(response => {

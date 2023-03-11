@@ -15,14 +15,16 @@ export default {
 
     async postSurveyDeviceComplete(params, enmemberidx) {
         return new Promise((resolve, reject) => {
-            rest.post("/api/survey/device/complete?" +
-                `useTelecomIdx=${params.useTelecomIdx}&` +
-                `usePeriodIdx=${params.usePeriodIdx}&` +
-                `deviceIdx=${params.deviceIdx}&` +
-                `findArea=${params.findArea}`,null,
+            rest.post("/api/survey/device/complete",null,
                 {
                     headers: {
                         'Enmemberidx': enmemberidx
+                    },
+                    params : {
+                        'useTelecomIdx' : params.useTelecomIdx,
+                        'usePeriodIdx' : params.usePeriodIdx,
+                        'deviceIdx' : params.deviceIdx,
+                        'findArea' : params.findArea
                     }
                 })
                 .then(response => {
@@ -36,14 +38,16 @@ export default {
 
     async postSurveyCostComplete(params, enmemberidx) {
         return new Promise((resolve, reject) => {
-            rest.post("/api/survey/cost/complete?" +
-                `useTelecomIdx=${params.useTelecomIdx}&` +
-                `usePeriodIdx=${params.usePeriodIdx}&` +
-                `monthCost=${params.monthCost}&` +
-                `findArea=${params.findArea}`,null,
+            rest.post("/api/survey/cost/complete?",null,
                 {
                     headers: {
                         'Enmemberidx': enmemberidx
+                    },
+                    params : {
+                        'useTelecomIdx' : params.useTelecomIdx,
+                        'usePeriodIdx' : params.usePeriodIdx,
+                        'monthCost' : params.monthCost,
+                        'findArea' : params.findArea
                     }
                 })
                 .then(response => {
