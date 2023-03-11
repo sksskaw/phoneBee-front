@@ -113,7 +113,7 @@
         </div>
 
         <div v-if="loading == false" class="reservation-btn" @click="onReservation()">새 핸드폰 받아보기</div>
-        <div v-if="loading == true" class="reservation-btn"><img src="/images/loading.gif"></div>
+        <div v-if="loading == true" class="reservation-btn"><img src="/images/loading_s.gif"></div>
 
     </div>
 </template>

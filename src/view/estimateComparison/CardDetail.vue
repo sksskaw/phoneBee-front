@@ -99,7 +99,7 @@
 
         <div class="confirm-box">
             <div v-if="loading == false" class="confirm-btn" @click="onConfirm">견적 확정하기</div>
-            <div v-if="loading == true" class="confirm-btn"><img src="/images/loading.gif"></div>
+            <div v-if="loading == true" class="confirm-btn"><img src="/images/loading_s.gif"></div>
         </div>
 
         <div style="height: 102px;"></div>

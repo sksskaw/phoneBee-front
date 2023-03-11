@@ -94,9 +94,10 @@ export default {
         getEstimateList(enmemberidx) {
             apiEstimate.getEstimateList(this.$route.query.surveyCode, enmemberidx)
                 .then(response => {
-                    this.date = response.data.date
-                    this.deviceName = response.data.deviceName
-                    this.totalDiscountPrice = response.data.totalDiscountPrice
+                    this.date = response.data.estimate.date
+                    this.deviceName = response.data.estimate.deviceName
+                    this.totalDiscountPrice = strg.priceFormat(response.data.estimate.totalDiscountPrice)
+                    this.cardList = response.data.estimate.list
                 })
                 .catch(e => {
                     console.log(e)
