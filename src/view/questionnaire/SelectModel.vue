@@ -138,7 +138,7 @@ export default {
 .model-radio-box {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-around;
     padding: 0px;
     gap: 18px;

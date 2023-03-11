@@ -7,7 +7,7 @@
         <div class="party-popper-box">
             <img src="/images/party_popper.svg">
             <div class="party-popper-text">
-                <span style="color: #E5B40F;">{{ today }}</span>에 선택하신<br>
+                <span style="color: #E5B40F;">{{ month }}월 {{ day }}일</span>에 선택하신<br>
                 견적이 확정되었습니다!
             </div>
         </div>
@@ -16,7 +16,7 @@
         <div class="estimate-info">
             <div class="ei-title">
                 <div>확정된 견적 내역</div>
-                <div style="color: #E5B40F;">{{ new Date().getFullYear() }}년 {{ today }}</div>
+                <div style="color: #E5B40F;">{{ year }}년 {{ month }}월 {{ day }}일</div>
             </div>
             <div class="cautionary">* 방문 일자가 달라지면 견적 금액이 변경될 수 있습니다.</div>
 
@@ -112,7 +112,9 @@
             </div>
         </div>
 
-        <div class="reservation-btn" @click="onReservation()">새 핸드폰 받아보기</div>
+        <div v-if="loading == false" class="reservation-btn" @click="onReservation()">새 핸드폰 받아보기</div>
+        <div v-if="loading == true" class="reservation-btn"><img src="/images/loading.gif"></div>
+
     </div>
 </template>
 
@@ -130,6 +132,10 @@ export default {
             today: strg.getCurrentMonthAndDate(),
             todayDate: new Date().getDate(),
 
+            year: '',
+            month: '',
+            day: '',
+
             deviceName: '',
             monthPrice: '',
             planName: '',
@@ -140,7 +146,8 @@ export default {
 
             selectedDate: new Date().getDate(),
             selectedTime: null,
-            nowHours: ('0' + new Date().getHours()).slice(-2),
+
+            loading: false,
         }
     },
 
@@ -202,7 +209,10 @@ export default {
             apiEstimate.getEstimateConfirm(this.$route.query.estimateCode, enmemberidx)
                 .then(response => {
                     const data = response.data.estimate
-                    console.log(data)
+
+                    this.year = data.confirmSection.date.year
+                    this.month = data.confirmSection.date.month
+                    this.day = data.confirmSection.date.day
 
                     this.deviceName = data.confirmSection.deviceName
                     this.monthPrice = this.priceFormat(data.confirmSection.monthPrice)
@@ -218,8 +228,31 @@ export default {
                 });
         },
 
+        postReservationComplete(reservationDate, reservationTime) {
+            const enmemberidx = cookie.getCookie('Enmemberidx')
+            const params = {
+                reservationDate: reservationDate,
+                reservationTime: reservationTime,
+            }
+            apiEstimate.postReservationComplete(this.$route.query.estimateCode, params, enmemberidx)
+                .then(response => {
+                    this.$router.push(`/confirm/confirmCheck?reservationCode=${response.data.reservationCode}`);
+                })
+                .catch(e => {
+                    console.log(e)
+                });
+        },
+
         onReservation() {
-            this.$router.push("/confirm/confirmCheck");
+            this.loading = true
+            if (this.selectedDate == null || this.selectedTime == null) {
+                alert('예약 날짜 및 시간을 선택해 주세요')
+                this.loading = false
+                return
+            }
+
+            const reservationDate = `${this.year}-${this.month}-${this.selectedDate}`
+            this.postReservationComplete(reservationDate, this.selectedTime)
         },
 
         priceFormat(price) {
@@ -389,8 +422,6 @@ export default {
     align-items: flex-start;
     padding: 0px;
     gap: 4px;
-
-    height: 100px;
 }
 
 .si-box {

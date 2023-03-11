@@ -13,22 +13,22 @@
         <div class="estimate-info">
             <div class="ei-title">
                 <div>확정된 견적 내역</div>
-                <div style="color: #E5B40F;">{{ new Date().getFullYear() }}년 {{ today }}</div>
+                <div style="color: #E5B40F;">{{ year }}년 {{ month }}월 {{ day }}일</div>
             </div>
 
             <div class="ei-model">
                 <div class="sub-title">핸드폰 기기명</div>
-                <div class="info-box">갤럭시 A53 5G 자급제</div>
+                <div class="info-box">{{ deviceName }}</div>
             </div>
 
             <div class="ei-total-dc">
                 <div class="sub-title">총 할인 금액</div>
-                <div class="amount">189,134원</div>
+                <div class="amount">{{ totalDiscountPrice }}원</div>
             </div>
 
             <div class="ei-condition">
                 <div class="sub-title">매장 특별 지원금 지급 조건</div>
-                <div class="info-box">99 요금제 6개월 유지</div>
+                <div class="info-box">{{ planName }} 6개월 유지</div>
             </div>
 
             <div class="ei-condition">
@@ -40,7 +40,7 @@
                 <div class="sub-title">판매점 정보</div>
                 <div class="si-box">
                     <div class="si-box-name">상호명</div>
-                    <div>싸다폰</div>
+                    <div>{{ storeName }}</div>
                 </div>
 
                 <div class="si-box">
@@ -74,21 +74,32 @@
 
 <script>
 import strg from "@/utils/strg";
+import apiEstimate from "@/api/estimate";
+import cookie from '@/utils/cookie';
+
 export default {
     data() {
         return {
-            today: strg.getCurrentMonthAndDate(),
-            storeAddress: "서울시 마포구 양화로 160 수성빌딩 101호",
+            year: '',
+            month: '',
+            day: '',
 
+            deviceName: '',
+            monthPrice: '',
+            planName: '',
+            totalDiscountPrice: '',
+
+            storeName: '',
+            storeAddress: '',
         }
     },
 
     mounted() {
-        const script = document.createElement("script");
-        script.onload = () => kakao.maps.load(this.initMap);
-        script.src =
-            "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=" + process.env.VUE_APP_KAKAO_KEY + "&libraries=services";
-        document.head.appendChild(script);
+        var enmemberidx = cookie.getCookie('Enmemberidx')
+        if (enmemberidx == '' || enmemberidx == null)
+            this.$router.push("/");
+
+        this.getReservationConfirm(enmemberidx)
     },
 
     methods: {
@@ -128,6 +139,41 @@ export default {
                 }
             });
         },
+
+        getMapPosition() {
+            const script = document.createElement("script");
+            script.onload = () => kakao.maps.load(this.initMap);
+            script.src =
+                "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=" + process.env.VUE_APP_KAKAO_KEY + "&libraries=services";
+            document.head.appendChild(script);
+        },
+
+        getReservationConfirm(enmemberidx) {
+            apiEstimate.getReservationConfirm(this.$route.query.reservationCode, enmemberidx)
+                .then(response => {
+                    const data = response.data.reservation
+
+                    this.year = data.confirmSection.date.year
+                    this.month = data.confirmSection.date.month
+                    this.day = data.confirmSection.date.day
+
+                    this.deviceName = data.confirmSection.deviceName
+                    this.monthPrice = this.priceFormat(data.confirmSection.monthPrice)
+                    this.planName = data.confirmSection.planName
+                    this.totalDiscountPrice = this.priceFormat(data.confirmSection.totalDiscountPrice)
+
+                    this.storeName = data.storeSection.storeName
+                    this.storeAddress = data.storeSection.storeAddress
+                    this.getMapPosition()
+                })
+                .catch(e => {
+                    console.log(e)
+                });
+        },
+
+        priceFormat(price) {
+            return strg.priceFormat(price)
+        }
     }
 }
 </script>
