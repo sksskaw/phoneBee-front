@@ -33,7 +33,7 @@
 
             <div class="ei-condition">
                 <div class="sub-title">방문 예약 일시 정보</div>
-                <div class="info-box">2월 25일 AM 11 : 00</div>
+                <div class="info-box">{{ visitDate }}</div>
             </div>
 
             <div class="ei-store-info">
@@ -88,6 +88,7 @@ export default {
             monthPrice: '',
             planName: '',
             totalDiscountPrice: '',
+            visitDate: '',
 
             storeName: '',
             storeAddress: '',
@@ -161,6 +162,7 @@ export default {
                     this.monthPrice = this.priceFormat(data.confirmSection.monthPrice)
                     this.planName = data.confirmSection.planName
                     this.totalDiscountPrice = this.priceFormat(data.confirmSection.totalDiscountPrice)
+                    this.visitDate = `${data.visitDate.reservationDate} ${data.visitDate.reservationTime}`
 
                     this.storeName = data.storeSection.storeName
                     this.storeAddress = data.storeSection.storeAddress
