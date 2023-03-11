@@ -320,7 +320,7 @@ export default {
 }
 
 .title {
-  font-family: 'Pretendard';
+  
   font-style: normal;
   font-weight: 700;
   font-size: 28.43px;
@@ -331,7 +331,7 @@ export default {
 }
 
 .sub-title {
-  font-family: 'Pretendard';
+  
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
@@ -357,7 +357,7 @@ export default {
 
 .search-input {
   border: none;
-  font-family: 'Pretendard';
+  
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -409,7 +409,7 @@ export default {
   padding: 0px;
   gap: 8px;
 
-  font-family: 'Pretendard';
+  
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
@@ -503,7 +503,7 @@ export default {
 }
 
 .roadAddress {
-  font-family: 'Pretendard';
+  
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -513,7 +513,7 @@ export default {
 }
 
 .jibunAddress {
-  font-family: 'Pretendard';
+  
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
@@ -526,7 +526,7 @@ export default {
   height: 22px;
   margin-bottom: 14px;
 
-  font-family: 'Pretendard';
+  
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
@@ -548,7 +548,7 @@ export default {
   background: #FEE500;
   border-radius: 8px;
 
-  font-family: 'Pretendard';
+  
   font-style: normal;
   font-weight: 600;
   font-size: 16px;

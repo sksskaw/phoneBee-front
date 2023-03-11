@@ -86,7 +86,7 @@ export default {
 .found-page-box-1 {
     height: 90px;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 700;
     font-size: 21.33px;
@@ -110,7 +110,7 @@ export default {
     background: #391A15;
     border-radius: 8px;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 600;
     font-size: 16px;

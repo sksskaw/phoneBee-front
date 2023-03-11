@@ -226,7 +226,7 @@ export default {
     height: 32px;
     margin-left: 24px;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 400;
     font-size: 21.33px;
@@ -258,7 +258,7 @@ export default {
 }
 
 .model-name {
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -268,7 +268,7 @@ export default {
 }
 
 .model-price {
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -297,7 +297,7 @@ export default {
 }
 
 .di-title {
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -317,7 +317,7 @@ export default {
     width: 100%;
     height: 22px;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -337,7 +337,7 @@ export default {
     width: 100%;
     height: 22px;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 700;
     font-size: 14px;
@@ -348,7 +348,7 @@ export default {
 }
 
 .di-box3 {
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
@@ -367,7 +367,7 @@ export default {
     width: 100%;
     height: 22px;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -388,7 +388,7 @@ export default {
     width: 100%;
     height: 26px;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -399,7 +399,7 @@ export default {
 }
 
 .di-box6 {
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
@@ -421,7 +421,7 @@ export default {
 }
 
 .si-title {
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -440,7 +440,7 @@ export default {
 
     height: auto;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -487,7 +487,7 @@ export default {
     background: #391A15;
     border-radius: 8px;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
@@ -515,7 +515,7 @@ export default {
 
     height: 22px;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -557,7 +557,7 @@ export default {
     padding: 0px;
     gap: 8px;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -567,7 +567,7 @@ export default {
 }
 
 .review-content {
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 500;
     font-size: 14px;

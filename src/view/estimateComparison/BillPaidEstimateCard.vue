@@ -119,7 +119,7 @@ export default {
     height: 90px;
     margin: 90px 0px 40px 0px;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 700;
     font-size: 21.33px;
@@ -132,7 +132,7 @@ export default {
     height: 22px;
     margin-bottom: 12px;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -145,7 +145,7 @@ export default {
     height: 90px;
     margin-bottom: 40px;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 700;
     font-size: 21.33px;
@@ -168,7 +168,7 @@ export default {
     border: 1px solid #AEAEAE;
     border-radius: 8px;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 600;
     font-size: 16px;

@@ -27,7 +27,6 @@
 
     background: #F7F7F7;
 
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 400;
     font-size: 12px;

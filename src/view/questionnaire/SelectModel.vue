@@ -118,7 +118,7 @@ export default {
 }
 
 .title {
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 700;
     font-size: 28.43px;
@@ -183,7 +183,7 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 400;
     font-size: 16px;

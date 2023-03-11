@@ -95,7 +95,7 @@ export default {
 }
 
 .title {
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 700;
     font-size: 28.43px;

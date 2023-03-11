@@ -45,7 +45,6 @@ export default {
 }
 
 .title {
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 700;
     font-size: 28.43px;
@@ -56,7 +55,6 @@ export default {
 }
 
 .speech {
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
@@ -89,7 +87,6 @@ export default {
     border: none;
     cursor: pointer;
 
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 600;
     font-size: 16px;

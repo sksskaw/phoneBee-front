@@ -197,7 +197,6 @@ export default {
 }
 
 .text-box {
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 700;
     font-size: 21.33px;
@@ -228,7 +227,6 @@ export default {
     width: 100%;
     height: 22px;
 
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -249,7 +247,6 @@ export default {
 }
 
 .sub-title {
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -259,7 +256,6 @@ export default {
 }
 
 .info-box {
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 700;
     font-size: 14px;
@@ -298,7 +294,6 @@ export default {
 
     height: auto;
 
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 700;
     font-size: 14px;
@@ -320,7 +315,6 @@ export default {
 }
 
 .cautionary {
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -338,7 +332,6 @@ export default {
 
     background: #FFFFFF;
 
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 600;
     font-size: 16px;

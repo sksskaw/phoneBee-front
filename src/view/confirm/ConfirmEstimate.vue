@@ -291,7 +291,6 @@ export default {
 .party-popper-text {
     height: 60px;
 
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 700;
     font-size: 21.33px;
@@ -320,8 +319,7 @@ export default {
 
     width: 100%;
     height: 22px;
-
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -334,7 +332,6 @@ export default {
 .cautionary {
     height: 18px;
 
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
@@ -355,7 +352,6 @@ export default {
 }
 
 .sub-title {
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -365,7 +361,6 @@ export default {
 }
 
 .info-box {
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 700;
     font-size: 14px;
@@ -386,7 +381,6 @@ export default {
 }
 
 .amount {
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 700;
     font-size: 28.43px;
@@ -433,7 +427,6 @@ export default {
 
     height: auto;
 
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 700;
     font-size: 14px;
@@ -473,7 +466,6 @@ export default {
 .phrase {
     height: 60px;
 
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 700;
     font-size: 21.33px;
@@ -486,7 +478,7 @@ export default {
 .phrase-sub {
     height: 36px;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
@@ -504,7 +496,7 @@ export default {
     gap: 24px;
     background: #FFFFFF;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -534,7 +526,7 @@ export default {
     gap: 7px;
     width: 100%;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -652,7 +644,7 @@ export default {
     background: #391A15;
     border-radius: 8px;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 600;
     font-size: 16px;

@@ -102,7 +102,7 @@ export default {
 .loading-page-box-1 {
     height: 66px;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
@@ -117,7 +117,7 @@ export default {
 .loading-page-box-2 {
     height: 60px;
 
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 700;
     font-size: 21.33px;

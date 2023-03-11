@@ -87,7 +87,6 @@ export default {
     top: 5.48%;
     bottom: 86.3%;
 
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 600;
     font-size: 12px;
@@ -103,7 +102,6 @@ export default {
     top: 88.58%;
     bottom: 3.2%;
 
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 600;
     font-size: 12px;
@@ -152,8 +150,7 @@ export default {
 
     width: max-content;
     height: 18px;
-
-    font-family: 'Pretendard';
+    
     font-style: normal;
     font-weight: 600;
     font-size: 12px;
