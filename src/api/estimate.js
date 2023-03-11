@@ -51,4 +51,38 @@ export default {
                 });
         });
     },
+
+    async postEstimateComplete(surveyCode, planPriceIdx, enmemberidx) {
+        return new Promise((resolve, reject) => {
+            rest.post(`/api/estimate/complete/${surveyCode}/${planPriceIdx}`,null,
+                {
+                    headers: {
+                        'Enmemberidx': enmemberidx
+                    }
+                })
+                .then(response => {
+                    resolve(response);
+                })
+                .catch(error => {
+                    reject(error);
+                });
+        });
+    },
+
+    async getEstimateConfirm(estimateCode, enmemberidx) {
+        return new Promise((resolve, reject) => {
+            rest.get(`/api/estimate/confirm/${estimateCode}`
+                , {
+                    headers: {
+                        'Enmemberidx': enmemberidx
+                    }
+                })
+                .then(response => {
+                    resolve(response);
+                })
+                .catch(error => {
+                    reject(error);
+                });
+        });
+    },
 }

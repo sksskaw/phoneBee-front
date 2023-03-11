@@ -22,29 +22,29 @@
 
             <div class="ei-model">
                 <div class="sub-title">핸드폰 기기명</div>
-                <div class="info-box">갤럭시 A53 5G 자급제</div>
+                <div class="info-box">{{ deviceName }}</div>
             </div>
 
             <div class="ei-total-dc">
                 <div class="sub-title">총 할인 금액</div>
-                <div class="amount">189,134원</div>
+                <div class="amount">{{ totalDiscountPrice }}원</div>
             </div>
 
             <div class="ei-monthly-amount">
                 <div class="sub-title">단말기 월 할부금</div>
-                <div class="amount">19,000원</div>
+                <div class="amount">{{ monthPrice }}원</div>
             </div>
 
             <div class="ei-condition">
                 <div class="sub-title">매장 특별 지원금 지급 조건</div>
-                <div class="info-box">99 요금제 6개월 유지</div>
+                <div class="info-box">{{ planName }} 6개월 유지</div>
             </div>
 
             <div class="ei-store-info">
                 <div class="sub-title">판매점 정보</div>
                 <div class="si-box">
                     <div class="si-box-name">상호명</div>
-                    <div>싸다폰</div>
+                    <div>{{ storeName }}</div>
                 </div>
 
                 <div class="si-box">
@@ -64,9 +64,17 @@
         </div>
         <hr width="100%" color="#E1E1E1" size="3">
 
-        <div class="phrase">
-            sample 확정된 견적 그대로,<br>
-            상담없이 바로 개통 가능해요.
+        <div class="phrase-frame">
+            <div class="phrase-box">
+                <div class="phrase">
+                    확정된 견적 그대로,<br>
+                    상담없이 바로 개통 가능해요.
+                </div>
+                <div class="phrase-sub">
+                    *해당 견적은 유효기간이 있으니<br>
+                    이 기회를 놓치지 마세요.
+                </div>
+            </div>
         </div>
         <hr width="100%" color="#E1E1E1" size="3">
 
@@ -110,6 +118,9 @@
 
 <script>
 import strg from "@/utils/strg";
+import apiEstimate from "@/api/estimate";
+import cookie from '@/utils/cookie';
+
 export default {
     data() {
         return {
@@ -118,7 +129,14 @@ export default {
                 "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"],
             today: strg.getCurrentMonthAndDate(),
             todayDate: new Date().getDate(),
-            storeAddress: "서울시 마포구 양화로 160 수성빌딩 101호",
+
+            deviceName: '',
+            monthPrice: '',
+            planName: '',
+            totalDiscountPrice: '',
+
+            storeName: '',
+            storeAddress: '',
 
             selectedDate: new Date().getDate(),
             selectedTime: null,
@@ -127,11 +145,11 @@ export default {
     },
 
     mounted() {
-        const script = document.createElement("script");
-        script.onload = () => kakao.maps.load(this.initMap);
-        script.src =
-            "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=" + process.env.VUE_APP_KAKAO_KEY + "&libraries=services";
-        document.head.appendChild(script);
+        var enmemberidx = cookie.getCookie('Enmemberidx')
+        if (enmemberidx == '' || enmemberidx == null)
+            this.$router.push("/");
+
+        this.getEstimateConfirm(enmemberidx)
     },
 
     methods: {
@@ -172,9 +190,41 @@ export default {
             });
         },
 
+        getMapPosition() {
+            const script = document.createElement("script");
+            script.onload = () => kakao.maps.load(this.initMap);
+            script.src =
+                "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=" + process.env.VUE_APP_KAKAO_KEY + "&libraries=services";
+            document.head.appendChild(script);
+        },
+
+        getEstimateConfirm(enmemberidx) {
+            apiEstimate.getEstimateConfirm(this.$route.query.estimateCode, enmemberidx)
+                .then(response => {
+                    const data = response.data.estimate
+                    console.log(data)
+
+                    this.deviceName = data.confirmSection.deviceName
+                    this.monthPrice = this.priceFormat(data.confirmSection.monthPrice)
+                    this.planName = data.confirmSection.planName
+                    this.totalDiscountPrice = this.priceFormat(data.confirmSection.totalDiscountPrice)
+
+                    this.storeName = data.storeSection.storeName
+                    this.storeAddress = data.storeSection.storeAddress
+                    this.getMapPosition()
+                })
+                .catch(e => {
+                    console.log(e)
+                });
+        },
+
         onReservation() {
             this.$router.push("/confirm/confirmCheck");
         },
+
+        priceFormat(price) {
+            return strg.priceFormat(price)
+        }
     }
 }
 </script>
@@ -373,22 +423,46 @@ export default {
     background-color: gainsboro;
 }
 
-.phrase {
+.phrase-frame {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-around;
     align-items: center;
-    height: 116px;
+    padding: 24px;
+    gap: 24px;
+}
+
+.phrase-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+    gap: 12px;
+}
+
+.phrase {
+    height: 60px;
 
     font-family: 'Pretendard';
     font-style: normal;
     font-weight: 700;
     font-size: 21.33px;
     line-height: 30px;
+    text-align: center;
 
     color: #000000;
-    background: #FFFFFF;
+}
+
+.phrase-sub {
+    height: 36px;
+
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+
+    text-align: center;
+    color: #828282;
 }
 
 .reservation-date {

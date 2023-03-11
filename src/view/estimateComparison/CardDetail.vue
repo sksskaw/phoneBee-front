@@ -98,7 +98,8 @@
         </div>
 
         <div class="confirm-box">
-            <div class="confirm-btn" @click="onConfirm">견적 확정하기</div>
+            <div v-if="loading == false" class="confirm-btn" @click="onConfirm">견적 확정하기</div>
+            <div v-if="loading == true" class="confirm-btn"><img src="/images/loading.gif"></div>
         </div>
 
         <div style="height: 102px;"></div>
@@ -113,6 +114,8 @@ import cookie from '@/utils/cookie';
 export default {
     data() {
         return {
+            loading: false,
+
             monthPrice: '',
             deviceImgUrl: '',
             deviceName: '',
@@ -146,7 +149,9 @@ export default {
         },
 
         onConfirm() {
-            this.$router.push("/confirm/confirmEstimate");
+            this.loading = true
+            var enmemberidx = cookie.getCookie('Enmemberidx')
+            this.postEstimateComplete(enmemberidx)
         },
 
         getEstimateDetail(enmemberidx) {
@@ -170,6 +175,17 @@ export default {
                     this.storeName = data.storeSection.storeName
 
                     this.reviews = data.reviewSection
+                })
+                .catch(e => {
+                    console.log(e)
+                });
+        },
+
+        postEstimateComplete(enmemberidx) {
+            apiEstimate.postEstimateComplete(this.$route.query.surveyCode, this.$route.query.planPriceIdx, enmemberidx)
+                .then(response => {
+                    const estimateCode = response.data.estimateCode
+                    this.$router.push(`/confirm/confirmEstimate?estimateCode=${estimateCode}`);
                 })
                 .catch(e => {
                     console.log(e)
