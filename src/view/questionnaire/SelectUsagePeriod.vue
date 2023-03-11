@@ -48,22 +48,22 @@ export default {
 
     methods: {
         onBackBtn() {
-            if (this.$route.params.findType == "0") {
-                this.$router.push(`/questionnaire/${this.$route.params.findType}/0/${this.$route.params.useTelecomIdx}`);
-            }
-
-            if (this.$route.params.findType == "1") {
-                this.$router.push(`/questionnaire/${this.$route.params.findType}/${this.$route.params.deviceIdx}/${this.$route.params.useTelecomIdx}`);
-            }
+            this.$router.go(-1);
         },
 
         onCheck(ref) {
             if (this.$route.params.findType == "0") {
-                this.$router.push(`/questionnaire/${this.$route.params.findType}/0/${this.$route.params.useTelecomIdx}/${ref.target.id}/selectBillPaid`);
+                this.$router.replace(`/questionnaire/${this.$route.params.findType}/0/${this.$route.params.useTelecomIdx}/${ref.target.id}`)
+                    .then(() => {
+                        this.$router.push(`/questionnaire/${this.$route.params.findType}/0/${this.$route.params.useTelecomIdx}/${ref.target.id}/selectBillPaid`);
+                    });
             }
 
             if (this.$route.params.findType == "1") {
-                this.$router.push(`/questionnaire/${this.$route.params.findType}/${this.$route.params.deviceIdx}/${this.$route.params.useTelecomIdx}/${ref.target.id}/0/selectLocation`);
+                this.$router.replace(`/questionnaire/${this.$route.params.findType}/${this.$route.params.deviceIdx}/${this.$route.params.useTelecomIdx}/${ref.target.id}`)
+                    .then(() => {
+                        this.$router.push(`/questionnaire/${this.$route.params.findType}/${this.$route.params.deviceIdx}/${this.$route.params.useTelecomIdx}/${ref.target.id}/0/selectLocation`);
+                    });
             }
         },
     }
@@ -88,7 +88,7 @@ export default {
 }
 
 .title {
-    
+
     font-style: normal;
     font-weight: 700;
     font-size: 28.43px;

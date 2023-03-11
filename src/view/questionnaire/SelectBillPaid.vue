@@ -10,8 +10,8 @@
         </div>
 
         <div>
-            <input type="radio" id="5만원대" v-model="check" value="5" class="radio" @click="onCheck">
-            <label for="5만원대">
+            <input type="radio" id="5" v-model="check" value="5" class="radio" @click="onCheck">
+            <label for="5">
                 <div class="select-btn">5만원대 이하
                     <img class="check-icon" src="/images/unfilled_check.png">
                 </div>
@@ -62,11 +62,14 @@ export default {
 
     methods: {
         onBackBtn() {
-            this.$router.push(`/questionnaire/${this.$route.params.findType}/${this.$route.params.deviceIdx}/${this.$route.params.useTelecomIdx}/${this.$route.params.usePeriodIdx}`);
+            this.$router.go(-1);
         },
 
         onCheck(ref) {
-            this.$router.push(`/questionnaire/${this.$route.params.findType}/${this.$route.params.deviceIdx}/${this.$route.params.useTelecomIdx}/${this.$route.params.usePeriodIdx}/${ref.target.id}/selectLocation`);
+            this.$router.replace(`/questionnaire/${this.$route.params.findType}/${this.$route.params.deviceIdx}/${this.$route.params.useTelecomIdx}/${this.$route.params.usePeriodIdx}/${ref.target.id}`)
+                .then(() => {
+                    this.$router.push(`/questionnaire/${this.$route.params.findType}/${this.$route.params.deviceIdx}/${this.$route.params.useTelecomIdx}/${this.$route.params.usePeriodIdx}/${ref.target.id}/selectLocation`);
+                });
         },
     }
 }
@@ -90,7 +93,7 @@ export default {
 }
 
 .title {
-    
+
     font-style: normal;
     font-weight: 700;
     font-size: 28.43px;

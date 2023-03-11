@@ -41,15 +41,22 @@ export default {
 
     methods: {
         onBackBtn() {
-            this.$router.push("/");
+            this.$router.go(-1);
         },
 
         onCheck(ref) {
             if (ref.target.id === "y") {
-                this.$router.push(`/questionnaire/1/selectModel`);
+                this.$router.replace(`/questionnaire/1`)
+                    .then(() => {
+                        this.$router.push(`/questionnaire/1/selectModel`);
+                    });
                 return
             }
-            this.$router.push(`/questionnaire/0/0/selectMobileCarrier`);
+
+            this.$router.replace(`/questionnaire/0`)
+                .then(() => {
+                    this.$router.push(`/questionnaire/0/0/selectMobileCarrier`);
+                });
         },
     }
 }
@@ -73,7 +80,7 @@ export default {
 }
 
 .title {
-    
+
     font-style: normal;
     font-weight: 700;
     font-size: 28.43px;

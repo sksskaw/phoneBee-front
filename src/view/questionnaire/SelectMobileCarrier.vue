@@ -55,22 +55,22 @@ export default {
 
     methods: {
         onBackBtn() {
-            if (this.$route.params.findType == "0") {
-                this.$router.push(`/questionnaire/${this.$route.params.findType}`);
-            }
-
-            if (this.$route.params.findType == "1") {
-                this.$router.push(`/questionnaire/${this.$route.params.findType}/${this.$route.params.deviceIdx}`);
-            }
+            this.$router.go(-1);
         },
 
         onCheck(ref) {
             if (this.$route.params.findType == "0") {
-                this.$router.push(`/questionnaire/${this.$route.params.findType}/0/${ref.target.id}/selectUsagePeriod`);
+                this.$router.replace(`/questionnaire/${this.$route.params.findType}/0/${ref.target.id}`)
+                    .then(() => {
+                        this.$router.push(`/questionnaire/${this.$route.params.findType}/0/${ref.target.id}/selectUsagePeriod`);
+                    });
             }
 
             if (this.$route.params.findType == "1") {
-                this.$router.push(`/questionnaire/${this.$route.params.findType}/${this.$route.params.deviceIdx}/${ref.target.id}/selectUsagePeriod`);
+                this.$router.replace(`/questionnaire/${this.$route.params.findType}/${this.$route.params.deviceIdx}/${ref.target.id}`)
+                    .then(() => {
+                        this.$router.push(`/questionnaire/${this.$route.params.findType}/${this.$route.params.deviceIdx}/${ref.target.id}/selectUsagePeriod`);
+                    });
             }
         },
     }
@@ -95,7 +95,7 @@ export default {
 }
 
 .title {
-    
+
     font-style: normal;
     font-weight: 700;
     font-size: 28.43px;

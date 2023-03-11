@@ -97,15 +97,8 @@ export default {
 
   methods: {
     onBackBtn() {
-      if (this.$route.params.findType == "0") {
-        this.$router.push(`/questionnaire/${this.$route.params.findType}/${this.$route.params.deviceIdx}/${this.$route.params.useTelecomIdx}/${this.$route.params.usePeriodIdx}/${this.$route.params.monthCost}`);
-      }
-
-      if (this.$route.params.findType == "1") {
-        this.$router.push(`/questionnaire/${this.$route.params.findType}/${this.$route.params.deviceIdx}/${this.$route.params.useTelecomIdx}/${this.$route.params.usePeriodIdx}`);
-      }
+      this.$router.go(-1);
     },
-
 
     onCurrentLocation() {
       this.getCurrentPositionLoding = true
@@ -320,7 +313,7 @@ export default {
 }
 
 .title {
-  
+
   font-style: normal;
   font-weight: 700;
   font-size: 28.43px;
@@ -331,7 +324,7 @@ export default {
 }
 
 .sub-title {
-  
+
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
@@ -357,7 +350,7 @@ export default {
 
 .search-input {
   border: none;
-  
+
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -409,7 +402,7 @@ export default {
   padding: 0px;
   gap: 8px;
 
-  
+
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
@@ -503,7 +496,7 @@ export default {
 }
 
 .roadAddress {
-  
+
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -513,7 +506,7 @@ export default {
 }
 
 .jibunAddress {
-  
+
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
@@ -526,7 +519,7 @@ export default {
   height: 22px;
   margin-bottom: 14px;
 
-  
+
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
@@ -548,7 +541,7 @@ export default {
   background: #FEE500;
   border-radius: 8px;
 
-  
+
   font-style: normal;
   font-weight: 600;
   font-size: 16px;

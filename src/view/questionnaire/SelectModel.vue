@@ -63,11 +63,15 @@ export default {
 
     methods: {
         onBackBtn() {
-            this.$router.push(`/questionnaire/${this.$route.params.findType}`);
+            this.$router.go(-1);
         },
 
         onCheck(ref) {
-            this.$router.push(`/questionnaire/${this.$route.params.findType}/${ref.target.id}/selectMobileCarrier`);
+            this.$router.replace(`/questionnaire/${this.$route.params.findType}/${ref.target.id}`)
+                .then(() => {
+                    this.$router.push(`/questionnaire/${this.$route.params.findType}/${ref.target.id}/selectMobileCarrier`);
+                });
+            return
         },
 
         getDiviceModels() {
@@ -118,7 +122,7 @@ export default {
 }
 
 .title {
-    
+
     font-style: normal;
     font-weight: 700;
     font-size: 28.43px;
@@ -183,7 +187,7 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
 
-    
+
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
