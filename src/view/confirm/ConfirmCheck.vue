@@ -67,7 +67,7 @@
 
         <div class="contact-box">
             <div>추가로 궁금한 점이 있으신가요?</div>
-            <div class="kakao-contact-btn">카카오톡 문의하기</div>
+            <div class="kakao-contact-btn" @click="onContact">카카오톡 문의하기</div>
         </div>
     </div>
 </template>
@@ -173,7 +173,11 @@ export default {
 
         priceFormat(price) {
             return strg.priceFormat(price)
-        }
+        },
+
+        onContact() {
+            window.open("https://pf.kakao.com/_wYqxexj/chat", "_blank");
+        },
     }
 }
 </script>

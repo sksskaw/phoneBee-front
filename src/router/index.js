@@ -16,8 +16,8 @@ const routes = [
 
     //questionnaire
     {
-        path: '/questionnaire/:findType',
-        alias: ['/questionnaire'],
+        path: '/questionnaire',
+        alias: ['/questionnaire/:findType'],
         component: () => import('../view/questionnaire/LookingForModel.vue')
     },
     {
