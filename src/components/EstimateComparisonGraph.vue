@@ -82,10 +82,10 @@ export default {
 
 .y-title {
     position: absolute;
-    left: 3.67%;
-    right: 89.91%;
-    top: 5.48%;
-    bottom: 86.3%;
+    height: 18px;
+    width: 21px;
+    left: 12px;
+    top: 12px;
 
     font-style: normal;
     font-weight: 600;
@@ -97,10 +97,10 @@ export default {
 
 .x-title {
     position: absolute;
-    left: 83.49%;
-    right: 3.67%;
-    top: 88.58%;
-    bottom: 3.2%;
+    height: 18px;
+    width: 42px;
+    left: 273px;
+    top: 194px;
 
     font-style: normal;
     font-weight: 600;
