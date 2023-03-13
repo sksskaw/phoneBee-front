@@ -1,8 +1,9 @@
 .router-div {
     width: 375px;
-
+    
     margin: 0 auto;
-    margin-top: 52px;
+    padding-left: 24px;
+    padding-right: 24px;
     font-family: 'Pretendard', 'Apple SD Gothic Neo';
 }
 
