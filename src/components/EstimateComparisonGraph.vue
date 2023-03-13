@@ -4,13 +4,13 @@
         <div class="y-title">정책</div>
         <div class="graph">
             <div class="bar-frame">
-                <div class="bar" v-for="item in list" :style="{
-                    height: `${getHeight(item.deviceMonthPrice) * 140}px`,
-                    background: `${getBackground(item.badge.message)}`
+                <div class="bar" v-for="item in barChart" :style="{
+                    height: `${getHeight(item.price) * 140}px`,
+                    background: `${getBackground(item.isRecommend)}`
                 }">
-                    <div class="bar-value">{{ priceFormat(item.deviceMonthPrice) }}원</div>
+                    <div class="bar-value">{{ priceFormat(item.price) }}원</div>
 
-                    <img v-if="item.badge.message == '추천'" style="margin-top: 4px; width: 36px; height: 14.4;"
+                    <img v-if="item.isRecommend == 'Y'" style="margin-top: 4px; width: 36px; height: 14.4;"
                         :src="getCarrierLogo(item.telecomName)">
                 </div>
             </div>
@@ -22,20 +22,7 @@
 import strg from "@/utils/strg";
 
 export default {
-    props: ["cardList"],
-
-    data() {
-        return {
-            sortedList: [],
-        }
-    },
-
-    computed: {
-        list() {
-            this.sortedList = Object.assign([], this.cardList);
-            return this.sortedList.sort(this.compare).slice(0, 5);
-        },
-    },
+    props: ["barChart"],
 
     methods: {
         compare(a, b) {
@@ -53,14 +40,13 @@ export default {
         },
 
         getHeight(value) {
-            let prices = this.sortedList.map(i => i.deviceMonthPrice)
-            let maxValue = Math.max(...prices)
-            let rate = (value / maxValue)
+            let maxPrice = this.barChart.at(-1).price
+            let rate = (value / maxPrice)
             return rate
         },
 
         getBackground(message) {
-            if (message == '추천') return "#FFD340"
+            if (message == 'Y') return "#FFD340"
         },
 
         getCarrierLogo(name) {

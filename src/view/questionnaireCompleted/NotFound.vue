@@ -4,7 +4,7 @@
             <img class="back-btn" src="/images/arrow.png" @click="onBackBtn">
         </div>
 
-        <img class="not-found-img" src="/images/not_found.svg">
+        <img class="not-found-img" src="/images/not_found.png">
 
         <div class="not-found-page-box-1">
             입력해주신 {{ sigungu }}<br>

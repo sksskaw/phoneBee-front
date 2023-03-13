@@ -6,7 +6,7 @@
         </div>
 
         <div class="graph">
-            <Graph v-bind:cardList="cardList"></Graph>
+            <Graph v-bind:barChart="barChart"></Graph>
         </div>
 
         <div class="box-3">
@@ -29,9 +29,9 @@
                         <img v-if="item.badge.message == '통신사이동' && item.badge.show == 'Y'" class="badge-icon"
                             src="/images/carrier_change_badge.svg">
 
-                        <div class="cost">{{ priceFormat(item.factoryMonthPrice) }}원</div>
-                        <div class="discount">-{{ priceFormat(item.factoryMonthPrice - item.deviceMonthPrice) }}원</div>
-                        <div class="amount">{{ priceFormat(item.deviceMonthPrice) }}원</div>
+                        <div class="cost">{{ priceFormat(item.monthPrice) }}원</div>
+                        <div class="discount">{{ priceFormat(item.discountMonthPrice - item.monthPrice) }}원</div>
+                        <div class="amount">{{ priceFormat(item.discountMonthPrice) }}원</div>
                         <div class="card-text">단말기 월 할부금</div>
                     </div>
                 </label>
@@ -57,6 +57,7 @@ export default {
             date: {},
             deviceName: '',
             totalDiscountPrice: '',
+            barChart: [],
             cardList: [],
             showListIndex: 3,
 
@@ -81,7 +82,7 @@ export default {
             let length = this.cardList.length
             this.showListIndex = this.showListIndex + 3;
 
-            if (length < this.showListIndex) {
+            if (length <= this.showListIndex) {
                 var btn = document.getElementById('more-btn')
                 btn.style.display = "none";
                 return length
@@ -97,6 +98,7 @@ export default {
                     this.deviceName = response.data.estimate.deviceName
                     this.totalDiscountPrice = strg.priceFormat(response.data.estimate.totalDiscountPrice)
                     this.cardList = response.data.estimate.list
+                    this.barChart = response.data.estimate.barChart
                 })
                 .catch(e => {
                     console.log(e)
