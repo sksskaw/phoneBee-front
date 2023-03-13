@@ -4,7 +4,7 @@
             <img class="back-btn" src="/images/arrow.png" @click="onBackBtn">
         </div>
 
-        <img class="loading-img" src="/images/loading.gif">
+        <Vue3Lottie class="loading-img" :animationData="loadingImg" />
 
         <div class="loading-page-box-1 animate__animated animate__fadeInUp">
             {{ sigungu }} 주변 매장들의<br>
@@ -23,14 +23,22 @@
 import apiEstimate from '@/api/estimate';
 import cookie from '@/utils/cookie';
 
+import { Vue3Lottie } from 'vue3-lottie'
+import 'vue3-lottie/dist/style.css'
+import loadingImg from '@/assets/loading.json'
+
 export default {
+    components: {
+        Vue3Lottie
+    },
+
     data() {
         return {
             sigungu: '',
             condition: '',
+            loadingImg,
         }
     },
-
 
     mounted() {
         var enmemberidx = cookie.getCookie('Enmemberidx')
@@ -50,11 +58,11 @@ export default {
                 .then(response => {
                     this.condition = response.data.buttonLabel.condition
                     this.sigungu = response.data.buttonLabel.findArea
-                    let searchAgain = response.data.searchAgain.findArea
 
                     setTimeout(() => {
                         if (response.data.isEstimate == 'N') {
-                            this.$router.push(`/questionnaireCompleted/NotFound?findArea=${this.sigungu}&searchAgain=${searchAgain}`);
+                            localStorage.setItem('searchAgain', JSON.stringify(response.data.searchAgain))
+                            this.$router.push(`/questionnaireCompleted/NotFound?sigungu=${this.sigungu}`);
                         }
 
                         if (response.data.isEstimate == 'Y') {
@@ -102,7 +110,7 @@ export default {
 .loading-page-box-1 {
     height: 66px;
 
-    
+
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
@@ -117,7 +125,7 @@ export default {
 .loading-page-box-2 {
     height: 60px;
 
-    
+
     font-style: normal;
     font-weight: 700;
     font-size: 21.33px;

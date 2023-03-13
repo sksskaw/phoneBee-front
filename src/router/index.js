@@ -57,6 +57,7 @@ const routes = [
     },
     {
         path: '/questionnaireCompleted/NotFound',
+        name: 'notFound',
         props: true,
         component: () => import('../view/questionnaireCompleted/NotFound.vue')
     },

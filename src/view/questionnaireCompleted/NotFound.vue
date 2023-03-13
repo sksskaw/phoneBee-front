@@ -7,7 +7,7 @@
         <img class="not-found-img" src="/images/not_found.svg">
 
         <div class="not-found-page-box-1">
-            입력해주신 {{ findArea }}<br>
+            입력해주신 {{ sigungu }}<br>
             주변에는 저렴한 견적이 없어요.
         </div>
 
@@ -22,16 +22,22 @@
 
 <script>
 export default {
+    props: ['test'],
+
     data() {
         return {
-            findArea: '',
+            sigungu: '',
             searchAgain: '',
+            reTrySurvey: {},
         }
     },
 
     mounted() {
-        this.findArea = this.$route.query.findArea
-        this.searchAgain = this.$route.query.searchAgain
+        const searchAgain = JSON.parse(localStorage.getItem('searchAgain'))
+
+        this.sigungu = this.$route.query.sigungu
+        this.searchAgain = searchAgain.reTrySurvey.findArea
+        this.reTrySurvey = searchAgain.reTrySurvey
     },
 
     methods: {
