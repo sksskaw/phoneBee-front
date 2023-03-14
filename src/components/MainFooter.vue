@@ -17,9 +17,11 @@
     align-items: flex-start;
     justify-content: center;
     padding: 28px 24px 56px 24px;
+    margin: 0 auto;
     gap: 4px;
     height: 54px;
-
+    max-width: 475px;
+    
     background: #F7F7F7;
 
     font-style: normal;

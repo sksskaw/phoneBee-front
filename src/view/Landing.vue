@@ -20,10 +20,8 @@
             <span style="font-weight: 700;">평균 18만원 정도 저렴해요!</span>
         </div>
     </div>
+    <Footer> </Footer>
 
-    <div class="footer-wrap">
-        <Footer> </Footer>
-    </div>
 </template>
 
 <script>
@@ -43,11 +41,6 @@ export default {
 </script>
   
 <style scoped>
-.footer-wrap {
-    position: relative;
-    min-height: 100%;
-}
-
 .title {
     font-style: normal;
     font-weight: 700;

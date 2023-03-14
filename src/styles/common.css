@@ -1,5 +1,5 @@
 .router-div {
-    width: 375px;
+    max-width: 475px;
 
     margin: 0 auto;
     padding-left: 24px;
