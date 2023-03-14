@@ -99,7 +99,9 @@
 
         <div class="confirm-box">
             <div v-if="loading == false" class="confirm-btn" @click="onConfirm">견적 확정하기</div>
-            <div v-if="loading == true" class="confirm-btn"><img src="/images/loading_s.gif"></div>
+            <div v-if="loading == true" class="confirm-btn">
+                <Vue3Lottie :animationData="loadingImg" />
+            </div>
         </div>
 
         <div style="height: 102px;"></div>
@@ -111,10 +113,18 @@ import strg from "@/utils/strg";
 import apiEstimate from "@/api/estimate";
 import cookie from '@/utils/cookie';
 
+import { Vue3Lottie } from 'vue3-lottie'
+import 'vue3-lottie/dist/style.css'
+import loadingImg from '@/assets/loading.json'
 export default {
+    components: {
+        Vue3Lottie
+    },
+
     data() {
         return {
             loading: false,
+            loadingImg,
 
             monthPrice: '',
             deviceImgUrl: '',
@@ -226,7 +236,7 @@ export default {
     height: 32px;
     margin-left: 24px;
 
-    
+
     font-style: normal;
     font-weight: 400;
     font-size: 21.33px;
@@ -239,7 +249,6 @@ export default {
 
 .carrier-img {
     height: 32px;
-    width: 79px;
 }
 
 .model-box {
@@ -258,7 +267,7 @@ export default {
 }
 
 .model-name {
-    
+
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -268,7 +277,7 @@ export default {
 }
 
 .model-price {
-    
+
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -297,7 +306,7 @@ export default {
 }
 
 .di-title {
-    
+
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -317,7 +326,7 @@ export default {
     width: 100%;
     height: 22px;
 
-    
+
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -337,7 +346,7 @@ export default {
     width: 100%;
     height: 22px;
 
-    
+
     font-style: normal;
     font-weight: 700;
     font-size: 14px;
@@ -348,7 +357,7 @@ export default {
 }
 
 .di-box3 {
-    
+
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
@@ -367,7 +376,7 @@ export default {
     width: 100%;
     height: 22px;
 
-    
+
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -388,7 +397,7 @@ export default {
     width: 100%;
     height: 26px;
 
-    
+
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -399,7 +408,7 @@ export default {
 }
 
 .di-box6 {
-    
+
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
@@ -421,7 +430,7 @@ export default {
 }
 
 .si-title {
-    
+
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -440,7 +449,7 @@ export default {
 
     height: auto;
 
-    
+
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -487,7 +496,7 @@ export default {
     background: #391A15;
     border-radius: 8px;
 
-    
+
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
@@ -515,7 +524,7 @@ export default {
 
     height: 22px;
 
-    
+
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -557,7 +566,7 @@ export default {
     padding: 0px;
     gap: 8px;
 
-    
+
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -567,7 +576,7 @@ export default {
 }
 
 .review-content {
-    
+
     font-style: normal;
     font-weight: 500;
     font-size: 14px;

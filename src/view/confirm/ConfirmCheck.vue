@@ -28,7 +28,7 @@
 
             <div class="ei-condition">
                 <div class="sub-title">매장 특별 지원금 지급 조건</div>
-                <div class="info-box">{{ planName }} 6개월 유지</div>
+                <div class="info-box">{{ planName }} 6개월 유지 (6개월 뒤 바꿀 수 있어요)</div>
             </div>
 
             <div class="ei-condition">
@@ -45,13 +45,8 @@
 
                 <div class="si-box">
                     <div class="si-box-name">주소</div>
-                    <div>{{ storeAddress }}</div>
-                </div>
-
-                <div class="si-box">
-                    <div class="si-box-name"></div>
-                    <div>
-                        <img src="/images/copy.svg" @click="copyAddress">
+                    <div>{{ storeAddress }}
+                        <img style="position: relative; bottom: -5px;" src="/images/copy.svg" @click="copyAddress">
                     </div>
                 </div>
             </div>

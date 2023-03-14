@@ -103,7 +103,6 @@ export default {
 
 .loading-img {
     height: 187px;
-
     margin-bottom: 56px;
 }
 

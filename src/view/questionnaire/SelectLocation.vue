@@ -44,7 +44,7 @@
             <div class="jibunAddress">{{ jibunAddress }}</div>
           </div>
 
-          <div class="estimate-notice">견적 확인을 위해 카카오로 가입이 필요해요</div>
+          <div class="estimate-notice">견적 확인을 위해 카카오 가입이 필요해요</div>
           <div @click="onEstimate">
             <div class="estimate-btn" v-if="estimateLoading == true">
               <img class="loading-icon" src="/images/search_loading_icon.gif">
@@ -237,17 +237,10 @@ export default {
 
     onEstimate() {
       this.estimateLoading = true
-
-      var enmemberidx = cookie.getCookie('Enmemberidx')
-
-      if (enmemberidx == null || enmemberidx == '') {
-        window.Kakao.Auth.login({
+      
+      window.Kakao.Auth.login({
           success: this.getKakaoMyInfo
         })
-        return
-      }
-
-      this.postSurvey(enmemberidx)
     },
 
     postSurvey(enmemberidx) {
@@ -411,8 +404,8 @@ export default {
 }
 
 .loading-icon {
-  width: 24px;
-  height: 24px;
+  width: 40px;
+  height: 40px;
 }
 
 .target-icon {

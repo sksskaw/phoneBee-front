@@ -37,7 +37,7 @@
 
             <div class="ei-condition">
                 <div class="sub-title">매장 특별 지원금 지급 조건</div>
-                <div class="info-box">{{ planName }} 6개월 유지</div>
+                <div class="info-box">{{ planName }} 6개월 유지 (6개월 뒤 바꿀 수 있어요)</div>
             </div>
 
             <div class="ei-store-info">
@@ -49,13 +49,8 @@
 
                 <div class="si-box">
                     <div class="si-box-name">주소</div>
-                    <div>{{ storeAddress }}</div>
-                </div>
-
-                <div class="si-box">
-                    <div class="si-box-name"></div>
-                    <div>
-                        <img src="/images/copy.svg" @click="copyAddress">
+                    <div>{{ storeAddress }}
+                        <img style="position: relative; bottom: -5px;" src="/images/copy.svg" @click="copyAddress">
                     </div>
                 </div>
             </div>
@@ -113,7 +108,9 @@
         </div>
 
         <div v-if="loading == false" class="reservation-btn" @click="onReservation()">새 핸드폰 받아보기</div>
-        <div v-if="loading == true" class="reservation-btn"><img src="/images/loading_s.gif"></div>
+        <div v-if="loading == true" class="reservation-btn">
+            <Vue3Lottie :animationData="loadingImg" />
+        </div>
 
     </div>
 </template>
@@ -123,7 +120,14 @@ import strg from "@/utils/strg";
 import apiEstimate from "@/api/estimate";
 import cookie from '@/utils/cookie';
 
+import { Vue3Lottie } from 'vue3-lottie'
+import 'vue3-lottie/dist/style.css'
+import loadingImg from '@/assets/loading.json'
 export default {
+    components: {
+        Vue3Lottie
+    },
+
     data() {
         return {
             week: ['일', '월', '화', '수', '목', '금', '토'],
@@ -148,6 +152,7 @@ export default {
             selectedTime: null,
 
             loading: false,
+            loadingImg,
         }
     },
 
@@ -319,7 +324,7 @@ export default {
 
     width: 100%;
     height: 22px;
-    
+
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -421,7 +426,7 @@ export default {
 .si-box {
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: center;
     padding: 0px;
     gap: 40px;
 
@@ -478,7 +483,7 @@ export default {
 .phrase-sub {
     height: 36px;
 
-    
+
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
@@ -496,7 +501,7 @@ export default {
     gap: 24px;
     background: #FFFFFF;
 
-    
+
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -526,7 +531,7 @@ export default {
     gap: 7px;
     width: 100%;
 
-    
+
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -644,7 +649,7 @@ export default {
     background: #391A15;
     border-radius: 8px;
 
-    
+
     font-style: normal;
     font-weight: 600;
     font-size: 16px;

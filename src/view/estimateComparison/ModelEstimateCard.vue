@@ -21,7 +21,7 @@
                     class="estimate-radio" @click="toDetail">
                 <label :for="item.planPriceIdx">
                     <div class="estimate-radio-card">
-                        <img class="carrier-icon" :src="getCarrierLogo(item.telecomName)">
+                        <img class="carrier-icon" :style="getCarrierLogoStyle(item.telecomName)" :src="getCarrierLogo(item.telecomName)">
 
                         <img v-if="item.badge.message == '추천' && item.badge.show == 'Y'" class="badge-icon"
                             src="/images/recommended_badge.svg">
@@ -109,6 +109,10 @@ export default {
             return strg.getCarrierLogo(name)
         },
 
+        getCarrierLogoStyle(name) {
+            return strg.getCarrierLogoSmallStyle(name)
+        },
+
         priceFormat(price) {
             return strg.priceFormat(price)
         }
@@ -120,7 +124,7 @@ export default {
 .box-1 {
     margin: 90px 0px 32px 0px;
 
-    
+
     font-style: normal;
     font-weight: 700;
     font-size: 21.33px;
@@ -133,7 +137,7 @@ export default {
     height: 22px;
     margin-bottom: 12px;
 
-    
+
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -146,7 +150,7 @@ export default {
     height: 90px;
     margin-bottom: 40px;
 
-    
+
     font-style: normal;
     font-weight: 700;
     font-size: 21.33px;
@@ -156,7 +160,7 @@ export default {
 }
 
 .box-3-date {
-    
+
     font-size: 16px;
     font-weight: 600;
     line-height: 22px;
@@ -181,7 +185,7 @@ export default {
     border: 1px solid #AEAEAE;
     border-radius: 8px;
 
-    
+
     font-style: normal;
     font-weight: 600;
     font-size: 16px;

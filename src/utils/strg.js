@@ -9,8 +9,14 @@ export default {
     },
 
     getCarrierLogo(name) {
-        if (name == 'SKT') return "/images/skt_logo.svg"
-        if (name == 'LGU+') return "/images/lgu+_logo.svg"
-        if (name == 'KT') return "/images/kt_logo.svg"
+        if (name == 'SKT') return "/images/skt_logo.png"
+        if (name == 'LGU+') return "/images/lgu+_logo.png"
+        if (name == 'KT') return "/images/kt_logo.png"
+    },
+
+    getCarrierLogoSmallStyle(name) {
+        if (name == 'SKT') return "width: 60px; height: 24px;"
+        if (name == 'LGU+') return "width: 48.3px; height: 13.8px;"
+        if (name == 'KT') return "width: 31.2px; height: 13.2px;"
     },
 };
