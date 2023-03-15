@@ -16,25 +16,42 @@
             {{ searchAgain }}의 견적을 확인해 보시겠어요?
         </div>
 
-        <div class="check-btn">최적 견적 확인하기</div>
+        <div v-if="loading == false" class="reTrySurvey-btn" @click="onReTrySurvey">최적 견적 확인하기</div>
+        <div v-if="loading == true" class="reTrySurvey-btn">
+            <Vue3Lottie :animationData="loadingImg" />
+        </div>
     </div>
 </template>
 
 <script>
+import apiQuestionnaire from '@/api/questionnaire';
+import cookie from '@/utils/cookie';
+
+import { Vue3Lottie } from 'vue3-lottie'
+import 'vue3-lottie/dist/style.css'
+import loadingImg from '@/assets/loading.json'
 export default {
-    props: ['test'],
+    components: {
+        Vue3Lottie
+    },
 
     data() {
         return {
             sigungu: '',
             searchAgain: '',
             reTrySurvey: {},
+
+            loading: false,
+            loadingImg,
         }
     },
 
     mounted() {
-        const searchAgain = JSON.parse(localStorage.getItem('searchAgain'))
+        var enmemberidx = cookie.getCookie('Enmemberidx')
+        if (enmemberidx == '' || enmemberidx == null)
+            this.$router.push("/");
 
+        const searchAgain = JSON.parse(localStorage.getItem('searchAgain'))
         this.sigungu = this.$route.query.sigungu
         this.searchAgain = searchAgain.reTrySurvey.findArea
         this.reTrySurvey = searchAgain.reTrySurvey
@@ -43,6 +60,51 @@ export default {
     methods: {
         onBackBtn() {
             this.$router.push("/questionnaire/selectLocation");
+        },
+
+        onReTrySurvey() {
+            this.loading = true
+
+            var enmemberidx = cookie.getCookie('Enmemberidx')
+            let findArea = this.reTrySurvey.findArea
+            let param = {
+                useTelecomIdx: parseInt(this.reTrySurvey.useTelecomIdx),
+                usePeriodIdx: parseInt(this.reTrySurvey.usePeriodIdx),
+                deviceIdx: parseInt(this.reTrySurvey.deviceIdx),
+                monthCost: parseInt(this.reTrySurvey.monthCost),
+                findArea: encodeURIComponent(findArea),
+            }
+
+            var findType = this.reTrySurvey.findType
+            // 원하는 기기 있는 경우
+            if (findType == "device") {
+                apiQuestionnaire.postSurveyDeviceComplete(param, enmemberidx)
+                    .then(response => {
+                        if (response.data.resultCode === 0) {
+                            this.$router.push(`/questionnaireCompleted/loading?surveyCode=${response.data.surveyCode}`);
+                        } else {
+                            console.log("실패")
+                        }
+                    }).catch(e => {
+                        // 예외사항 체크
+                        console.log(e)
+                    });
+            }
+
+            // 원하는 기기 없는 경우
+            if (findType == "cost") {
+                apiQuestionnaire.postSurveyCostComplete(param, enmemberidx)
+                    .then(response => {
+                        if (response.data.resultCode === 0) {
+                            this.$router.push(`/questionnaireCompleted/loading?surveyCode=${response.data.surveyCode}`);
+                        } else {
+                            console.log("실패")
+                        }
+                    }).catch(e => {
+                        // 예외사항 체크
+                        console.log(e)
+                    });
+            }
         },
     }
 }
@@ -77,7 +139,7 @@ export default {
 .not-found-page-box-1 {
     height: 60px;
 
-    
+
     font-style: normal;
     font-weight: 700;
     font-size: 21.33px;
@@ -92,7 +154,7 @@ export default {
 .not-found-page-box-2 {
     height: 44px;
 
-    
+
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
@@ -104,7 +166,7 @@ export default {
     margin-bottom: 118px;
 }
 
-.check-btn {
+.reTrySurvey-btn {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -116,7 +178,7 @@ export default {
     background: #391A15;
     border-radius: 8px;
 
-    
+
     font-style: normal;
     font-weight: 600;
     font-size: 16px;

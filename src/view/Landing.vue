@@ -21,7 +21,6 @@
         </div>
     </div>
     <Footer> </Footer>
-
 </template>
 
 <script>
@@ -53,9 +52,9 @@ export default {
 
 .speech {
     font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 22px;
+    font-weight: 400;
+    font-size: 21.33px;
+    line-height: 30px;
 
     color: #391A15;
     margin-bottom: 18px;

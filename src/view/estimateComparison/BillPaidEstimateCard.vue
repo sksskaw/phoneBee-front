@@ -21,7 +21,7 @@
                     class="estimate-radio" @click="toDetail">
                 <label :for="item.planPriceIdx">
                     <div class="estimate-radio-card">
-                        <img class="carrier-icon" :src="getCarrierLogo(item.telecomName)">
+                        <img class="carrier-icon" :style="getCarrierLogoStyle(item.telecomName)" :src="getCarrierLogo(item.telecomName)">
 
                         <img v-if="item.badge.message == '추천' && item.badge.show == 'Y'" class="badge-icon"
                             src="/images/recommended_badge.svg">
@@ -109,6 +109,10 @@ export default {
 
         getCarrierLogo(name) {
             return strg.getCarrierLogo(name)
+        },
+
+        getCarrierLogoStyle(name) {
+            return strg.getCarrierLogoSmallStyle(name)
         },
 
         priceFormat(price) {
