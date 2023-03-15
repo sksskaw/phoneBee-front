@@ -21,7 +21,8 @@
                     class="estimate-radio" @click="toDetail">
                 <label :for="item.planPriceIdx">
                     <div class="estimate-radio-card">
-                        <img class="carrier-icon" :style="getCarrierLogoStyle(item.telecomName)" :src="getCarrierLogo(item.telecomName)">
+                        <img class="carrier-icon" :style="getCarrierLogoStyle(item.telecomName)"
+                            :src="getCarrierLogo(item.telecomName)">
 
                         <img v-if="item.badge.message == '추천' && item.badge.show == 'Y'" class="badge-icon"
                             src="/images/recommended_badge.svg">
@@ -34,11 +35,14 @@
                         <div class="amount">{{ priceFormat(item.discountMonthPrice) }}원</div>
                         <div class="card-model-text"> {{ item.deviceName }}</div>
                         <div class="card-text">단말기 월 할부금</div>
+                        <img class="arrow-right" src="/images/arrow_right.png">
                     </div>
                 </label>
             </div>
             <div class="more-btn" id="more-btn" @click="onMore(selectedCard)">요금 더보기</div>
         </div>
+
+        
     </div>
 </template>
 
@@ -191,5 +195,14 @@ export default {
     align-items: center;
     height: 220px;
     margin-bottom: 48px
+}
+
+.arrow-right {
+    position: absolute;
+    right: 4%;
+    top: 45%;
+
+    height: 16.125px;
+    width: 8.625px;
 }
 </style>

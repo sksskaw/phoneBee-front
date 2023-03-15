@@ -59,7 +59,7 @@ export default {
 
     methods: {
         onBackBtn() {
-            this.$router.push("/questionnaire/selectLocation");
+            this.$router.push("/");
         },
 
         onReTrySurvey() {

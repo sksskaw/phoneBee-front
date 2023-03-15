@@ -36,7 +36,9 @@
             <div style="width: 24px; height: 24px;"></div>
           </div>
 
-          <div class="kakao-map" id="kakao-map"></div>
+          <div class="kakao-map">
+            <div style="width: 100%; height: 100%;" id="kakao-map"></div>
+          </div>
 
           <div class="address-box">
             <div class="buildingName">{{ buildingName }}</div>
@@ -334,22 +336,21 @@ export default {
   justify-content: space-between;
   align-items: center;
 
-  width: 100%;
   height: 51px;
-
+  width: 100%;
   border-bottom: 1px solid #e5e5e5;
   margin-bottom: 17px;
 }
 
 .search-input {
   border: none;
+  width: 100%;
 
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 22px;
 
-  width: 287px;
   cursor: pointer;
 }
 
@@ -415,17 +416,18 @@ export default {
 
 .black-bg {
   display: none;
+  width: 100%;
+  height: 100%;
+
   left: 0px;
   top: 0px;
-  width: 100%;
-  height: auto;
+  bottom: 0px;
   background: rgba(0, 0, 0, 0.1);
   position: absolute;
 }
 
 .white-bg {
-  width: 100%;
-  height: auto;
+  height: 100%;
   background: white;
   border-radius: 20px 20px 0px 0px;
   animation: fadeInUp 1s;
@@ -489,7 +491,6 @@ export default {
 }
 
 .roadAddress {
-
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -499,7 +500,6 @@ export default {
 }
 
 .jibunAddress {
-
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
@@ -511,7 +511,6 @@ export default {
 .estimate-notice {
   height: 22px;
   margin-bottom: 14px;
-
 
   font-style: normal;
   font-weight: 500;
@@ -534,7 +533,6 @@ export default {
   background: #FEE500;
   border-radius: 8px;
 
-
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
@@ -544,7 +542,7 @@ export default {
 }
 
 .kakao-map {
-  height: 450px;
+  width: 100%;
+  height: 35vh
 }
 </style>
-  

@@ -17,7 +17,6 @@
                         @click="onCheck">
                     <label :for="model.deviceIdx">
                         <div class="model-select-btn">
-                            <img class="model-check-icon" src="/images/unfilled_check.png">
                             <img class="sample-model-img" :src="model.deviceImgUrl">
                             <div class="model-name">{{ model.deviceName }}</div>
                         </div>
@@ -31,7 +30,6 @@
                         @click="onCheck">
                     <label :for="model.deviceIdx">
                         <div class="model-select-btn">
-                            <img class="model-check-icon" src="/images/unfilled_check.png">
                             <img class="sample-model-img" :src="model.deviceImgUrl">
                             <div class="model-name">{{ model.deviceName }}</div>
                         </div>
@@ -153,22 +151,11 @@ export default {
     position: relative;
     width: 154.5px;
     height: 154.5px;
-
-    /* White */
-
     background: #FFFFFF;
-    /* Shadow 01 */
 
     box-shadow: 1px 0px 12px rgba(48, 48, 48, 0.1);
     border-radius: 8px;
-}
-
-.model-check-icon {
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    left: 118.5px;
-    top: 12px;
+    border: 1px solid white;
 }
 
 .sample-model-img {
@@ -204,11 +191,13 @@ export default {
     display: none;
 }
 
-.model-radio:hover+label .model-check-icon {
-    content: url("../../../public/images/filled_check.png")
+.model-radio:hover+label .model-select-btn {
+    border: 1px solid #FFD340;
+
 }
 
-.model-radio:checked+label .model-check-icon {
-    content: url("../../../public/images/filled_check.png")
+.model-radio:checked+label .model-select-btn {
+    border: 1px solid #FFD340;
+
 }
 </style>
