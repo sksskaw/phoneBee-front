@@ -161,7 +161,7 @@ export default {
     mounted() {
         var enmemberidx = cookie.getCookie('Enmemberidx')
         if (enmemberidx == '' || enmemberidx == null)
-            this.$router.push("/");
+            this.$router.push("/login");
 
         this.findType = this.$route.query.findType
         this.getEstimateConfirm(enmemberidx)

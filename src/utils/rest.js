@@ -19,7 +19,7 @@ instance.interceptors.response.use(
 
         if (response.data.message.strType == 'alert_and_go_login') {
             alert(response.data.message.strMessage)
-            this.$router.push('/login');
+            this.$router.push("/login");
             return
         }
 
