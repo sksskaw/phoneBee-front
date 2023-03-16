@@ -178,6 +178,7 @@ export default {
                     this.publicSubsidy = this.priceFormat(data.monthPriceSection.publicSubsidy)
                     this.storeSupport = this.priceFormat(data.monthPriceSection.storeSupport)
                     this.totalDiscountPrice = this.priceFormat(data.monthPriceSection.totalDiscountPrice)
+                    if (this.factoryPrice < this.totalDiscountPrice) this.totalDiscountPrice = 0
                     this.monthPrice = this.priceFormat(data.monthPriceSection.monthPrice)
 
                     this.storeAddress = data.storeSection.storeAddress
