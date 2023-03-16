@@ -62,7 +62,7 @@ export default {
             barChart: [],
             cardList: [],
             showListIndex: 3,
-
+            findType: '',
             selectedCard: null,
         }
     },
@@ -77,7 +77,7 @@ export default {
 
     methods: {
         toDetail(ref) {
-            this.$router.push(`/estimateComparison/cardDetail?surveyCode=${this.$route.query.surveyCode}&planPriceIdx=${ref.target.id}`);
+            this.$router.push(`/estimateComparison/cardDetail?surveyCode=${this.$route.query.surveyCode}&planPriceIdx=${ref.target.id}&findType=${this.findType}`);
         },
 
         onMore() {
@@ -99,8 +99,10 @@ export default {
                     this.date = response.data.estimate.date
                     this.deviceName = response.data.estimate.deviceName
                     this.totalDiscountPrice = strg.priceFormat(response.data.estimate.totalDiscountPrice)
+                    if (this.totalDiscountPrice < 0) this.totalDiscountPrice = 0
                     this.cardList = response.data.estimate.list
                     this.barChart = response.data.estimate.barChart
+                    this.findType = response.data.estimate.findType
                 })
                 .catch(e => {
                     console.log(e)
@@ -203,6 +205,7 @@ export default {
     height: 220px;
     margin-bottom: 48px
 }
+
 .arrow-right {
     position: absolute;
     right: 4%;

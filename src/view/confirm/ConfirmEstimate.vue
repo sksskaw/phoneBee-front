@@ -31,7 +31,8 @@
             </div>
 
             <div class="ei-monthly-amount">
-                <div class="sub-title">단말기 월 할부금</div>
+                <div class="sub-title" v-if="findType == 'device'">단말기 월 할부금</div>
+                <div class="sub-title" v-if="findType == 'cost'">월 납부 금액</div>
                 <div class="amount">{{ monthPrice }}원</div>
             </div>
 
@@ -130,6 +131,7 @@ export default {
 
     data() {
         return {
+            findType: '',
             week: ['일', '월', '화', '수', '목', '금', '토'],
             times: ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
                 "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"],
@@ -161,6 +163,7 @@ export default {
         if (enmemberidx == '' || enmemberidx == null)
             this.$router.push("/");
 
+        this.findType = this.$route.query.findType
         this.getEstimateConfirm(enmemberidx)
     },
 
@@ -176,6 +179,7 @@ export default {
             textArea.select()
             document.execCommand('copy')
             document.body.removeChild(textArea)
+            alert('복사되었어요')
         },
 
         initMap() {
@@ -214,7 +218,6 @@ export default {
             apiEstimate.getEstimateConfirm(this.$route.query.estimateCode, enmemberidx)
                 .then(response => {
                     const data = response.data.estimate
-
                     this.year = data.confirmSection.date.year
                     this.month = data.confirmSection.date.month
                     this.day = data.confirmSection.date.day
@@ -241,7 +244,7 @@ export default {
             }
             apiEstimate.postReservationComplete(this.$route.query.estimateCode, params, enmemberidx)
                 .then(response => {
-                    this.$router.push(`/confirm/confirmCheck?reservationCode=${response.data.reservationCode}`);
+                    this.$router.push(`/confirm/confirmCheck?reservationCode=${response.data.reservationCode}&findType=${this.$route.query.findType}`);
                 })
                 .catch(e => {
                     console.log(e)

@@ -34,7 +34,7 @@
                         <div class="discount">{{ priceFormat(item.discountMonthPrice - item.monthPrice) }}원</div>
                         <div class="amount">{{ priceFormat(item.discountMonthPrice) }}원</div>
                         <div class="card-model-text"> {{ item.deviceName }}</div>
-                        <div class="card-text">단말기 월 할부금</div>
+                        <div class="card-text">단말기 월 납부금액</div>
                         <img class="arrow-right" src="/images/arrow_right.png">
                     </div>
                 </label>
@@ -65,6 +65,7 @@ export default {
             barChart: [],
             cardList: [],
             showListIndex: 3,
+            findType: '',
 
             selectedCard: null,
         }
@@ -80,7 +81,7 @@ export default {
 
     methods: {
         toDetail(ref) {
-            this.$router.push(`/estimateComparison/cardDetail?surveyCode=${this.$route.query.surveyCode}&planPriceIdx=${ref.target.id}`);
+            this.$router.push(`/estimateComparison/cardDetail?surveyCode=${this.$route.query.surveyCode}&planPriceIdx=${ref.target.id}&findType=${this.findType}`);
         },
 
         onMore() {
@@ -99,12 +100,13 @@ export default {
         getEstimateList(enmemberidx) {
             apiEstimate.getEstimateList(this.$route.query.surveyCode, enmemberidx)
                 .then(response => {
-                    console.log(response.data.estimate)
                     this.date = response.data.estimate.date
                     this.deviceName = response.data.estimate.deviceName
                     this.totalDiscountPrice = strg.priceFormat(response.data.estimate.totalDiscountPrice)
+                    if (this.totalDiscountPrice < 0) this.totalDiscountPrice = 0
                     this.cardList = response.data.estimate.list
                     this.barChart = response.data.estimate.barChart
+                    this.findType = response.data.estimate.findType
                 })
                 .catch(e => {
                     console.log(e)

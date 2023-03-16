@@ -195,7 +195,7 @@ export default {
             apiEstimate.postEstimateComplete(this.$route.query.surveyCode, this.$route.query.planPriceIdx, enmemberidx)
                 .then(response => {
                     const estimateCode = response.data.estimateCode
-                    this.$router.push(`/confirm/confirmEstimate?estimateCode=${estimateCode}`);
+                    this.$router.push(`/confirm/confirmEstimate?estimateCode=${estimateCode}&findType=${this.$route.query.findType}`);
                 })
                 .catch(e => {
                     console.log(e)

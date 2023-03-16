@@ -59,7 +59,7 @@ export default {
 
     methods: {
         onBackBtn() {
-            this.$router.push("/");
+            this.$router.go(-2);
         },
 
         onReTrySurvey() {

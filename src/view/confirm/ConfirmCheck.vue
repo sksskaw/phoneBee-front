@@ -26,6 +26,12 @@
                 <div class="amount">{{ totalDiscountPrice }}원</div>
             </div>
 
+            <div class="ei-monthly-amount">
+                <div class="sub-title" v-if="findType == 'device'">단말기 월 할부금</div>
+                <div class="sub-title" v-if="findType == 'cost'">월 납부 금액</div>
+                <div class="amount">{{ monthPrice }}원</div>
+            </div>
+
             <div class="ei-condition">
                 <div class="sub-title">매장 특별 지원금 지급 조건</div>
                 <div class="info-box">{{ planName }} 6개월 유지 (6개월 뒤 바꿀 수 있어요)</div>
@@ -75,6 +81,7 @@ import cookie from '@/utils/cookie';
 export default {
     data() {
         return {
+            findType: '',
             year: '',
             month: '',
             day: '',
@@ -95,12 +102,13 @@ export default {
         if (enmemberidx == '' || enmemberidx == null)
             this.$router.push("/");
 
+        this.findType = this.$route.query.findType
         this.getReservationConfirm(enmemberidx)
     },
 
     methods: {
         onBackBtn() {
-            this.$router.go(-1);
+            this.$router.push("/");
         },
 
         copyAddress() {
@@ -110,6 +118,7 @@ export default {
             textArea.select()
             document.execCommand('copy')
             document.body.removeChild(textArea)
+            alert('복사되었어요')
         },
 
         initMap() {
@@ -148,6 +157,7 @@ export default {
             apiEstimate.getReservationConfirm(this.$route.query.reservationCode, enmemberidx)
                 .then(response => {
                     const data = response.data.reservation
+                    console.log(data)
 
                     this.year = data.confirmSection.date.year
                     this.month = data.confirmSection.date.month
