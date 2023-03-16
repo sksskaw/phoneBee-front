@@ -41,11 +41,12 @@
                 <hr width="100%" color="#E1E1E1" size="1">
 
                 <div class="di-box5">
-                    <div>단말기 월 할부 금액 :</div>
+                    <div v-if="findType == 'device'">단말기 월 할부 금액 :</div>
+                    <div v-if="findType == 'cost'">월 납부 금액 :</div>
                     <div>{{ monthPrice }}원</div>
                 </div>
 
-                <div class="di-box6">* 매장 특별 지원금 지급 조건 65요금제 6개월 유지</div>
+                <div class="di-box6">* 매장 특별 지원금 지급 조건 <br>- {{ planName }} 6개월 유지</div>
             </div>
 
             <div class="store-information-box">
@@ -125,10 +126,12 @@ export default {
         return {
             loading: false,
             loadingImg,
+            findType: '',
 
             monthPrice: '',
             deviceImgUrl: '',
             deviceName: '',
+            planName: '',
             factoryPrice: '',
             telecomCode: '',
 
@@ -150,6 +153,7 @@ export default {
         if (enmemberidx == '' || enmemberidx == null)
             this.$router.push("/login");
 
+        this.findType = this.$route.query.findType
         this.getEstimateDetail(enmemberidx)
     },
 
@@ -174,11 +178,11 @@ export default {
                     this.deviceName = data.deviceSection.deviceName
                     this.factoryPrice = this.priceFormat(data.deviceSection.factoryPrice)
                     this.telecomCode = this.getCarrierLogo(data.deviceSection.telecomCode)
-
+                    this.planName = data.deviceSection.planName
+                    
                     this.publicSubsidy = this.priceFormat(data.monthPriceSection.publicSubsidy)
                     this.storeSupport = this.priceFormat(data.monthPriceSection.storeSupport)
                     this.totalDiscountPrice = this.priceFormat(data.monthPriceSection.totalDiscountPrice)
-                    if (this.factoryPrice < this.totalDiscountPrice) this.totalDiscountPrice = 0
                     this.monthPrice = this.priceFormat(data.monthPriceSection.monthPrice)
 
                     this.storeAddress = data.storeSection.storeAddress

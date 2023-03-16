@@ -1,6 +1,6 @@
 <template>
     <div class="graph-box">
-        <div class="x-title">할부원금</div>
+        <div class="x-title">다이렉트샵가격</div>
         <div class="y-title">정책</div>
         <div class="graph">
             <div class="bar-frame">
@@ -84,8 +84,8 @@ export default {
 .x-title {
     position: absolute;
     height: 18px;
-    width: 42px;
-    left: 273px;
+    width: 80px;
+    left: 235px;
     top: 194px;
 
     font-style: normal;
