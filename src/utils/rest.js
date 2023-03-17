@@ -26,7 +26,7 @@ instance.interceptors.response.use(
         return response
     },
     function (error) {
-        alert(error)
+        console.log(error)
     },
 );
 
