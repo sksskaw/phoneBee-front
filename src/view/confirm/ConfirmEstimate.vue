@@ -373,7 +373,7 @@ export default {
     font-weight: 700;
     font-size: 14px;
     line-height: 22px;
-    text-align: right;
+    text-align: left;
 
     color: #391A15;
 }
@@ -486,7 +486,6 @@ export default {
 .phrase-sub {
     height: 36px;
 
-
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
@@ -503,7 +502,6 @@ export default {
     padding: 28px 24px;
     gap: 24px;
     background: #FFFFFF;
-
 
     font-style: normal;
     font-weight: 500;
@@ -523,6 +521,7 @@ export default {
     gap: 12px;
 
     width: 100%;
+    overflow: auto;
 }
 
 .weeks {
@@ -531,9 +530,7 @@ export default {
     justify-content: space-between;
     align-items: flex-start;
     padding: 0px;
-    gap: 7px;
     width: 100%;
-
 
     font-style: normal;
     font-weight: 500;
@@ -549,6 +546,7 @@ export default {
     align-items: center;
     padding: 0px;
     gap: 8px;
+    width: 100%;
 }
 
 .select-date-radio {
@@ -588,6 +586,7 @@ export default {
     align-items: flex-start;
     padding: 0px;
     gap: 12px;
+    width: 100%;
 }
 
 .times {
@@ -596,20 +595,25 @@ export default {
     align-items: flex-start;
     padding: 0px;
     gap: 6px;
-    width: 360px;
-    height: 34px;
+    width: 100%;
+    height: 48px;
 
     white-space: nowrap;
     overflow-x: scroll;
 }
 
-.times {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+.times::-webkit-scrollbar {
+    width: 176px;
+    height: 7px;
 }
 
-.times::-webkit-scrollbar {
-    display: none;
+.times::-webkit-scrollbar-thumb {
+    background-color: #9E9E9E;
+    border-radius: 10px;
+}
+
+.times::-webkit-scrollbar-track {
+    background-color: #F7F7F7;
 }
 
 .select-time-radio {
