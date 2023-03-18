@@ -11,7 +11,9 @@
             </p>
         </div>
 
-        <img class="ad-image" src="/images/ad_image_1.png">
+        <div class="landing-icon-box">
+            <img class="landing-icon" src="/images/landing_icon.png">
+        </div>
 
         <button class="estimate-btn" type="button" @click="onEstimateBtn">3분만에 견적 받아보기</button>
 
@@ -57,14 +59,24 @@ export default {
     line-height: 30px;
 
     color: #391A15;
-    margin-bottom: 18px;
+    margin-bottom: 32px;
 }
 
-.ad-image {
-    width: 100%;
-    height: auto;
+.landing-icon-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    margin-bottom: 18px;
+    height: 224.7px;
+    background: #FFD54A;
+    border-radius: 8px;
+
+    margin-bottom: 32px;
+}
+
+.landing-icon {
+    width: 179.76px;
+    height: 179.76px;
 }
 
 .estimate-btn {
