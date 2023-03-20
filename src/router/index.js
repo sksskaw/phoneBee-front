@@ -44,6 +44,10 @@ const routes = [
         path: '/questionnaire/:findType/:deviceIdx/:useTelecomIdx/:usePeriodIdx/:monthCost/selectLocation',
         component: () => import('../view/questionnaire/SelectLocation.vue')
     },
+    {
+        path: '/selectLocation2',
+        component: () => import('../view/questionnaire/SelectLocation2.vue')
+    },
 
     //questionnaire complete
     {
