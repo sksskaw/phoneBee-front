@@ -251,11 +251,12 @@ export default {
             }
             apiEstimate.postReservationComplete(this.$route.query.estimateCode, params, enmemberidx)
                 .then(response => {
+                    if (response == undefined) {
+                        this.loading = false
+                        return
+                    }
                     this.$router.push(`/confirm/confirmCheck?reservationCode=${response.data.reservationCode}&findType=${this.$route.query.findType}`);
                 })
-                .catch(e => {
-                    console.log(e)
-                });
         },
 
         onReservation() {
