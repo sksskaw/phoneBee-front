@@ -13,18 +13,16 @@ export default {
         });
     },
 
-    async postSurveyDeviceComplete(params, enmemberidx) {
+    async postSurveyDeviceComplete(params) {
         return new Promise((resolve, reject) => {
-            rest.post("/api/survey/device/complete",null,
+            rest.post("/api/survey/device/complete", null,
                 {
-                    headers: {
-                        'Enmemberidx': enmemberidx
-                    },
-                    params : {
-                        'useTelecomIdx' : params.useTelecomIdx,
-                        'usePeriodIdx' : params.usePeriodIdx,
-                        'deviceIdx' : params.deviceIdx,
-                        'findArea' : params.findArea
+                    params: {
+                        'useTelecomIdx': params.useTelecomIdx,
+                        'usePeriodIdx': params.usePeriodIdx,
+                        'deviceIdx': params.deviceIdx,
+                        'phoneNumber': params.phoneNumber,
+                        'findArea': params.findArea
                     }
                 })
                 .then(response => {
@@ -36,18 +34,16 @@ export default {
         });
     },
 
-    async postSurveyCostComplete(params, enmemberidx) {
+    async postSurveyCostComplete(params) {
         return new Promise((resolve, reject) => {
-            rest.post("/api/survey/cost/complete?",null,
+            rest.post("/api/survey/cost/complete?", null,
                 {
-                    headers: {
-                        'Enmemberidx': enmemberidx
-                    },
-                    params : {
-                        'useTelecomIdx' : params.useTelecomIdx,
-                        'usePeriodIdx' : params.usePeriodIdx,
-                        'monthCost' : params.monthCost,
-                        'findArea' : params.findArea
+                    params: {
+                        'useTelecomIdx': params.useTelecomIdx,
+                        'usePeriodIdx': params.usePeriodIdx,
+                        'monthCost': params.monthCost,
+                        'phoneNumber': params.phoneNumber,
+                        'findArea': params.findArea
                     }
                 })
                 .then(response => {

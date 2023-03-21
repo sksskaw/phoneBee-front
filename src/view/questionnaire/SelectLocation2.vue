@@ -1,279 +1,548 @@
 <template>
-    <div class="router-div">
-        <div class="back-btn-box">
-            <img class="back-btn" src="/images/arrow.png" @click="onBackBtn">
-        </div>
-
-        <div class="title">
-            <div>어느 동네 매장을</div>
-            <div>알아봐 드릴까요?</div>
-        </div>
-
-        <div class="sub-title">
-            현재는 베타서비스 중이라<br>
-            아래 5개 구만 선택이 가능해요!
-        </div>
-
-        <div style="position: relative;">
-
-            <div class="selected" @click="onToggle">
-                <span v-if="selectedArea == '동네 선택하기'" style="color: #AEAEAE; font-weight: 400;">{{ selectedArea }}</span>
-                <span v-else>{{ selectedArea }}</span>
-                <img style="width: 22px; height: 22px;" :src=arrowIcon>
-            </div>
-
-
-            <div class="options-container">
-
-                <div class="option" v-for="area in areaList">
-                    <input type="radio" class="radio" @click="selectArea(selectedArea)" :id=area :value=area
-                        v-model="selectedArea" />
-                    <label class="option-label" :id=area :for=area>{{ area }}</label>
-                </div>
-
-            </div>
-
-
-            <div class="phone-number-box" v-if="selectedArea != '동네 선택하기'">
-                <div class="title">
-                    <div>견적 전달을 위해</div>
-                    <div>핸드폰 번호가 필요해요</div>
-                </div>
-
-                <input class="phone-number" type="text" placeholder="번호를 정확하게 입력해주세요" v-model="phoneNumber"
-                    @input="inputPhoneNumber(phoneNumber)" maxlength="13" />
-
-                <div class="sub-title" v-if="phoneNumber.length == 13">
-                    알림톡 발송을 위한 핸드폰 번호 수집에<br>
-                    동의하시면 아래 버튼을 눌러주세요
-                </div>
-            </div>
-
-            <div v-if="phoneNumber == '' || phoneNumber.length != 13" class="estimate-btn" style="background: #E1E1E1;">
-                알림톡으로 견적받기</div>
-            <div v-if="phoneNumber != '' && phoneNumber.length == 13" class="estimate-btn">알림톡으로 견적받기</div>
-        </div>
+  <div class="router-div">
+    <div class="back-btn-box">
+      <img class="back-btn" src="/images/arrow.png" @click="onBackBtn">
     </div>
+
+    <div class="title">
+      <div>어느 동네 매장을</div>
+      <div>알아봐 드릴까요?</div>
+    </div>
+
+    <div class="sub-title">상세 주소는 기입하실 필요 없어요!</div>
+    <div class="search-box">
+      <span @click="searchAddress">
+        <input class="search-input" type="text" v-model="address" placeholder="시/군/구/동을 입력해주세요." disabled>
+      </span>
+      <input class="search-icon" type="button" @click="searchAddress">
+    </div>
+
+    <div class="current-location-btn" @click="onCurrentLocation">
+      <div v-if="getCurrentPositionLoding == true" class="current-location-box">
+        <img class="loading-icon" src="/images/search_loading_icon.gif">
+      </div>
+
+      <div v-if="getCurrentPositionLoding == false" class="current-location-box">
+        <img class="target-icon" src="/images/target_icon.svg">현재 위치로 검색
+      </div>
+    </div>
+
+    <transition name="slide-up">
+      <div class="black-bg" id="mapContainer">
+        <div class="white-bg">
+          <div class="address-check">
+            <img class="back-btn" src="/images/arrow.png" @click="closeModal">
+            주소 확인
+            <div style="width: 24px; height: 24px;"></div>
+          </div>
+
+          <div class="kakao-map">
+            <div style="width: 100%; height: 100%;" id="kakao-map"></div>
+          </div>
+
+          <div class="address-box">
+            <div class="buildingName">{{ buildingName }}</div>
+            <div class="roadAddress">{{ roadAddress }}</div>
+            <div class="jibunAddress">{{ jibunAddress }}</div>
+          </div>
+
+          <div class="estimate-notice">견적 확인을 위해 카카오 가입이 필요해요</div>
+          <div @click="onEstimate">
+            <div class="estimate-btn" v-if="estimateLoading == true">
+              <img class="loading-icon" src="/images/search_loading_icon.gif">
+            </div>
+
+            <div class="estimate-btn" v-if="estimateLoading == false">
+              <img src="/images/kakao_icon.svg" style="background-color: #FEE500;">
+              <div>카카오로 견적 확인하기</div>
+            </div>
+          </div>
+          <div style="height: 34px;"></div>
+        </div>
+      </div>
+    </transition>
+  </div>
 </template>
-    
+  
 <script>
+import apiQuestionnaire from '@/api/questionnaire';
+import apiLogin from '@/api/login';
+import cookie from '@/utils/cookie';
+
 export default {
-    data() {
-        return {
-            areaList: ["강동구", "광진구", "금천구", "성동구", "송파구"],
-            selectedArea: "동네 선택하기",
-            arrowIcon: "/images/arrow_down.svg",
-            phoneNumber: '',
+  data() {
+    return {
+      address: null,
+      sido: null,
+      sigungu: null,
 
-            address: null,
-            sido: null,
-            sigungu: null,
+      buildingName: "",
+      roadAddress: "",
+      jibunAddress: "",
 
-            buildingName: "",
-            roadAddress: "",
-            jibunAddress: "",
+      getCurrentPositionLoding: false,
+      estimateLoading: false,
+    }
+  },
 
-            getCurrentPositionLoding: false,
-            estimateLoading: false,
-        }
+  mounted() {
+    if (window.kakao && window.kakao.maps) {
+      this.initMap();
+    } else {
+      const script = document.createElement("script");
+      script.onload = () => kakao.maps.load(this.initMap);
+      script.src =
+        "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=" + process.env.VUE_APP_KAKAO_KEY + "&libraries=services";
+      document.head.appendChild(script);
+    }
+  },
+
+  methods: {
+    onBackBtn() {
+      this.$router.go(-1);
     },
 
-    methods: {
-        onBackBtn() {
-            this.$router.go(-1);
-        },
+    onCurrentLocation() {
+      this.getCurrentPositionLoding = true
 
-        onToggle() {
-            const optionsContainer = document.querySelector(".options-container");
-            optionsContainer.classList.toggle("active");
+      navigator.geolocation.getCurrentPosition((pos) => {
+        var latitude = pos.coords.latitude;
+        var longitude = pos.coords.longitude;
+        var coord = new kakao.maps.LatLng(latitude, longitude);
 
-            if (this.arrowIcon.includes("arrow_down"))
-                this.arrowIcon = "/images/arrow_up.svg"
-            else this.arrowIcon = "/images/arrow_down.svg"
-        },
+        var callback = (result, status) => {
+          if (status === kakao.maps.services.Status.OK) {
 
-        selectArea(selectedArea) {
-            const optionsContainer = document.querySelector(".options-container");
-            optionsContainer.classList.remove("active");
+            this.address = result[0].address.address_name;
+            this.sido = result[0].address.region_1depth_name;
+            this.sigungu = result[0].address.region_2depth_name;
+            var roadAddress = result[0].road_address
 
-            this.selectedArea = selectedArea
-            this.arrowIcon = "/images/arrow_down.svg"
-        },
-
-        inputPhoneNumber(val) {
-            var number = val.replace(/[^0-9]/g, '');
-            var phone = "";
-
-            if (number.length < 4) {
-                phone = number
-            } else if (number.length < 7) {
-                phone += number.substr(0, 3);
-                phone += "-";
-                phone += number.substr(3);
-            } else if (number.length < 10) {
-                phone += number.substr(0, 3);
-                phone += "-";
-                phone += number.substr(3, 3);
-                phone += "-";
-                phone += number.substr(6);
+            if (roadAddress != null) {
+              this.buildingName = roadAddress.building_name;
+              this.roadAddress = result[0].road_address.address_name;
             } else {
-                phone += number.substr(0, 3);
-                phone += "-";
-                phone += number.substr(3, 4);
-                phone += "-";
-                phone += number.substr(7);
+              this.roadAddress = result[0].address.address_name;
             }
 
-            this.phoneNumber = phone;
-            return
+            this.jibunAddress = "[지번] " + result[0].address.address_name;
+
+            var mapContainer = document.getElementById('mapContainer')
+            mapContainer.style.display = "block";
+
+            this.initMap()
+            this.map.setCenter(coord);
+            this.marker.setPosition(coord)
+            this.getCurrentPositionLoding = false
+          }
+        };
+
+        this.geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+      });
+    },
+
+    searchAddress() {
+      new daum.Postcode({
+        oncomplete: (data) => {
+          this.address = data.address;
+          this.sido = data.sido
+          this.sigungu = data.sigungu
+
+          this.buildingName = data.buildingName;
+          this.roadAddress = data.roadAddress ? data.roadAddress : data.autoRoadAddress;
+          this.jibunAddress = data.jibunAddress ? data.jibunAddress : data.autoJibunAddress;
+          this.jibunAddress = "[지번] " + this.jibunAddress
+
+          var mapContainer = document.getElementById('mapContainer')
+          this.geocoder.addressSearch(data.address, (results, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+              var result = results[0];
+              var coords = new kakao.maps.LatLng(result.y, result.x);
+
+              mapContainer.style.display = "block";
+
+              this.initMap()
+              this.map.setCenter(coords);
+              this.marker.setPosition(coords)
+            }
+          });
+        }
+      }).open();
+    },
+
+    closeModal() {
+      var mapContainer = document.getElementById('mapContainer')
+      mapContainer.style.display = "none";
+    },
+
+    initMap() {
+      const container = document.getElementById("kakao-map");
+      const options = {
+        center: new kakao.maps.LatLng(33.450701, 126.570667),
+        level: 5,
+      };
+
+      this.map = new kakao.maps.Map(container, options);
+      this.geocoder = new kakao.maps.services.Geocoder();
+      this.marker = new kakao.maps.Marker({
+        position: new kakao.maps.LatLng(33.450701, 126.570667),
+        map: this.map
+      });
+    },
+
+
+    /**
+     * 카카오톡을 통해 전달받은 token 정보를 이용하여 회원의 정보를 받아온다.
+     * @param authObj
+     */
+    getKakaoMyInfo(authObj) {
+
+      const vm_ = this
+
+      window.Kakao.API.request({
+        url: '/v2/user/me',
+        success: res => {
+          const kakao_account = res.kakao_account;
+          const userInfo = {
+            kakaoId: res.id,
+            accessToken: authObj.access_token,
+            refreshToken: authObj.refresh_token,
+            expiresIn: authObj.expires_in,
+            nickname: kakao_account.profile.nickname,
+            email: kakao_account.email,
+            phoneNumber: kakao_account.phone_number,
+            thumbnailImageUrl: kakao_account.profile.thumbnail_image_url
+
+          }
+
+          apiLogin.sighUpLogin(userInfo)
+            .then(response => {
+              // response.resultCode === 0 인 경우..
+              if (response.data.resultCode === 0) {
+                var enmemberidx = response.data.Enmemberidx
+                cookie.setCookie('Enmemberidx', enmemberidx, 1)
+                this.postSurvey(enmemberidx)
+              } else {
+                console.log("response.data.resultCode === 0 이 아닌 경우에 대한 예외 처리")
+              }
+            })
+            .catch(e => {
+              // 예외사항 체크
+              console.log(e)
+            });
         },
-    }
+        fail: error => {
+          console.log(error);
+        }
+      })
+    },
+
+    onEstimate() {
+      this.estimateLoading = true
+      
+      window.Kakao.Auth.login({
+          success: this.getKakaoMyInfo
+        })
+    },
+
+    postSurvey(enmemberidx) {
+      let findArea = this.sido + "시 " + this.sigungu
+      let param = {
+        useTelecomIdx: parseInt(this.$route.params.useTelecomIdx),
+        usePeriodIdx: parseInt(this.$route.params.usePeriodIdx),
+        deviceIdx: parseInt(this.$route.params.deviceIdx),
+        monthCost: parseInt(this.$route.params.monthCost),
+        findArea: encodeURIComponent(findArea),
+      }
+
+      var findType = this.$route.params.findType
+      // 원하는 기기 있는 경우
+      if (findType == "1") {
+        apiQuestionnaire.postSurveyDeviceComplete(param, enmemberidx)
+          .then(response => {
+            if (response.data.resultCode === 0) {
+              this.$router.push(`/questionnaireCompleted/loading?surveyCode=${response.data.surveyCode}`);
+            } else {
+              console.log("실패")
+            }
+          }).catch(e => {
+            // 예외사항 체크
+            console.log(e)
+          });
+      }
+
+      // 원하는 기기 없는 경우
+      if (findType == "0") {
+        apiQuestionnaire.postSurveyCostComplete(param, enmemberidx)
+          .then(response => {
+            if (response.data.resultCode === 0) {
+              this.$router.push(`/questionnaireCompleted/loading?surveyCode=${response.data.surveyCode}`);
+            } else {
+              console.log("실패")
+            }
+          }).catch(e => {
+            // 예외사항 체크
+            console.log(e)
+          });
+      }
+    },
+  }
 }
 </script>
-    
+  
 <style scoped>
 .back-btn-box {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 60px;
 
-    margin-bottom: 72px;
+  margin-bottom: 72px;
 }
 
 .back-btn {
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
 }
 
 .title {
-    font-style: normal;
-    font-weight: 700;
-    font-size: 28.43px;
-    line-height: 38px;
-    color: #391A15;
 
-    margin-bottom: 24px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 28.43px;
+  line-height: 38px;
+  color: #391A15;
+
+  margin-bottom: 24px;
 }
 
 .sub-title {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 22px;
-    color: #AEAEAE;
 
-    margin-bottom: 30px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+
+  color: #AEAEAE;
+
+  margin-bottom: 26px;
 }
 
-.selected {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding-left: 12px;
-    padding-right: 12px;
-    height: 54px;
-    gap: 8px;
+.search-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 
-    font-weight: 600;
-    border: 1px solid #AEAEAE;
-    border-radius: 8px;
-    position: relative;
-
-    cursor: pointer;
-    margin-bottom: 58px;
+  height: 51px;
+  width: 100%;
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 17px;
 }
 
-.options-container {
-    position: absolute;
-    top: 58px;
+.search-input {
+  border: none;
+  width: 100%;
 
-    max-height: 0px;
-    width: 100%;
-    max-width: 475px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
 
+  cursor: pointer;
+}
+
+.search-input::placeholder {
+  color: #AEAEAE;
+}
+
+.search-input:disabled {
+  background: white;
+}
+
+.search-icon {
+  background: url("../../../public/images/search_icon.png");
+  background-size: cover;
+  border: none;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.current-location-btn {
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 20px;
+  gap: 10px;
+
+  height: 50px;
+
+  border: 1px solid #AEAEAE;
+  border-radius: 8px;
+
+  cursor: pointer;
+}
+
+.current-location-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 8px;
+
+
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+
+  color: #575757;
+}
+
+.loading-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.target-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.black-bg {
+  display: none;
+  width: 100%;
+  height: 100%;
+
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  background: rgba(0, 0, 0, 0.1);
+  position: absolute;
+}
+
+.white-bg {
+  height: 100%;
+  background: white;
+  border-radius: 20px 20px 0px 0px;
+  animation: fadeInUp 1s;
+}
+
+@keyframes fadeInUp {
+  0% {
     opacity: 0;
-    transition: all 0.4s;
-    border-radius: 8px;
-    overflow: hidden;
+    transform: translate3d(0, 100%, 0);
+  }
 
-    background-color: white;
-    box-shadow: 1px 0px 12px rgba(48, 48, 48, 0.1);
-    z-index: 2;
-}
-
-.options-container.active {
-    max-height: 340px;
+  to {
     opacity: 1;
+    transform: translateZ(0);
+  }
 }
 
-.option-label {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    padding-left: 20px;
-    height: 54px;
-    cursor: pointer;
+.black-bg .white-bg {
+  display: block;
 }
 
-.option:hover {
-    background: #F7F7F7;
-    font-weight: 600;
+.address-check {
+  margin-top: 51px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 18px;
+
+  height: 60px;
+
+  font-family: 'Spoqa Han Sans Neo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+
+  color: #241E17;
 }
 
-.option .radio {
-    display: none;
+.address-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0px;
+  margin: 24px 24px 30px 24px;
+
+  height: 78px;
 }
 
-.phone-number-box {
-    position: relative;
-    z-index: 1;
+.buildingName {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 21.33px;
+  line-height: 30px;
+
+  color: #391A15;
 }
 
-.phone-number {
-    display: flex;
-    align-items: center;
-    padding: 18px 0px 18px 12px;
+.roadAddress {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
 
-    height: 22px;
-    width: calc(100% - 12px);
-    background: #F7F7F7;
-    border-radius: 8px;
-    border: 0px;
+  color: #391A15;
+}
 
-    margin-bottom: 23px;
+.jibunAddress {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
 
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 22px;
+  color: #828282;
+}
 
-    color: black;
+.estimate-notice {
+  height: 22px;
+  margin-bottom: 14px;
+
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 22px;
+  text-align: center;
+
+  color: #391A15;
 }
 
 .estimate-btn {
-    position: relative;
-    bottom: 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 0px 24px 0px 24px;
+  gap: 8px;
+  height: 58px;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  background: #FEE500;
+  border-radius: 8px;
 
-    height: 58px;
-    background: #391A15;
-    border-radius: 8px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1px;
 
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 22px;
+  color: #000000;
+}
 
-    color: #FFFFFF;
-
-    margin-bottom: 70px;
+.kakao-map {
+  width: 100%;
+  height: 35vh
 }
 </style>

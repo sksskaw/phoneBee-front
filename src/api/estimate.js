@@ -3,12 +3,7 @@ import rest from "@/utils/rest";
 export default {
     async getEstimateList(surveyCode, enmemberidx) {
         return new Promise((resolve, reject) => {
-            rest.get(`/api/survey/estimate/list/${surveyCode}`
-                , {
-                    headers: {
-                        'Enmemberidx': enmemberidx
-                    }
-                })
+            rest.get(`/api/survey/estimate/list/${surveyCode}?Enmemberidx=${enmemberidx}`)
                 .then(response => {
                     resolve(response);
                 })
@@ -20,12 +15,7 @@ export default {
 
     async getEstimateCheck(surveyCode, enmemberidx) {
         return new Promise((resolve, reject) => {
-            rest.get(`/api/survey/estimate/check/${surveyCode}`
-                , {
-                    headers: {
-                        'Enmemberidx': enmemberidx
-                    }
-                })
+            rest.get(`/api/survey/estimate/check/${surveyCode}?Enmemberidx=${enmemberidx}`)
                 .then(response => {
                     resolve(response);
                 })
@@ -37,12 +27,7 @@ export default {
 
     async getEstimateDetail(surveyCode, planPriceIdx, enmemberidx) {
         return new Promise((resolve, reject) => {
-            rest.get(`/api/estimate/detail/${surveyCode}/${planPriceIdx}`
-                , {
-                    headers: {
-                        'Enmemberidx': enmemberidx
-                    }
-                })
+            rest.get(`/api/estimate/detail/${surveyCode}/${planPriceIdx}?Enmemberidx=${enmemberidx}`)
                 .then(response => {
                     resolve(response);
                 })
@@ -56,7 +41,7 @@ export default {
         return new Promise((resolve, reject) => {
             rest.post(`/api/estimate/complete/${surveyCode}/${planPriceIdx}`, null,
                 {
-                    headers: {
+                    params: {
                         'Enmemberidx': enmemberidx
                     }
                 })
@@ -71,12 +56,7 @@ export default {
 
     async getEstimateConfirm(estimateCode, enmemberidx) {
         return new Promise((resolve, reject) => {
-            rest.get(`/api/estimate/confirm/${estimateCode}`
-                , {
-                    headers: {
-                        'Enmemberidx': enmemberidx
-                    }
-                })
+            rest.get(`/api/estimate/confirm/${estimateCode}?Enmemberidx=${enmemberidx}`)
                 .then(response => {
                     resolve(response);
                 })
@@ -85,17 +65,15 @@ export default {
                 });
         });
     },
-    
+
     async postReservationComplete(estimateCode, params, enmemberidx) {
         return new Promise((resolve, reject) => {
             rest.post(`/api/reservation/complete/${estimateCode}`, null,
                 {
-                    headers: {
-                        'Enmemberidx': enmemberidx
-                    },
-                    params : {
-                        'reservationDate' : params.reservationDate,
-                        'reservationTime' : params.reservationTime,
+                    params: {
+                        'Enmemberidx': enmemberidx,
+                        'reservationDate': params.reservationDate,
+                        'reservationTime': params.reservationTime,
                     }
                 })
                 .then(response => {
@@ -109,12 +87,7 @@ export default {
 
     async getReservationConfirm(reservationCode, enmemberidx) {
         return new Promise((resolve, reject) => {
-            rest.get(`/api/reservation/confirm/${reservationCode}`
-                , {
-                    headers: {
-                        'Enmemberidx': enmemberidx
-                    }
-                })
+            rest.get(`/api/reservation/confirm/${reservationCode}?Enmemberidx=${enmemberidx}`)
                 .then(response => {
                     resolve(response);
                 })
