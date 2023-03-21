@@ -100,16 +100,16 @@ export default {
 
                     if (response.data.isEstimate == 'N') {
                         localStorage.setItem('searchAgain', JSON.stringify(response.data.searchAgain))
-                        this.$router.push(`/questionnaireCompleted/NotFound?sigungu=${this.sigungu}`);
+                        this.$router.replace(`/questionnaireCompleted/NotFound?sigungu=${this.sigungu}`);
                     }
 
                     if (response.data.isEstimate == 'Y') {
                         if (response.data.findType == 'device') {
-                            this.$router.push(`/estimateComparison/modelEstimateCard?surveyCode=${this.surveyCode}`);
+                            this.$router.replace(`/estimateComparison/modelEstimateCard?surveyCode=${this.surveyCode}`);
                         }
 
                         if (response.data.findType == 'cost') {
-                            this.$router.push(`/estimateComparison/billPaidEstimateCard?surveyCode=${this.surveyCode}`);
+                            this.$router.replace(`/estimateComparison/billPaidEstimateCard?surveyCode=${this.surveyCode}`);
                         }
                     }
                 })
