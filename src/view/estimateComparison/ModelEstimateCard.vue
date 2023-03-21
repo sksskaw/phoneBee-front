@@ -72,6 +72,7 @@ export default {
         if (enmemberidx == '' || enmemberidx == null) {
             const urlParams = new URL(location.href).searchParams;
             enmemberidx = urlParams.get('Enmemberidx');
+            cookie.setCookie('Enmemberidx', enmemberidx, 1)
         }
 
         if (enmemberidx == '' || enmemberidx == null) {
