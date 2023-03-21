@@ -69,8 +69,8 @@ export default {
 .y-title {
     position: absolute;
     height: 18px;
-    width: 21px;
-    left: 12px;
+    width: 32px;
+    left: 2px;
     top: 12px;
 
     font-style: normal;
@@ -84,8 +84,8 @@ export default {
 .x-title {
     position: absolute;
     height: 18px;
-    width: 80px;
-    left: 235px;
+    width: 100px;
+    left: 215px;
     top: 194px;
 
     font-style: normal;
