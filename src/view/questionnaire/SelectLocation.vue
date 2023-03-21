@@ -61,10 +61,6 @@
 </template>
     
 <script>
-import apiQuestionnaire from '@/api/questionnaire';
-import apiLogin from '@/api/login';
-import cookie from '@/utils/cookie';
-
 export default {
     data() {
         return {
@@ -140,54 +136,19 @@ export default {
         onEstimate() {
             this.estimateLoading = true
 
-            this.postSurvey()
-        },
-
-        postSurvey() {
             let findArea = "서울시 " + this.selectedArea
-            let param = {
+            const params = {
                 useTelecomIdx: parseInt(this.$route.params.useTelecomIdx),
                 usePeriodIdx: parseInt(this.$route.params.usePeriodIdx),
                 deviceIdx: parseInt(this.$route.params.deviceIdx),
                 monthCost: parseInt(this.$route.params.monthCost),
                 phoneNumber: this.phoneNumber,
                 findArea: encodeURIComponent(findArea),
+                findType: this.$route.params.findType
             }
 
-            var findType = this.$route.params.findType
-            // 원하는 기기 있는 경우
-            if (findType == "1") {
-                apiQuestionnaire.postSurveyDeviceComplete(param)
-                    .then(response => {
-                        if (response.data.resultCode === 0) {
-                            var enmemberidx = response.data.Enmemberidx
-                            cookie.setCookie('Enmemberidx', enmemberidx, 1)
-                            this.$router.push(`/questionnaireCompleted/loading?surveyCode=${response.data.surveyCode}`);
-                        } else {
-                            console.log("실패")
-                        }
-                    }).catch(e => {
-                        // 예외사항 체크
-                        console.log(e)
-                    });
-            }
-
-            // 원하는 기기 없는 경우
-            if (findType == "0") {
-                apiQuestionnaire.postSurveyCostComplete(param)
-                    .then(response => {
-                        if (response.data.resultCode === 0) {
-                            var enmemberidx = response.data.Enmemberidx
-                            cookie.setCookie('Enmemberidx', enmemberidx, 1)
-                            this.$router.push(`/questionnaireCompleted/loading?surveyCode=${response.data.surveyCode}`);
-                        } else {
-                            console.log("실패")
-                        }
-                    }).catch(e => {
-                        // 예외사항 체크
-                        console.log(e)
-                    });
-            }
+            localStorage.setItem('surveyParmas', JSON.stringify(params))
+            this.$router.push("/questionnaireCompleted/loading");
         },
     }
 }

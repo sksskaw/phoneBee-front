@@ -22,6 +22,7 @@
 <script>
 import apiEstimate from '@/api/estimate';
 import cookie from '@/utils/cookie';
+import apiQuestionnaire from '@/api/questionnaire';
 
 import { Vue3Lottie } from 'vue3-lottie'
 import 'vue3-lottie/dist/style.css'
@@ -37,15 +38,13 @@ export default {
             sigungu: '',
             condition: '',
             loadingImg,
+            surveyCode: null,
         }
     },
 
     mounted() {
-        var enmemberidx = cookie.getCookie('Enmemberidx')
-        if (enmemberidx == '' || enmemberidx == null)
-            this.$router.push("/login");
-
-        this.getEstimateCheck(enmemberidx)
+        const surveyParmas = JSON.parse(localStorage.getItem('surveyParmas'))
+        this.postSurvey(surveyParmas)
     },
 
     methods: {
@@ -53,28 +52,66 @@ export default {
             this.$router.push("/");
         },
 
+        postSurvey(params) {
+            var findType = params.findType
+
+            // 원하는 기기 있는 경우
+            if (findType == "1") {
+                apiQuestionnaire.postSurveyDeviceComplete(params)
+                    .then(response => {
+                        if (response.data.resultCode === 0) {
+                            this.surveyCode = response.data.surveyCode
+                            var enmemberidx = response.data.Enmemberidx
+                            cookie.setCookie('Enmemberidx', enmemberidx, 1)
+                            this.getEstimateCheck(enmemberidx)
+                        } else {
+                            console.log("실패")
+                        }
+                    }).catch(e => {
+                        // 예외사항 체크
+                        console.log(e)
+                    });
+            }
+
+            // 원하는 기기 없는 경우
+            if (findType == "0") {
+                apiQuestionnaire.postSurveyCostComplete(params)
+                    .then(response => {
+                        if (response.data.resultCode === 0) {
+                            this.surveyCode = response.data.surveyCode
+                            var enmemberidx = response.data.Enmemberidx
+                            cookie.setCookie('Enmemberidx', enmemberidx, 1)
+                            this.getEstimateCheck(enmemberidx)
+                        } else {
+                            console.log("실패")
+                        }
+                    }).catch(e => {
+                        // 예외사항 체크
+                        console.log(e)
+                    });
+            }
+        },
+
         getEstimateCheck(enmemberidx) {
-            apiEstimate.getEstimateCheck(this.$route.query.surveyCode, enmemberidx)
+            apiEstimate.getEstimateCheck(this.surveyCode, enmemberidx)
                 .then(response => {
                     this.condition = response.data.buttonLabel.condition
                     this.sigungu = response.data.buttonLabel.findArea
 
-                    setTimeout(() => {
-                        if (response.data.isEstimate == 'N') {
-                            localStorage.setItem('searchAgain', JSON.stringify(response.data.searchAgain))
-                            this.$router.push(`/questionnaireCompleted/NotFound?sigungu=${this.sigungu}`);
+                    if (response.data.isEstimate == 'N') {
+                        localStorage.setItem('searchAgain', JSON.stringify(response.data.searchAgain))
+                        this.$router.push(`/questionnaireCompleted/NotFound?sigungu=${this.sigungu}`);
+                    }
+
+                    if (response.data.isEstimate == 'Y') {
+                        if (response.data.findType == 'device') {
+                            this.$router.push(`/estimateComparison/modelEstimateCard?surveyCode=${this.surveyCode}`);
                         }
 
-                        if (response.data.isEstimate == 'Y') {
-                            if (response.data.findType == 'device') {
-                                this.$router.push(`/estimateComparison/modelEstimateCard?surveyCode=${this.$route.query.surveyCode}`);
-                            }
-
-                            if (response.data.findType == 'cost') {
-                                this.$router.push(`/estimateComparison/billPaidEstimateCard?surveyCode=${this.$route.query.surveyCode}`);
-                            }
+                        if (response.data.findType == 'cost') {
+                            this.$router.push(`/estimateComparison/billPaidEstimateCard?surveyCode=${this.surveyCode}`);
                         }
-                    }, 3000);
+                    }
                 })
                 .catch(e => {
                     console.log(e)

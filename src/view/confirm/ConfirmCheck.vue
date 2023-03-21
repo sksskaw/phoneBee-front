@@ -99,8 +99,14 @@ export default {
 
     mounted() {
         var enmemberidx = cookie.getCookie('Enmemberidx')
-        if (enmemberidx == '' || enmemberidx == null)
-            this.$router.push("/login");
+        if (enmemberidx == '' || enmemberidx == null) {
+            const urlParams = new URL(location.href).searchParams;
+            enmemberidx = urlParams.get('Enmemberidx');
+        }
+
+        if (enmemberidx == '' || enmemberidx == null) {
+            this.$router.push("/");
+        }
 
         this.findType = this.$route.query.findType
         this.getReservationConfirm(enmemberidx)
@@ -157,7 +163,6 @@ export default {
             apiEstimate.getReservationConfirm(this.$route.query.reservationCode, enmemberidx)
                 .then(response => {
                     const data = response.data.reservation
-                    console.log(data)
 
                     this.year = data.confirmSection.date.year
                     this.month = data.confirmSection.date.month

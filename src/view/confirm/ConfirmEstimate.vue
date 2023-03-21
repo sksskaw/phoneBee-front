@@ -160,8 +160,14 @@ export default {
 
     mounted() {
         var enmemberidx = cookie.getCookie('Enmemberidx')
-        if (enmemberidx == '' || enmemberidx == null)
-            this.$router.push("/login");
+        if (enmemberidx == '' || enmemberidx == null) {
+            const urlParams = new URL(location.href).searchParams;
+            enmemberidx = urlParams.get('Enmemberidx');
+        }
+
+        if (enmemberidx == '' || enmemberidx == null) {
+            this.$router.push("/");
+        }
 
         this.findType = this.$route.query.findType
         this.getEstimateConfirm(enmemberidx)
