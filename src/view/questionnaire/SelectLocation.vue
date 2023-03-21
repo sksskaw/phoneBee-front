@@ -61,9 +61,6 @@
 </template>
     
 <script>
-import apiQuestionnaire from '@/api/questionnaire';
-import cookie from '@/utils/cookie';
-
 export default {
     data() {
         return {
@@ -150,47 +147,8 @@ export default {
                 findType: this.$route.params.findType
             }
 
-            this.postSurvey(params)
-        },
-
-        postSurvey(params) {
-            var findType = params.findType
-
-            // 원하는 기기 있는 경우
-            if (findType == "1") {
-                apiQuestionnaire.postSurveyDeviceComplete(params)
-                    .then(response => {
-                        if (response.data.resultCode === 0) {
-                            var enmemberidx = response.data.Enmemberidx
-                            cookie.setCookie('Enmemberidx', enmemberidx, 1)
-                            this.estimateLoading = false
-                            window.open("https://pf.kakao.com/_wYqxexj/chat", "_blank");
-                        } else {
-                            console.log("실패")
-                        }
-                    }).catch(e => {
-                        // 예외사항 체크
-                        console.log(e)
-                    });
-            }
-
-            // 원하는 기기 없는 경우
-            if (findType == "0") {
-                apiQuestionnaire.postSurveyCostComplete(params)
-                    .then(response => {
-                        if (response.data.resultCode === 0) {
-                            var enmemberidx = response.data.Enmemberidx
-                            cookie.setCookie('Enmemberidx', enmemberidx, 1)
-                            this.estimateLoading = false
-                            window.open("https://pf.kakao.com/_wYqxexj/chat", "_blank");
-                        } else {
-                            console.log("실패")
-                        }
-                    }).catch(e => {
-                        // 예외사항 체크
-                        console.log(e)
-                    });
-            }
+            localStorage.setItem('surveyParmas', JSON.stringify(params))
+            this.$router.push("/questionnaireCompleted/loading");
         },
     }
 }
