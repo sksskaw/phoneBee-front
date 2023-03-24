@@ -36,8 +36,8 @@
 
             <div class="phone-number-box" v-if="selectedArea != '동네 선택하기'">
                 <div class="title">
-                    <div>견적 전달을 위해</div>
-                    <div>핸드폰 번호가 필요해요</div>
+                    <div>알림톡으로</div>
+                    <div>견적을 전달드려요</div>
                 </div>
 
                 <input class="phone-number" type="tel" placeholder="번호를 정확하게 입력해주세요" v-model="phoneNumber"
@@ -49,11 +49,14 @@
                 </div>
             </div>
 
-            <div v-if="phoneNumber == '' || phoneNumber.length != 13" class="estimate-btn" style="background: #E1E1E1;">
+            <div v-if="phoneNumber == '' || phoneNumber.length != 13" class="estimate-btn-off" style="background: #E1E1E1;">
                 알림톡으로 견적받기</div>
             <div v-if="phoneNumber != '' && phoneNumber.length == 13 && estimateLoading == false" @click="onEstimate"
-                class="estimate-btn">알림톡으로 견적받기</div>
-            <div v-if="phoneNumber != '' && phoneNumber.length == 13 && estimateLoading == true" class="estimate-btn">
+                class="estimate-btn-on">
+                <img src="/images/kakao_icon.svg" style="background-color: #FEE500;">
+                알림톡으로 견적받기
+            </div>
+            <div v-if="phoneNumber != '' && phoneNumber.length == 13 && estimateLoading == true" class="estimate-btn-on">
                 <img class="loading-icon" src="/images/search_loading_icon.gif">
             </div>
         </div>
@@ -68,7 +71,6 @@ export default {
             selectedArea: "동네 선택하기",
             arrowIcon: "/images/arrow_down.svg",
             phoneNumber: '',
-            estimateLoading: false,
 
             address: null,
             sido: null,
@@ -278,7 +280,7 @@ export default {
     color: black;
 }
 
-.estimate-btn {
+.estimate-btn-off {
     position: relative;
     bottom: 0px;
 
@@ -293,10 +295,29 @@ export default {
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
-    line-height: 22px;
 
     color: #FFFFFF;
 
+    margin-bottom: 70px;
+}
+
+.estimate-btn-on {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    gap: 8px;
+    height: 58px;
+
+    background: #FEE500;
+    border-radius: 8px;
+
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+
+    color: #000000;
     margin-bottom: 70px;
 }
 
